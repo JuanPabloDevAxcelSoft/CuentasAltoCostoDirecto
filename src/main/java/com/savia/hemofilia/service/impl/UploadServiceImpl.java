@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Optional;
 
 import com.savia.hemofilia.model.IllnesModel;
@@ -29,11 +31,13 @@ public class UploadServiceImpl implements UploadService {
 
 	@Override
 	public ResponseEntity<Message> save(MultipartFile file, int idEnfermedad, String ipsEmisora) {
+		Date date= new Date();
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd-kk-mm-ss");
 		if (!file.isEmpty()) {
 			try {
 				IllnesModel illnesModel = enfermedadesServiceDirect.tblIllness(idEnfermedad);
 				byte [] bytes= file.getBytes();
-				Path path = Paths.get( folder+idEnfermedad+ipsEmisora+".csv" );
+				Path path = Paths.get( folder+idEnfermedad+ipsEmisora+format.format(date)+".csv" );
 				Files.write(path, bytes);
 				enfermedadesServiceDirect.loadDataBase(String.valueOf(path),illnesModel.getNameTables());
 				return ResponseEntity.ok()
