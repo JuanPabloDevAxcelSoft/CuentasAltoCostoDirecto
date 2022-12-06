@@ -8,7 +8,7 @@ import java.util.Date;
 
 
 @Entity
-@Table(name = "ips")
+@Table(name = "ips",schema = "public")
 public class IpsReadModel implements Serializable {
 
     private static final long serialVersionUID = 1L;

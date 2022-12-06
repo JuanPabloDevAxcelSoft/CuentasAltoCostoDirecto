@@ -2,6 +2,8 @@ package com.savia.hemofilia.model;
 
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.*;
@@ -9,7 +11,7 @@ import javax.validation.constraints.Size;
 
 
 @Entity
-@Table(name = "illness_model")
+@Table(name = "illness_model",schema = "public")
 @NamedQueries({
         @NamedQuery(name = "EnfermedadesReadModel.findAll", query = "SELECT i FROM EnfermedadesReadModel i")})
 public class EnfermedadesReadModel implements Serializable {
@@ -72,7 +74,7 @@ public class EnfermedadesReadModel implements Serializable {
     public void setId(Integer id) {
         this.id = id;
     }
-
+    @JsonProperty("table")
     public String getNameTables() {
         return nameTables;
     }
