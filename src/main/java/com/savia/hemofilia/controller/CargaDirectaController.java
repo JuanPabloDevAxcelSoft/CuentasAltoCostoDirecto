@@ -1,6 +1,6 @@
 package com.savia.hemofilia.controller;
 
-import com.savia.hemofilia.service.EnfermedadesServiceDirect;
+import com.savia.hemofilia.service.CargaDirectaService;
 import com.savia.hemofilia.service.UploadService;
 import com.savia.hemofilia.valueobject.Message;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,13 +13,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/documento/v1")
-public class HemofiliaController {
+public class CargaDirectaController {
 
     @Autowired
     private UploadService upload;
 
     @Autowired
-    private EnfermedadesServiceDirect enfermedadesServiceDirect;
+    private CargaDirectaService cargaDirectaService;
 
     @PostMapping("/carga")
     public ResponseEntity<Message> upload(@RequestParam("file") MultipartFile file,
@@ -30,7 +30,7 @@ public class HemofiliaController {
     @PostMapping("/carga/bd")
     public ResponseEntity<Message> uploadDirec(@RequestParam("ruta") String ruta,
             @RequestParam("cuentaTipo") int cuentaTipo) {
-        return (enfermedadesServiceDirect.loadDataBaseDirect(ruta, cuentaTipo));
+        return (cargaDirectaService.loadDataBaseDirect(ruta, cuentaTipo));
     }
 
 }

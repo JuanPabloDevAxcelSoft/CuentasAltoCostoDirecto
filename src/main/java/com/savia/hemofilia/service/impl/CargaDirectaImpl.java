@@ -1,8 +1,7 @@
 package com.savia.hemofilia.service.impl;
 
-import com.savia.hemofilia.model.IllnesModel;
-import com.savia.hemofilia.repository.IllnesRepository;
-import com.savia.hemofilia.service.EnfermedadesServiceDirect;
+import com.savia.hemofilia.service.CargaDirectaService;
+import com.savia.hemofilia.service.EnfermedadesReadService;
 import com.savia.hemofilia.valueobject.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,38 +11,18 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import java.util.List;
 
 @Service
-public class EnfermedadesServiceDirectImpl implements EnfermedadesServiceDirect {
+public class CargaDirectaImpl implements CargaDirectaService {
     @PersistenceContext
     private EntityManager entityManager;
     @Autowired
-    IllnesRepository illnesRepository;
-
-    @Override
-    public List<IllnesModel> allIllness() {
-        return illnesRepository.findAll();
-    }
-
-    @Override
-    public IllnesModel tblIllness(Integer id) {
-        return illnesRepository.getById(id);
-    }
-
-    @Override
-    @Transactional
-    public void loadDataBase(String ruta, String tabla) {
-        String s = "COPY " + tabla + " from '" + ruta + "' with DELIMITER ';' CSV HEADER;";
-        Query nativeQuery = entityManager.createNativeQuery(s);
-        nativeQuery.executeUpdate();
-    }
-
+    EnfermedadesReadService enfermedadesServiceDirect;
     @Override
     @Transactional
     public ResponseEntity<Message> loadDataBaseDirect(String ruta, Integer id) {
         try {
-            String s = "COPY " + illnesRepository.getById(id).getNameTables() + " from '" + ruta
+            String s = "COPY " + enfermedadesServiceDirect.tblIllness(id).getNameTables() + " from '" + ruta
                     + "' with DELIMITER ';' CSV HEADER;";
             Query nativeQuery = entityManager.createNativeQuery(s);
             nativeQuery.executeUpdate();
@@ -53,7 +32,12 @@ public class EnfermedadesServiceDirectImpl implements EnfermedadesServiceDirect 
             return ResponseEntity.badRequest()
                     .body(new Message("El archivo: tiene un error  : " + e.getLocalizedMessage()));
         }
-
     }
-
+    @Override
+    @Transactional
+    public void loadDataBase(String ruta, String tabla) {
+        String s = "COPY " + tabla + " from '" + ruta + "' with DELIMITER ';' CSV HEADER;";
+        Query nativeQuery = entityManager.createNativeQuery(s);
+        nativeQuery.executeUpdate();
+    }
 }

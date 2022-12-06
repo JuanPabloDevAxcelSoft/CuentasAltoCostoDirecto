@@ -7,9 +7,10 @@ import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import com.savia.hemofilia.model.IllnesModel;
-import com.savia.hemofilia.repository.IllnesRepository;
-import com.savia.hemofilia.service.EnfermedadesServiceDirect;
+import com.savia.hemofilia.Dto.EnfermedadesReadDto;
+import com.savia.hemofilia.model.EnfermedadesReadModel;
+import com.savia.hemofilia.service.CargaDirectaService;
+import com.savia.hemofilia.service.EnfermedadesReadService;
 import com.savia.hemofilia.service.UploadService;
 import com.savia.hemofilia.valueobject.Message;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +23,9 @@ public class UploadServiceImpl implements UploadService {
 	private String folder = "C:/Users/JuanSuarez/Desktop/Savia/hemofilia/Spring/EnfermedadaesPrueba/cargas/";
 	// private String foldeer2 = "C:/Users/JuanSuarez/Desktop/Savia/cargas/";
 	@Autowired
-	EnfermedadesServiceDirect enfermedadesServiceDirect;
+	EnfermedadesReadService enfermedadesServiceDirect;
 	@Autowired
-	IllnesRepository illnesRepository;
+	CargaDirectaService cargaDirectaService;
 
 	@Override
 	public ResponseEntity<Message> save(MultipartFile file, int idEnfermedad, String ipsEmisora) {
@@ -32,11 +33,11 @@ public class UploadServiceImpl implements UploadService {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd-kk-mm-ss");
 		if (!file.isEmpty()) {
 			try {
-				IllnesModel illnesModel = enfermedadesServiceDirect.tblIllness(idEnfermedad);
+				EnfermedadesReadDto illnesModel = enfermedadesServiceDirect.tblIllness(idEnfermedad);
 				byte[] bytes = file.getBytes();
 				Path path = Paths.get(folder + idEnfermedad + ipsEmisora + format.format(date) + ".csv");
 				Files.write(path, bytes);
-				enfermedadesServiceDirect.loadDataBase(String.valueOf(path), illnesModel.getNameTables());
+				cargaDirectaService.loadDataBase(String.valueOf(path), illnesModel.getNameTables());
 				return ResponseEntity.ok()
 						.body(new Message("El archivo se cargo correctamente"));
 			} catch (IOException e) {
