@@ -1,4 +1,4 @@
-package com.savia.hemofilia.service;
+package com.savia.hemofilia.interfaces;
 
 import com.savia.hemofilia.valueobject.Message;
 import org.springframework.http.ResponseEntity;
