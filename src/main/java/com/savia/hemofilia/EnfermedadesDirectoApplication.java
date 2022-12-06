@@ -9,5 +9,4 @@ public class EnfermedadesDirectoApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(EnfermedadesDirectoApplication.class, args);
 	}
-
 }

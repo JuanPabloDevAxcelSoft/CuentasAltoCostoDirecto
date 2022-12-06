@@ -1,10 +1,11 @@
 package com.savia.hemofilia.model;
 
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name = "illness_model")
@@ -12,19 +13,20 @@ public class IllnesModel {
     @Id
     @Column(name = "id", nullable = false)
     private Integer id;
-    @Column(name = "name_tables",nullable = false)
-    private String NameTables;
+
+    @Column(name = "name_tables", nullable = false)
+    private String table;
 
     public IllnesModel() {
     }
 
     public IllnesModel(String nameTables) {
-        NameTables = nameTables;
+        table = nameTables;
     }
 
     public IllnesModel(Integer id, String nameTables) {
         this.id = id;
-        NameTables = nameTables;
+        table = nameTables;
     }
 
     public Integer getId() {
@@ -35,11 +37,12 @@ public class IllnesModel {
         this.id = id;
     }
 
+    @JsonProperty("table")
     public String getNameTables() {
-        return NameTables;
+        return table;
     }
 
     public void setNameTables(String nameTables) {
-        NameTables = nameTables;
+        table = nameTables;
     }
 }
