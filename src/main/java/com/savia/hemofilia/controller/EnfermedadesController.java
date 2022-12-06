@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.savia.hemofilia.interfaces.EnfermedadesServiceDirect;
+import com.savia.hemofilia.service.EnfermedadesServiceDirect;
 import com.savia.hemofilia.model.IllnesModel;
 import java.util.List;
 

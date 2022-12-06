@@ -1,8 +1,8 @@
-package com.savia.hemofilia.service;
+package com.savia.hemofilia.service.impl;
 
-import com.savia.hemofilia.interfaces.EnfermedadesServiceDirect;
 import com.savia.hemofilia.model.IllnesModel;
 import com.savia.hemofilia.repository.IllnesRepository;
+import com.savia.hemofilia.service.EnfermedadesServiceDirect;
 import com.savia.hemofilia.valueobject.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

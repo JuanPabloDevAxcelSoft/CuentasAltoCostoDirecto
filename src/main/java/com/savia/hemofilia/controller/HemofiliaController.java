@@ -1,7 +1,7 @@
 package com.savia.hemofilia.controller;
 
-import com.savia.hemofilia.interfaces.EnfermedadesServiceDirect;
-import com.savia.hemofilia.interfaces.UploadService;
+import com.savia.hemofilia.service.EnfermedadesServiceDirect;
+import com.savia.hemofilia.service.UploadService;
 import com.savia.hemofilia.valueobject.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

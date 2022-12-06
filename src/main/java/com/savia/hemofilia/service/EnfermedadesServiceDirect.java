@@ -1,4 +1,4 @@
-package com.savia.hemofilia.interfaces;
+package com.savia.hemofilia.service;
 
 import com.savia.hemofilia.model.IllnesModel;
 import com.savia.hemofilia.valueobject.Message;

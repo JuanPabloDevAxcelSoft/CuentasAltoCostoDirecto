@@ -1,4 +1,4 @@
-package com.savia.hemofilia.service;
+package com.savia.hemofilia.service.impl;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -7,10 +7,10 @@ import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import com.savia.hemofilia.interfaces.EnfermedadesServiceDirect;
-import com.savia.hemofilia.interfaces.UploadService;
 import com.savia.hemofilia.model.IllnesModel;
 import com.savia.hemofilia.repository.IllnesRepository;
+import com.savia.hemofilia.service.EnfermedadesServiceDirect;
+import com.savia.hemofilia.service.UploadService;
 import com.savia.hemofilia.valueobject.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
