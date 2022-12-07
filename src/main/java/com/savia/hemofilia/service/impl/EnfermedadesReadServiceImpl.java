@@ -1,15 +1,6 @@
 package com.savia.hemofilia.service.impl;
 
-<<<<<<< HEAD
 import com.savia.hemofilia.dto.EnfermedadesReadDto;
-=======
-<<<<<<< HEAD
-
-import com.savia.hemofilia.dto.EnfermedadesReadDto;
-=======
-import com.savia.hemofilia.Dto.EnfermedadesReadDto;
->>>>>>> 18f0df31e80e18a202f11965cb73112d3b170592
->>>>>>> 9fc4a6c82e455563e073a854ab90c0019b34ceff
 import com.savia.hemofilia.model.EnfermedadesReadModel;
 import com.savia.hemofilia.repository.EnfermedadesReadRepository;
 import com.savia.hemofilia.service.EnfermedadesReadService;
