@@ -1,0 +1,6 @@
+POST http://localhost:8081/documento/v1/carga/bd
+Content-Type: application/json
+
+{
+    "id" : 1
+}

@@ -7,7 +7,7 @@ import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import com.savia.hemofilia.Dto.EnfermedadesReadDto;
+import com.savia.hemofilia.dto.EnfermedadesReadDto;
 import com.savia.hemofilia.service.CargaDirectaService;
 import com.savia.hemofilia.service.EnfermedadesReadService;
 import com.savia.hemofilia.service.UploadService;

@@ -1,12 +1,11 @@
 package com.savia.hemofilia.service.impl;
 
-import com.savia.hemofilia.Dto.EnfermedadesReadDto;
+import com.savia.hemofilia.dto.EnfermedadesReadDto;
 import com.savia.hemofilia.model.EnfermedadesReadModel;
 import com.savia.hemofilia.repository.EnfermedadesReadRepository;
 import com.savia.hemofilia.service.EnfermedadesReadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service

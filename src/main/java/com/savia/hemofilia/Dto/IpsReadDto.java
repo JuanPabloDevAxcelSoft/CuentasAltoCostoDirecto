@@ -1,4 +1,4 @@
-package com.savia.hemofilia.Dto;
+package com.savia.hemofilia.dto;
 
 import java.util.Date;
 

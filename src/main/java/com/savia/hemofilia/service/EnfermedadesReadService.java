@@ -1,6 +1,6 @@
 package com.savia.hemofilia.service;
 
-import com.savia.hemofilia.Dto.EnfermedadesReadDto;
+import com.savia.hemofilia.dto.EnfermedadesReadDto;
 import com.savia.hemofilia.model.EnfermedadesReadModel;
 
 import java.util.List;

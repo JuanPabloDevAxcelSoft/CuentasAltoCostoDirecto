@@ -1,6 +1,6 @@
 package com.savia.hemofilia.service;
 
-import com.savia.hemofilia.Dto.IpsReadDto;
+import com.savia.hemofilia.dto.IpsReadDto;
 import com.savia.hemofilia.model.IpsReadModel;
 
 import java.util.List;
