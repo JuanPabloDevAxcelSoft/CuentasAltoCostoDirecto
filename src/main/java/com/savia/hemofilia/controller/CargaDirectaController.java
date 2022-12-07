@@ -31,16 +31,9 @@ public class CargaDirectaController {
         return (upload.save(file, cuentaTipo, ipsEmisora));
     }
 
-    // @RequestMapping(method = RequestMethod.POST, path = "/carga/bd", consumes =
-    // "application/json", produces = "application/json")
     @PostMapping("/carga/bd")
-    public ResponseEntity<Message> uploadDirec(@RequestParam("id") int id) {
-
-        // System.out.println("Ruta: " + carga.getRuta());
-        // System.out.println("ID: " + carga.getIdEnfermedad());
-
-        return (cargaDirectaService.loadDataBaseDirect(
-                "C:\\Users\\Angel Gonzalez\\Desktop\\FILESERVERTEST_LOCAL\\Hemofilia_Estructura_Reporte_2022_Direct.csv",
-                id));
+    public ResponseEntity<Message> uploadDirec(@RequestParam("ruta") String ruta,
+            @RequestParam("cuentaTipo") int cuentaTipo) {
+        return (cargaDirectaService.loadDataBaseDirect(ruta, cuentaTipo));
     }
 }
