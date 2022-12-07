@@ -1,7 +1,5 @@
 package com.savia.hemofilia.model;
 
-
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
@@ -9,11 +7,10 @@ import java.util.Date;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 
-
 @Entity
-@Table(name = "illness_model",schema = "public")
+@Table(name = "illness_model", schema = "public")
 @NamedQueries({
-        @NamedQuery(name = "EnfermedadesReadModel.findAll", query = "SELECT i FROM EnfermedadesReadModel i")})
+        @NamedQuery(name = "EnfermedadesReadModel.findAll", query = "SELECT i FROM EnfermedadesReadModel i") })
 public class EnfermedadesReadModel implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -23,7 +20,7 @@ public class EnfermedadesReadModel implements Serializable {
     private Integer id;
     @Basic(optional = false)
     @Size(min = 1, max = 255)
-    @Column(name = "name_tables",unique = true)
+    @Column(name = "name_tables", unique = true)
     private String nameTables;
     @Column(name = "fecha_creacion")
     @Temporal(TemporalType.TIMESTAMP)
@@ -36,7 +33,6 @@ public class EnfermedadesReadModel implements Serializable {
     public EnfermedadesReadModel(Integer id) {
         this.id = id;
     }
-
 
     public EnfermedadesReadModel(Integer id, String nameTables) {
         this.id = id;
@@ -74,6 +70,7 @@ public class EnfermedadesReadModel implements Serializable {
     public void setId(Integer id) {
         this.id = id;
     }
+
     @JsonProperty("table")
     public String getNameTables() {
         return nameTables;

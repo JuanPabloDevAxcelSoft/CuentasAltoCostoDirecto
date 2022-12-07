@@ -19,10 +19,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class UploadServiceImpl implements UploadService {
+
 	private String folder = "C:/Users/JuanSuarez/Desktop/Savia/hemofilia/Spring/EnfermedadaesPrueba/cargas/";
 	// private String foldeer2 = "C:/Users/JuanSuarez/Desktop/Savia/cargas/";
+
 	@Autowired
 	EnfermedadesReadService enfermedadesServiceDirect;
+
 	@Autowired
 	CargaDirectaService cargaDirectaService;
 
