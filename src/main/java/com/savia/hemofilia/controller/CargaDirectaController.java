@@ -3,14 +3,11 @@ package com.savia.hemofilia.controller;
 import com.savia.hemofilia.service.CargaDirectaService;
 import com.savia.hemofilia.service.UploadService;
 import com.savia.hemofilia.valueobject.Message;
-import com.savia.hemofilia.vo.CargaVo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
