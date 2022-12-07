@@ -1,14 +1,12 @@
 package com.savia.hemofilia.model;
 
-
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 
-
 @Entity
-@Table(name = "ips",schema = "public")
+@Table(name = "ips", schema = "public")
 public class IpsReadModel implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -18,7 +16,7 @@ public class IpsReadModel implements Serializable {
     private Integer id;
     @Basic(optional = false)
     @Size(min = 1, max = 255)
-    @Column(name = "name_ips",unique = true)
+    @Column(name = "name_ips", unique = true)
     private String nameIps;
     @Column(name = "fecha_creacion")
     @Temporal(TemporalType.TIMESTAMP)
@@ -31,7 +29,6 @@ public class IpsReadModel implements Serializable {
     public IpsReadModel(Integer id) {
         this.id = id;
     }
-
 
     public IpsReadModel(Integer id, String nameIps) {
         this.id = id;

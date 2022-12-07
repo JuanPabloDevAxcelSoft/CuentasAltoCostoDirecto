@@ -27,6 +27,7 @@ public class IpsController {
             return null;
         }
     }
+
     @GetMapping("/ips/{idIps}")
     public IpsReadDto getIps(@PathVariable("idIps") int idIps) {
         try {
@@ -36,16 +37,20 @@ public class IpsController {
             return null;
         }
     }
+
     @PutMapping("/ips")
-    public ResponseEntity<Message> updateIps(@RequestParam("idIps")int idIps, @RequestParam("enfermedad")String nombreIps){
-        return ipsWriteService.updateIps(idIps,nombreIps);
+    public ResponseEntity<Message> updateIps(@RequestParam("idIps") int idIps,
+            @RequestParam("enfermedad") String nombreIps) {
+        return ipsWriteService.updateIps(idIps, nombreIps);
     }
+
     @PostMapping("/ips")
-    public ResponseEntity<Message> saveIps(@RequestParam("ips") String nombreIps){
+    public ResponseEntity<Message> saveIps(@RequestParam("ips") String nombreIps) {
         return ipsWriteService.saveIps(nombreIps);
     }
+
     @DeleteMapping("/ips/{idIps}")
-    public ResponseEntity<Message> updateIps(@PathVariable("idIps") int idIps){
+    public ResponseEntity<Message> updateIps(@PathVariable("idIps") int idIps) {
         return ipsWriteService.deleteIps(idIps);
     }
 }

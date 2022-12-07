@@ -1,14 +1,12 @@
 package com.savia.hemofilia.model;
 
-
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 
-
 @Entity
-@Table(name = "illness_model",schema = "public")
+@Table(name = "illness_model", schema = "public")
 public class EnfermedadesWriteModel implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -18,7 +16,7 @@ public class EnfermedadesWriteModel implements Serializable {
     private Integer id;
     @Basic(optional = false)
     @Size(min = 1, max = 255)
-    @Column(name = "name_tables",unique = true)
+    @Column(name = "name_tables", unique = true)
     private String nameTables;
     @Column(name = "fecha_creacion")
     @Temporal(TemporalType.TIMESTAMP)
@@ -31,7 +29,6 @@ public class EnfermedadesWriteModel implements Serializable {
     public EnfermedadesWriteModel(Integer id) {
         this.id = id;
     }
-
 
     public EnfermedadesWriteModel(Integer id, String nameTables) {
         this.id = id;

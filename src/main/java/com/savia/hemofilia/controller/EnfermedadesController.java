@@ -28,6 +28,7 @@ public class EnfermedadesController {
             return null;
         }
     }
+
     @GetMapping("/enfermedades/{idEnfermedad}")
     public EnfermedadesReadDto getEnfermedad(@PathVariable("idEnfermedad") int idEnfermedad) {
         try {
@@ -36,16 +37,20 @@ public class EnfermedadesController {
             return null;
         }
     }
+
     @PutMapping("/enfermedades")
-    public ResponseEntity<Message> updateEnfermedad(@RequestParam("idEnfermedad")int idEnfermedad,@RequestParam("enfermedad")String nombreEnfermedad){
-        return enfermedadesWriteService.updateEnfermedad(idEnfermedad,nombreEnfermedad);
+    public ResponseEntity<Message> updateEnfermedad(@RequestParam("idEnfermedad") int idEnfermedad,
+            @RequestParam("enfermedad") String nombreEnfermedad) {
+        return enfermedadesWriteService.updateEnfermedad(idEnfermedad, nombreEnfermedad);
     }
+
     @PostMapping("/enfermedades")
-    public ResponseEntity<Message> saveEnfermedad(@RequestParam("enfermedad") String nombreEnfermedad){
+    public ResponseEntity<Message> saveEnfermedad(@RequestParam("enfermedad") String nombreEnfermedad) {
         return enfermedadesWriteService.saveEnfermedad(nombreEnfermedad);
     }
+
     @DeleteMapping("/enfermedades/{idEnfermedad}")
-    public ResponseEntity<Message> updateIllness(@PathVariable("idEnfermedad") int idEnfermedad){
+    public ResponseEntity<Message> updateIllness(@PathVariable("idEnfermedad") int idEnfermedad) {
         return enfermedadesWriteService.deleteEnfermedad(idEnfermedad);
     }
 
