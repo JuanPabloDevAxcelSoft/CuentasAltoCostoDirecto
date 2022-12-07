@@ -1,6 +1,6 @@
 package com.savia.hemofilia.controller;
 
-import com.savia.hemofilia.Dto.IpsReadDto;
+import com.savia.hemofilia.dto.IpsReadDto;
 import com.savia.hemofilia.model.IpsReadModel;
 import com.savia.hemofilia.service.IpsReadService;
 import com.savia.hemofilia.service.IpsWriteService;

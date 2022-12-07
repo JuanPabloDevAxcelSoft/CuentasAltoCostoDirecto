@@ -2,7 +2,7 @@ package com.savia.hemofilia.service.impl;
 
 
 
-import com.savia.hemofilia.Dto.IpsReadDto;
+import com.savia.hemofilia.dto.IpsReadDto;
 import com.savia.hemofilia.model.IpsReadModel;
 import com.savia.hemofilia.repository.IpsReadRepository;
 import com.savia.hemofilia.service.IpsReadService;

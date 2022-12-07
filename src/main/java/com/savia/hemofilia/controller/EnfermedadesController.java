@@ -1,6 +1,6 @@
 package com.savia.hemofilia.controller;
 
-import com.savia.hemofilia.Dto.EnfermedadesReadDto;
+import com.savia.hemofilia.dto.EnfermedadesReadDto;
 import com.savia.hemofilia.model.EnfermedadesReadModel;
 import com.savia.hemofilia.service.EnfermedadesWriteService;
 import com.savia.hemofilia.valueobject.Message;
