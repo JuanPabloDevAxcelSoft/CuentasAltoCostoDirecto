@@ -17,6 +17,7 @@ public class EnfermedadesController {
 
     @Autowired
     private EnfermedadesReadService enfermedadesReadService;
+
     @Autowired
     private EnfermedadesWriteService enfermedadesWriteService;
 
