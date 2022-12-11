@@ -2,10 +2,9 @@ package com.savia.app.service;
 
 import org.springframework.http.ResponseEntity;
 
-import com.savia.app.valueobject.Message;
-
 public interface CargaDirectaService {
-    ResponseEntity<Message> loadDataBaseDirect(String ruta, Integer id);
+    public void loadDataBase(String ruta, String tabla);
 
-    void loadDataBase(String ruta, String tabla);
+    public ResponseEntity<String> loadDataBaseDirect(String ruta, Integer id);
+
 }

@@ -1,13 +1,16 @@
 package com.savia.app.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.savia.app.dto.EnfermedadesReadDto;
 import com.savia.app.service.CargaDirectaService;
 import com.savia.app.service.EnfermedadesReadService;
-import com.savia.app.valueobject.Message;
+import com.savia.app.util.ResponseEntityJson;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -23,22 +26,33 @@ public class CargaDirectaImpl implements CargaDirectaService {
     EnfermedadesReadService enfermedadesServiceDirect;
 
     @Override
-    @Transactional
-    public ResponseEntity<Message> loadDataBaseDirect(String ruta, Integer id) {
+    @Transactional(rollbackFor = { Exception.class }, propagation = Propagation.REQUIRED)
+    public ResponseEntity<String> loadDataBaseDirect(String ruta, Integer id) {
+        ResponseEntityJson jsonResponse = new ResponseEntityJson();
+        String message = "";
+        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
         try {
-            String pureSql = "COPY " +
-                    enfermedadesServiceDirect.findIllnessById(id).getNameTables() + " from '" + ruta
-                    + "' with DELIMITER ';' CSV HEADER;";
-            System.out.println(pureSql);
-            Query nativeQuery = entityManager.createNativeQuery(pureSql);
-            nativeQuery.executeUpdate();
-            return ResponseEntity.ok()
-                    .body(new Message("El archivo se cargo correctamente"));
+            if ((!ruta.isEmpty()) && (id > 0)) {
+                EnfermedadesReadDto enfermedadesReadDtoObj = enfermedadesServiceDirect.findIllnessById(id);
+                if (enfermedadesReadDtoObj != null) {
+                    String pureSql = "COPY " + enfermedadesReadDtoObj.getNameTables() + " from '" + ruta
+                            + "' with DELIMITER ';' CSV HEADER;";
+                    Query nativeQuery = entityManager.createNativeQuery(pureSql);
+                    nativeQuery.executeUpdate();
+                    status = HttpStatus.OK;
+                    message = "El archivo fue cargado correctamente";
+                } else {
+                    message = "Id de la enfermedad no existe";
+                    status = HttpStatus.NOT_FOUND;
+                }
+            } else {
+                message = "Verifique los datos al momento de enviar, Datos no aceptados.";
+                status = HttpStatus.BAD_REQUEST;
+            }
         } catch (Exception e) {
-            return ResponseEntity.badRequest()
-                    .body(new Message("El archivo: tiene un error : " +
-                            e.getLocalizedMessage()));
+            message = "El archivo: tiene un error : " + e.getLocalizedMessage();
         }
+        return jsonResponse.ResponseHttp(message, status, null);
     }
 
     @Override

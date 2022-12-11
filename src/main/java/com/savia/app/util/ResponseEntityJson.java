@@ -28,12 +28,14 @@ public class ResponseEntityJson {
     public ResponseEntity<String> ResponseHttp(String message, HttpStatus status, Object data) {
         ResponseEntity<String> response = null;
         try {
+            String statusResponse = status.toString().substring(0, 3);
             this.JSONObject = new JSONObject();
             JSONObject.put("message", message);
-            JSONObject.put("status", status);
+            JSONObject.put("status", Integer.parseInt(statusResponse));
             if (data != null) {
                 Gson gson = new Gson();
                 String json = gson.toJson(data);
+
                 JSONObject.put("data", (data instanceof List) ? new JSONArray(json) : new JSONObject(json));
                 gson = null;
             }

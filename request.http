@@ -13,16 +13,16 @@
 # Content-Type: application/json
 
 
-POST http://localhost:8081/documento/v1/carga/bd
-Content-Type: application/json
-Access-Control-Allow-Origin: *
-
-{
-    "ruta": "Direct.csv",
-    "idEnfermedad": 1,
-    "idIps": 0
-}
-
-
-# GET http://localhost:8081/api/v1/enfermedades
+# POST http://localhost:8081/documento/v1/carga/bd
 # Content-Type: application/json
+# Access-Control-Allow-Origin: *
+
+# {
+#     "ruta": "2022120915233511hemofiliaestructurareporte2022direct.csv",
+#     "idEnfermedad": 1,
+#     "idIps": 0
+# }
+
+
+GET http://localhost:8081/api/v1/enfermedades
+Content-Type: application/json
