@@ -10,6 +10,7 @@ import java.util.List;
 
 @Service
 public class EnfermedadesReadServiceImpl implements EnfermedadesReadService {
+
     @Autowired
     EnfermedadesReadRepository enfermedadesRepository;
 
