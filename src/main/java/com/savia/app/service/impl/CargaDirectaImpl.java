@@ -35,8 +35,9 @@ public class CargaDirectaImpl implements CargaDirectaService {
             if ((!ruta.isEmpty()) && (id > 0)) {
                 EnfermedadesReadDto enfermedadesReadDtoObj = enfermedadesServiceDirect.findIllnessById(id);
                 if (enfermedadesReadDtoObj != null) {
-                    String pureSql = "COPY " + enfermedadesReadDtoObj.getNameTables() + " from '" + ruta
-                            + "' with DELIMITER ';' CSV HEADER;";
+                    String pureSql="LOAD DATA LOCAL INFILE '" +ruta+
+                            "' INTO TABLE "+enfermedadesReadDtoObj.getNameTables()+" FIELDS TERMINATED BY ';' LINES TERMINATED BY '\\n' IGNORE 1 ROWS;";
+                    System.out.println(pureSql);
                     Query nativeQuery = entityManager.createNativeQuery(pureSql);
                     nativeQuery.executeUpdate();
                     status = HttpStatus.OK;

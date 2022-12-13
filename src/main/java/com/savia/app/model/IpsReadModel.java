@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-@Table(name = "ips", schema = "public")
+@Table(name = "tbl_ips", schema = "public")
 public class IpsReadModel implements Serializable {
 
     private static final long serialVersionUID = 1L;
