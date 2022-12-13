@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-@Table(name = "illness_model", schema = "public")
+@Table(name = "tbl_enfermedades", schema = "public")
 public class EnfermedadesWriteModel implements Serializable {
 
     private static final long serialVersionUID = 1L;
