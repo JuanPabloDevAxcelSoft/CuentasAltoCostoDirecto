@@ -18,6 +18,10 @@ public class EnfermedadesWriteModel implements Serializable {
     @Size(min = 1, max = 255)
     @Column(name = "name_tables", unique = true)
     private String nameTables;
+    @Basic(optional = false)
+    @Size(min = 1, max = 255)
+    @Column(name = "name_enfermedad_frond", unique = true)
+    private String nameEnfermedadFrond;
     @Column(name = "fecha_creacion")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaCreacion;
@@ -54,9 +58,32 @@ public class EnfermedadesWriteModel implements Serializable {
         this.estado = estado;
     }
 
+    public EnfermedadesWriteModel(Integer id, String nameTables, String nameEnfermedadFrond, Date fechaCreacion, Boolean estado) {
+        this.id = id;
+        this.nameTables = nameTables;
+        this.nameEnfermedadFrond = nameEnfermedadFrond;
+        this.fechaCreacion = fechaCreacion;
+        this.estado = estado;
+    }
+
+    public EnfermedadesWriteModel(String nameTables, String nameEnfermedadFrond, Date fechaCreacion, Boolean estado) {
+        this.nameTables = nameTables;
+        this.nameEnfermedadFrond = nameEnfermedadFrond;
+        this.fechaCreacion = fechaCreacion;
+        this.estado = estado;
+    }
+
     public EnfermedadesWriteModel(String nameTables, Boolean estado) {
         this.nameTables = nameTables;
         this.estado = estado;
+    }
+
+    public String getNameEnfermedadFrond() {
+        return nameEnfermedadFrond;
+    }
+
+    public void setNameEnfermedadFrond(String nameEnfermedadFrond) {
+        this.nameEnfermedadFrond = nameEnfermedadFrond;
     }
 
     public Integer getId() {
