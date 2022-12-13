@@ -20,6 +20,10 @@ public class EnfermedadesReadModel implements Serializable {
     @Size(min = 1, max = 255)
     @Column(name = "name_tables", unique = true)
     private String tabla;
+    @Basic(optional = false)
+    @Size(min = 1, max = 255)
+    @Column(name = "name_enfermedad_frond", unique = true)
+    private String nameEnfermedadFrond;
     @Column(name = "fecha_creacion")
     @Temporal(TemporalType.TIMESTAMP)
     private Date creacion;
@@ -56,9 +60,32 @@ public class EnfermedadesReadModel implements Serializable {
         this.estado = estado;
     }
 
+    public EnfermedadesReadModel(String tabla, String nameEnfermedadFrond, Date creacion, Boolean estado) {
+        this.tabla = tabla;
+        this.nameEnfermedadFrond = nameEnfermedadFrond;
+        this.creacion = creacion;
+        this.estado = estado;
+    }
+
+    public EnfermedadesReadModel(Integer id, String tabla, String nameEnfermedadFrond, Date creacion, Boolean estado) {
+        this.id = id;
+        this.tabla = tabla;
+        this.nameEnfermedadFrond = nameEnfermedadFrond;
+        this.creacion = creacion;
+        this.estado = estado;
+    }
+
     public EnfermedadesReadModel(String nameTables, Boolean estado) {
         this.tabla = nameTables;
         this.estado = estado;
+    }
+
+    public String getNameEnfermedadFrond() {
+        return nameEnfermedadFrond;
+    }
+
+    public void setNameEnfermedadFrond(String nameEnfermedadFrond) {
+        this.nameEnfermedadFrond = nameEnfermedadFrond;
     }
 
     public Integer getId() {
