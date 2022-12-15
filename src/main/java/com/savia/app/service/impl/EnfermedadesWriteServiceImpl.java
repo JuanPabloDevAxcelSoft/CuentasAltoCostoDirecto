@@ -60,9 +60,9 @@ public class EnfermedadesWriteServiceImpl implements EnfermedadesWriteService {
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
         try {
             if (!nombreEnfermedad.isEmpty()) {
-                EnfermedadesWriteModel save = enfermedadesRepository.save(
+                enfermedadesRepository.save(
                         new EnfermedadesWriteModel("tbl_" + nombreEnfermedad.toLowerCase() + "_paso",
-                                nombreEnfermedad.toLowerCase(),new Date(), true));
+                                nombreEnfermedad.toLowerCase(), new Date(), true));
             }
             message = (!nombreEnfermedad.isEmpty()) ? "Se cargo la enfermedad correctamente"
                     : "El nombre de la enfermedad  no puede ser vacio";
