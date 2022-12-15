@@ -2,6 +2,8 @@ package com.savia.app.controller;
 
 import java.sql.SQLException;
 
+import javax.servlet.annotation.MultipartConfig;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -17,7 +19,8 @@ import com.savia.app.util.ResponseEntityJson;
 import com.savia.app.valueobject.Message;
 
 @RestController
-@RequestMapping(value = "/api/v1/documento", produces = "application/json;charset=UTF-8")
+@RequestMapping(value = "/api/v1/documento", consumes = "multipart/form-data")
+@MultipartConfig
 public class CargaDirectaController {
 
     @Autowired
@@ -27,11 +30,27 @@ public class CargaDirectaController {
     private CargaDirectaService cargaDirectaService;
 
     private ResponseEntityJson jsonResponse = new ResponseEntityJson();
-    @PostMapping("/carga")
+
+    @RequestMapping(value = "/carga", method = RequestMethod.POST, consumes = { "multipart/form-data" })
     public ResponseEntity<Message> upload(@RequestParam("file") MultipartFile file,
-            @RequestParam("cuentaTipo") int cuentaTipo, @RequestParam("ipsEmisora") String ipsEmisora) {
-        return (upload.save(file, cuentaTipo, ipsEmisora));
+            @RequestParam("idEnfermedad") int idEnfermedad, @RequestParam("idIps") int idIps) {
+        return (upload.save(file, idEnfermedad, idIps));
     }
+
+    // @RequestMapping(value = "/carga", method = RequestMethod.POST, consumes = {
+    // "multipart/form-data" })
+    // public ResponseEntity<Message> upload(@RequestParam("file") MultipartFile
+    // file) {
+    // System.out.println(file);
+
+    // String tempDir = System.getProperty("java.io.tmpdir");
+    // if (!tempDir.endsWith("/") && !tempDir.endsWith("\\")) {
+    // System.out.println("Entrada a la funcion!!");
+    // tempDir = tempDir + "/";
+    // }
+    // return null;
+    // }
+
     @PostMapping("/carga/bd")
     @ExceptionHandler({ SQLException.class, DataAccessException.class })
     public ResponseEntity<String> uploadDirec(@RequestBody UploadDirectDto uploadDirectDto) {
@@ -44,5 +63,4 @@ public class CargaDirectaController {
         }
         return response;
     }
-
 }

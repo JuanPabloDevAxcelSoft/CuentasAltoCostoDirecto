@@ -2,11 +2,14 @@ package com.savia.app.dto;
 
 import java.io.Serializable;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class UploadDirectDto implements Serializable {
 
     private String ruta;
     private Integer idEnfermedad;
     private Integer idIps;
+    private MultipartFile file;
 
     public String getRuta() {
         return ruta;
@@ -20,6 +23,10 @@ public class UploadDirectDto implements Serializable {
         return idIps;
     }
 
+    public MultipartFile getFile() {
+        return file;
+    }
+
     public void setRuta(String ruta) {
         this.ruta = ruta;
     }
@@ -31,5 +38,4 @@ public class UploadDirectDto implements Serializable {
     public void setIdIps(Integer idIps) {
         this.idIps = idIps;
     }
-
 }
