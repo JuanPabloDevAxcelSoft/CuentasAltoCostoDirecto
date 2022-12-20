@@ -1,17 +1,15 @@
 package com.savia.app.config;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
 import javax.servlet.ServletContext;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -20,6 +18,8 @@ import com.savia.app.constants.PathFileUpload;
 
 @Configuration
 public class Config {
+
+    private final Logger logger = LoggerFactory.getLogger(Config.class);
 
     @Value("${allowed.origin}")
     private String allowedOrigin;
@@ -55,11 +55,16 @@ public class Config {
             directory = new File(directoryPath);
             if (!directory.isDirectory()) {
                 directory.mkdirs();
+                directory.setReadable(true, false);
+                directory.setWritable(true, false);
+                directory.setExecutable(true, false);
+                logger.info("Directorio de archivos temporales creado");
             }
         } catch (Exception e) {
-            System.out.println(e.getLocalizedMessage());
+            logger.error("Error en creacion de directorio termporal : " + e.getLocalizedMessage());
         } finally {
             directory = null;
+            logger.info("Proceso de creacion de directorio temporal terminado");
         }
     }
 }
