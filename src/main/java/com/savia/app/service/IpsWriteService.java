@@ -2,10 +2,12 @@ package com.savia.app.service;
 
 import org.springframework.http.ResponseEntity;
 
+import com.savia.app.vo.ResponseMessage;
+
 public interface IpsWriteService {
-    ResponseEntity<String> saveIps(String nombreIps);
+    ResponseEntity<ResponseMessage> saveIps(String nombreIps);
 
-    ResponseEntity<String> updateIps(int idIps, String nombreIps);
+    ResponseEntity<ResponseMessage> updateIps(int idIps, String nombreIps);
 
-    ResponseEntity<String> deleteIps(int idIps);
+    ResponseEntity<ResponseMessage> deleteIps(int idIps);
 }

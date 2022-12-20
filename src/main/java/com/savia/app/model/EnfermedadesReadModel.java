@@ -2,13 +2,24 @@ package com.savia.app.model;
 
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.*;
+
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name = "tbl_enfermedades", schema = "public")
-@NamedQueries({
-        @NamedQuery(name = "EnfermedadesReadModel.findAll", query = "SELECT i FROM EnfermedadesReadModel i") })
+@NamedQueries({ @NamedQuery(name = "EnfermedadesReadModel.findAll", query = "SELECT i FROM EnfermedadesReadModel i") })
 public class EnfermedadesReadModel implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -80,6 +91,7 @@ public class EnfermedadesReadModel implements Serializable {
         this.estado = estado;
     }
 
+    @JsonProperty("nombre")
     public String getNameEnfermedadFrond() {
         return nameEnfermedadFrond;
     }
@@ -96,6 +108,7 @@ public class EnfermedadesReadModel implements Serializable {
         this.id = id;
     }
 
+    @JsonProperty("tabla")
     public String getNameTables() {
         return tabla;
     }

@@ -3,11 +3,12 @@ package com.savia.app.service;
 import org.springframework.http.ResponseEntity;
 
 import com.savia.app.dto.EnfermedadesReadDto;
+import com.savia.app.vo.ResponseMessage;
 
 public interface EnfermedadesReadService {
-    ResponseEntity<String> tblIllness(Integer id);
+    ResponseEntity<ResponseMessage> tblIllness(Integer id);
 
-    ResponseEntity<String> allIllness();
+    ResponseEntity<ResponseMessage> allIllness();
 
     EnfermedadesReadDto findIllnessById(Integer id);
 

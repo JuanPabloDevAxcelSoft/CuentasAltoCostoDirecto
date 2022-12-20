@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.savia.app.service.EnfermedadesReadService;
 import com.savia.app.service.EnfermedadesWriteService;
+import com.savia.app.vo.ResponseMessage;
 
 @RestController
 @RequestMapping(path = "/api/v1")
@@ -18,7 +19,7 @@ public class EnfermedadesController {
     private EnfermedadesWriteService enfermedadesWriteService;
 
     @GetMapping("/enfermedades")
-    public ResponseEntity<String> getAllEnfermedad() {
+    public ResponseEntity<ResponseMessage> getAllEnfermedad() {
         try {
             return enfermedadesReadService.allIllness();
         } catch (Exception e) {
@@ -27,7 +28,7 @@ public class EnfermedadesController {
     }
 
     @GetMapping("/enfermedades/{idEnfermedad}")
-    public ResponseEntity<String> getEnfermedad(@PathVariable("idEnfermedad") int idEnfermedad) {
+    public ResponseEntity<ResponseMessage> getEnfermedad(@PathVariable("idEnfermedad") int idEnfermedad) {
         try {
             return enfermedadesReadService.tblIllness(idEnfermedad);
         } catch (Exception e) {
@@ -36,18 +37,18 @@ public class EnfermedadesController {
     }
 
     @PutMapping("/enfermedades")
-    public ResponseEntity<String> updateEnfermedad(@RequestParam("idEnfermedad") int idEnfermedad,
+    public ResponseEntity<ResponseMessage> updateEnfermedad(@RequestParam("idEnfermedad") int idEnfermedad,
             @RequestParam("enfermedad") String nombreEnfermedad) {
         return enfermedadesWriteService.updateEnfermedad(idEnfermedad, nombreEnfermedad);
     }
 
     @PostMapping("/enfermedades")
-    public ResponseEntity<String> saveEnfermedad(@RequestParam("enfermedad") String nombreEnfermedad) {
+    public ResponseEntity<ResponseMessage> saveEnfermedad(@RequestParam("enfermedad") String nombreEnfermedad) {
         return enfermedadesWriteService.saveEnfermedad(nombreEnfermedad);
     }
 
     @DeleteMapping("/enfermedades/{idEnfermedad}")
-    public ResponseEntity<String> updateIllness(@PathVariable("idEnfermedad") int idEnfermedad) {
+    public ResponseEntity<ResponseMessage> updateIllness(@PathVariable("idEnfermedad") int idEnfermedad) {
         return enfermedadesWriteService.deleteEnfermedad(idEnfermedad);
     }
 

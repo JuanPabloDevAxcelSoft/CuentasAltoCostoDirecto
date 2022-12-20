@@ -8,7 +8,8 @@ import org.springframework.stereotype.Service;
 import com.savia.app.model.EnfermedadesWriteModel;
 import com.savia.app.repository.EnfermedadesWriteRepository;
 import com.savia.app.service.EnfermedadesWriteService;
-import com.savia.app.util.ResponseEntityJson;
+import com.savia.app.vo.ResponseMessage;
+
 import java.util.Date;
 
 @Service
@@ -17,60 +18,53 @@ public class EnfermedadesWriteServiceImpl implements EnfermedadesWriteService {
     EnfermedadesWriteRepository enfermedadesRepository;
 
     @Override
-    public ResponseEntity<String> deleteEnfermedad(int idEnfermedad) {
-        ResponseEntityJson jsonResponse = new ResponseEntityJson();
-        String message = "";
-        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+    public ResponseEntity<ResponseMessage> deleteEnfermedad(int idEnfermedad) {
+        ResponseMessage response = new ResponseMessage();
         try {
             if (idEnfermedad > 0) {
                 enfermedadesRepository.deleteById(idEnfermedad);
             }
-            status = (idEnfermedad > 0) ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
-            message = (idEnfermedad > 0) ? "Se elimino la enfermedad correctamente"
-                    : "El id no es aceptado para realizar la eliminación";
+            response.setMessage((idEnfermedad > 0) ? "Se elimino la enfermedad correctamente"
+                    : "El id no es aceptado para realizar la eliminación");
+            response.setStatus((idEnfermedad > 0) ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
-            message = "No se elimino la enfermedad  : " + e.getLocalizedMessage();
+            response.setMessage("No se elimino la enfermedad  : " + e.getLocalizedMessage());
         }
-        return jsonResponse.ResponseHttp(message, status, null);
+        return ResponseEntity.ok().body(response);
     }
 
     @Override
-    public ResponseEntity<String> updateEnfermedad(int idEnfermedad, String nombreEnfermedad) {
-        ResponseEntityJson jsonResponse = new ResponseEntityJson();
-        String message = "";
-        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+    public ResponseEntity<ResponseMessage> updateEnfermedad(int idEnfermedad, String nombreEnfermedad) {
+        ResponseMessage response = new ResponseMessage();
         try {
             if (!nombreEnfermedad.isEmpty()) {
                 enfermedadesRepository.save(new EnfermedadesWriteModel(idEnfermedad,
                         "tbl_" + nombreEnfermedad.toLowerCase() + "_paso", new Date(), true));
             }
-            message = (!nombreEnfermedad.isEmpty()) ? "Se cargo la enfermedad correctamente"
-                    : "El nombre de la enfermedad no puede ser vacio";
-            status = (!nombreEnfermedad.isEmpty()) ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
+            response.setMessage((!nombreEnfermedad.isEmpty()) ? "Se cargo la enfermedad correctamente"
+                    : "El nombre de la enfermedad no puede ser vacio");
+            response.setStatus((!nombreEnfermedad.isEmpty()) ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
-            message = "No se cargo la enfermedad  : " + e.getLocalizedMessage();
+            response.setMessage("No se cargo la enfermedad  : " + e.getLocalizedMessage());
         }
-        return jsonResponse.ResponseHttp(message, status, null);
+        return ResponseEntity.ok().body(response);
     }
 
     @Override
-    public ResponseEntity<String> saveEnfermedad(String nombreEnfermedad) {
-        ResponseEntityJson jsonResponse = new ResponseEntityJson();
-        String message = "";
-        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+    public ResponseEntity<ResponseMessage> saveEnfermedad(String nombreEnfermedad) {
+        ResponseMessage response = new ResponseMessage();
         try {
             if (!nombreEnfermedad.isEmpty()) {
                 enfermedadesRepository.save(
                         new EnfermedadesWriteModel("tbl_" + nombreEnfermedad.toLowerCase() + "_paso",
                                 nombreEnfermedad.toLowerCase(), new Date(), true));
             }
-            message = (!nombreEnfermedad.isEmpty()) ? "Se cargo la enfermedad correctamente"
-                    : "El nombre de la enfermedad  no puede ser vacio";
-            status = (!nombreEnfermedad.isEmpty()) ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
+            response.setMessage((!nombreEnfermedad.isEmpty()) ? "Se cargo la enfermedad correctamente"
+                    : "El nombre de la enfermedad  no puede ser vacio");
+            response.setStatus((!nombreEnfermedad.isEmpty()) ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
-            message = "No se cargo la enfermedad  : " + e.getLocalizedMessage();
+            response.setMessage("No se cargo la enfermedad  : " + e.getLocalizedMessage());
         }
-        return jsonResponse.ResponseHttp(message, status, null);
+        return ResponseEntity.ok().body(response);
     }
-
 }

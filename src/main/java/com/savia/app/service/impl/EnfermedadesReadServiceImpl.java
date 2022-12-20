@@ -9,9 +9,11 @@ import com.savia.app.dto.EnfermedadesReadDto;
 import com.savia.app.model.EnfermedadesReadModel;
 import com.savia.app.repository.EnfermedadesReadRepository;
 import com.savia.app.service.EnfermedadesReadService;
-import com.savia.app.util.ResponseEntityJson;
+
+import com.savia.app.vo.ResponseMessage;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -20,26 +22,24 @@ public class EnfermedadesReadServiceImpl implements EnfermedadesReadService {
     EnfermedadesReadRepository enfermedadesRepository;
 
     @Override
-    public ResponseEntity<String> allIllness() {
-        ResponseEntityJson jsonResponse = new ResponseEntityJson();
-        String message = "";
-        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+    public ResponseEntity<ResponseMessage> allIllness() {
+        ResponseMessage response = new ResponseMessage();
         List<EnfermedadesReadModel> list = new ArrayList<>();
         try {
             list = enfermedadesRepository.findAllByEstado(true);
-            status = (!list.isEmpty()) ? HttpStatus.OK : HttpStatus.ACCEPTED;
-            message = (!list.isEmpty()) ? "Listado de enfermedades" : "No hay enfermedades para listar";
+            response.setStatus((!list.isEmpty()) ? HttpStatus.OK : HttpStatus.ACCEPTED);
+            response.setMessage((!list.isEmpty()) ? "Listado de enfermedades" : "No hay enfermedades para listar");
+            response.setData(Arrays.asList(list.toArray()));
         } catch (Exception e) {
-            message = "Ocurrio un error, No se puede consultar la lista de enfermedades: " + e.getLocalizedMessage();
+            response.setMessage(
+                    "Ocurrio un error, No se puede consultar la lista de enfermedades: " + e.getLocalizedMessage());
         }
-        return jsonResponse.ResponseHttp(message, status, list);
+        return ResponseEntity.ok().body(response);
     }
 
     @Override
-    public ResponseEntity<String> tblIllness(Integer id) {
-        ResponseEntityJson jsonResponse = new ResponseEntityJson();
-        String message = "";
-        HttpStatus status = HttpStatus.ACCEPTED;
+    public ResponseEntity<ResponseMessage> tblIllness(Integer id) {
+        ResponseMessage response = new ResponseMessage();
 
         EnfermedadesReadModel enfermedadesReadModel = enfermedadesRepository.getById(id);
         EnfermedadesReadDto enferReadDtoResponse = null;
@@ -47,12 +47,14 @@ public class EnfermedadesReadServiceImpl implements EnfermedadesReadService {
             enferReadDtoResponse = new EnfermedadesReadDto(enfermedadesReadModel.getId(),
                     enfermedadesReadModel.getNameTables(),
                     enfermedadesReadModel.getFechaCreacion(), enfermedadesReadModel.getEstado());
-            status = HttpStatus.OK;
-            message = "Información de la enfermedad";
+
+            response.setMessage("Información de la enfermedad");
+            response.setStatus(HttpStatus.OK);
+            response.setItem(enferReadDtoResponse);
         } else {
-            message = "La enfermedad consultada no se encuentra registrada";
+            response.setMessage("La enfermedad consultada no se encuentra registrada");
         }
-        return jsonResponse.ResponseHttp(message, status, enferReadDtoResponse);
+        return ResponseEntity.ok().body(response);
     }
 
     @Override
