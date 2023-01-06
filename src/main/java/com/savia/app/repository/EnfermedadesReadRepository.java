@@ -2,13 +2,13 @@ package com.savia.app.repository;
 
 import java.util.List;
 
+import com.savia.app.model.ReadCmEnfermedades;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.savia.app.model.EnfermedadesReadModel;
 
 @Repository
-public interface EnfermedadesReadRepository extends JpaRepository<EnfermedadesReadModel, Integer> {
+public interface EnfermedadesReadRepository extends JpaRepository<ReadCmEnfermedades, Integer> {
 
-    public List<EnfermedadesReadModel> findAllByEstado(boolean estado);
+    public List<ReadCmEnfermedades> findAllByEstado(boolean estado);
 }

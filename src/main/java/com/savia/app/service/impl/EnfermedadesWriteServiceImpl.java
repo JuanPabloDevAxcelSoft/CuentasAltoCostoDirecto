@@ -1,11 +1,12 @@
 package com.savia.app.service.impl;
 
+import com.savia.app.model.WriteCmEnfermedades;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.savia.app.model.EnfermedadesWriteModel;
+
 import com.savia.app.repository.EnfermedadesWriteRepository;
 import com.savia.app.service.EnfermedadesWriteService;
 import com.savia.app.vo.ResponseMessage;
@@ -38,8 +39,8 @@ public class EnfermedadesWriteServiceImpl implements EnfermedadesWriteService {
         ResponseMessage response = new ResponseMessage();
         try {
             if (!nombreEnfermedad.isEmpty()) {
-                enfermedadesRepository.save(new EnfermedadesWriteModel(idEnfermedad,
-                        "tbl_" + nombreEnfermedad.toLowerCase() + "_paso", new Date(), true));
+                enfermedadesRepository.save(new WriteCmEnfermedades(idEnfermedad,
+                        "cm_" + nombreEnfermedad.toLowerCase() + "_paso", new Date(), true));
             }
             response.setMessage((!nombreEnfermedad.isEmpty()) ? "Se cargo la enfermedad correctamente"
                     : "El nombre de la enfermedad no puede ser vacio");
@@ -50,13 +51,13 @@ public class EnfermedadesWriteServiceImpl implements EnfermedadesWriteService {
         return ResponseEntity.ok().body(response);
     }
 
-    @Override
+    /*@Override
     public ResponseEntity<ResponseMessage> saveEnfermedad(String nombreEnfermedad) {
         ResponseMessage response = new ResponseMessage();
         try {
             if (!nombreEnfermedad.isEmpty()) {
                 enfermedadesRepository.save(
-                        new EnfermedadesWriteModel("tbl_" + nombreEnfermedad.toLowerCase() + "_paso",
+                        new WriteCmEnfermedades("tbl_" + nombreEnfermedad.toLowerCase() + "_paso",
                                 nombreEnfermedad.toLowerCase(), new Date(), true));
             }
             response.setMessage((!nombreEnfermedad.isEmpty()) ? "Se cargo la enfermedad correctamente"
@@ -66,5 +67,5 @@ public class EnfermedadesWriteServiceImpl implements EnfermedadesWriteService {
             response.setMessage("No se cargo la enfermedad  : " + e.getLocalizedMessage());
         }
         return ResponseEntity.ok().body(response);
-    }
+    }*/
 }

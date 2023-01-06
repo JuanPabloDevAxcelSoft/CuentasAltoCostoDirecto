@@ -2,13 +2,13 @@ package com.savia.app.service.impl;
 
 import java.util.List;
 
+import com.savia.app.model.CmPaciente;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 // import com.savia.app.model.DetallePaciente;
-import com.savia.app.model.Paciente;
 import com.savia.app.repository.DetallePacienteRepository;
 import com.savia.app.service.DetallePacienteService;
 import com.savia.app.vo.ResponseMessage;
@@ -25,7 +25,7 @@ public class DetallePacienteImpl implements DetallePacienteService {
     @Override
     public ResponseEntity<ResponseMessage> getAllPacientePaginated() {
         ResponseMessage response = new ResponseMessage();
-        List<Paciente> list = new ArrayList<>();
+        List<CmPaciente> list = new ArrayList<>();
         try {
             list = detallePacienteRepository.findAll();
             response.setMessage((list.isEmpty()) ? "No hay registros para mostrar"
