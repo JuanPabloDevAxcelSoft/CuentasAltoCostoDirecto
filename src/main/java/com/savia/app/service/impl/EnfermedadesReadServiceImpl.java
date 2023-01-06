@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.savia.app.dto.EnfermedadesReadDto;
-import com.savia.app.model.EnfermedadesReadModel;
+import com.savia.app.model.CmEnfermedades;
 import com.savia.app.repository.EnfermedadesReadRepository;
 import com.savia.app.service.EnfermedadesReadService;
 
@@ -24,7 +24,7 @@ public class EnfermedadesReadServiceImpl implements EnfermedadesReadService {
     @Override
     public ResponseEntity<ResponseMessage> allIllness() {
         ResponseMessage response = new ResponseMessage();
-        List<EnfermedadesReadModel> list = new ArrayList<>();
+        List<CmEnfermedades> list = new ArrayList<>();
         try {
             list = enfermedadesRepository.findAllByEstado(true);
             response.setStatus((!list.isEmpty()) ? HttpStatus.OK : HttpStatus.ACCEPTED);
@@ -41,11 +41,11 @@ public class EnfermedadesReadServiceImpl implements EnfermedadesReadService {
     public ResponseEntity<ResponseMessage> tblIllness(Integer id) {
         ResponseMessage response = new ResponseMessage();
 
-        EnfermedadesReadModel enfermedadesReadModel = enfermedadesRepository.getById(id);
+        CmEnfermedades enfermedadesReadModel = enfermedadesRepository.getById(id);
         EnfermedadesReadDto enferReadDtoResponse = null;
         if (enfermedadesReadModel != null) {
             enferReadDtoResponse = new EnfermedadesReadDto(enfermedadesReadModel.getId(),
-                    enfermedadesReadModel.getNameTables(),
+                    enfermedadesReadModel.getNombreTabla(),
                     enfermedadesReadModel.getFechaCreacion(), enfermedadesReadModel.getEstado());
 
             response.setMessage("Información de la enfermedad");
@@ -59,11 +59,11 @@ public class EnfermedadesReadServiceImpl implements EnfermedadesReadService {
 
     @Override
     public EnfermedadesReadDto findIllnessById(Integer id) {
-        EnfermedadesReadModel enfermedadesReadModel = enfermedadesRepository.getById(id);
+        CmEnfermedades enfermedadesReadModel = enfermedadesRepository.getById(id);
         EnfermedadesReadDto enferReadDtoResponse = null;
         if (enfermedadesReadModel != null) {
             enferReadDtoResponse = new EnfermedadesReadDto(enfermedadesReadModel.getId(),
-                    enfermedadesReadModel.getNameTables(),
+                    enfermedadesReadModel.getNombreTabla(),
                     enfermedadesReadModel.getFechaCreacion(), enfermedadesReadModel.getEstado());
         }
         return enferReadDtoResponse;

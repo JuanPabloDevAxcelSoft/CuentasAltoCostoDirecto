@@ -1,7 +1,7 @@
 package com.savia.app.repository;
 
 // import com.savia.app.model.DetallePaciente;
-import com.savia.app.model.Paciente;
+import com.savia.app.model.CmPaciente;
 
 // import java.util.List;
 
@@ -11,7 +11,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface DetallePacienteRepository extends JpaRepository<Paciente, Integer> {
+public interface DetallePacienteRepository extends JpaRepository<CmPaciente, Integer> {
 
     // @Query("SELECT u.* FROM tbl_detalle_paciente u WHERE u.id_paciente = :id")
     // List<DetallePaciente> findByIdPaciente(@Param("id") Long id);

@@ -4,8 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.savia.app.dto.EnfermedadesReadDto;
 import com.savia.app.service.CargaDirectaService;
@@ -26,7 +24,6 @@ public class CargaDirectaImpl implements CargaDirectaService {
     EnfermedadesReadService enfermedadesServiceDirect;
 
     @Override
-    @Transactional(rollbackFor = { Exception.class }, propagation = Propagation.REQUIRED)
     public ResponseEntity<ResponseMessage> loadDataBaseDirect(String ruta, Integer id) {
         ResponseMessage response = new ResponseMessage();
         String message = "";

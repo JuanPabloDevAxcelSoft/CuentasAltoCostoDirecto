@@ -1,3 +1,8 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package com.savia.app.model;
 
 import java.io.Serializable;
@@ -13,72 +18,83 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ *
+ * @author Angel Gonzalez
+ */
 @Entity
-@Table(name = "tbl_detalle_paciente")
-public class DetallePaciente implements Serializable {
+@Table(name = "cm_detalle_paciente")
+@XmlRootElement
+public class CmDetallePaciente implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
     @NotNull
     private Long id;
-
     @Basic(optional = false)
     @NotNull
     @Column(name = "regimen_afiliacion")
-    private Character regimen_afiliacion;
-
+    private Character regimenAfiliacion;
     @Basic(optional = false)
     @NotNull
     @Column(name = "municipio_residencia")
-    private int municipio_residencia;
-
+    private int municipioResidencia;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 21)
     private String telefono;
-
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 6)
     @Column(name = "codigo_eapb")
-    private String codigo_eapb;
-
+    private String codigoEapb;
     @Basic(optional = false)
     @NotNull
     @Column(name = "fecha_afilicion_eapb")
     @Temporal(TemporalType.DATE)
-    private Date fecha_afilicion_eapb;
-
+    private Date fechaAfilicionEapb;
     @Basic(optional = false)
     @NotNull
     @Column(name = "fecha_muerte")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date fecha_muerte;
-
+    private Date fechaMuerte;
     @Basic(optional = false)
     @NotNull
     @Column(name = "causa_muerte")
-    private Character causa_muerte;
-
+    private Character causaMuerte;
     @Basic(optional = false)
     @NotNull
     @Column(name = "fecha_corte")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date fecha_corte;
-
+    private Date fechaCorte;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 10)
     @Column(name = "codigo_serial")
-    private String codigo_serial;
-
+    private String codigoSerial;
     @JoinColumn(name = "id_paciente", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    private Paciente id_paciente;
+    private CmPaciente idPaciente;
 
-    public DetallePaciente() {
+    public CmDetallePaciente() {
+    }
+
+    public CmDetallePaciente(Long id, Character regimenAfiliacion, int municipioResidencia, String telefono,
+            String codigoEapb, Date fechaAfilicionEapb, Date fechaMuerte, Character causaMuerte, Date fechaCorte,
+            String codigoSerial) {
+        this.id = id;
+        this.regimenAfiliacion = regimenAfiliacion;
+        this.municipioResidencia = municipioResidencia;
+        this.telefono = telefono;
+        this.codigoEapb = codigoEapb;
+        this.fechaAfilicionEapb = fechaAfilicionEapb;
+        this.fechaMuerte = fechaMuerte;
+        this.causaMuerte = causaMuerte;
+        this.fechaCorte = fechaCorte;
+        this.codigoSerial = codigoSerial;
     }
 
     public Long getId() {
@@ -90,19 +106,19 @@ public class DetallePaciente implements Serializable {
     }
 
     public Character getRegimenAfiliacion() {
-        return regimen_afiliacion;
+        return regimenAfiliacion;
     }
 
     public void setRegimenAfiliacion(Character regimenAfiliacion) {
-        this.regimen_afiliacion = regimenAfiliacion;
+        this.regimenAfiliacion = regimenAfiliacion;
     }
 
     public int getMunicipioResidencia() {
-        return municipio_residencia;
+        return municipioResidencia;
     }
 
     public void setMunicipioResidencia(int municipioResidencia) {
-        this.municipio_residencia = municipioResidencia;
+        this.municipioResidencia = municipioResidencia;
     }
 
     public String getTelefono() {
@@ -114,59 +130,58 @@ public class DetallePaciente implements Serializable {
     }
 
     public String getCodigoEapb() {
-        return codigo_eapb;
+        return codigoEapb;
     }
 
     public void setCodigoEapb(String codigoEapb) {
-        this.codigo_eapb = codigoEapb;
+        this.codigoEapb = codigoEapb;
     }
 
     public Date getFechaAfilicionEapb() {
-        return fecha_afilicion_eapb;
+        return fechaAfilicionEapb;
     }
 
     public void setFechaAfilicionEapb(Date fechaAfilicionEapb) {
-        this.fecha_afilicion_eapb = fechaAfilicionEapb;
+        this.fechaAfilicionEapb = fechaAfilicionEapb;
     }
 
     public Date getFechaMuerte() {
-        return fecha_muerte;
+        return fechaMuerte;
     }
 
     public void setFechaMuerte(Date fechaMuerte) {
-        this.fecha_muerte = fechaMuerte;
+        this.fechaMuerte = fechaMuerte;
     }
 
     public Character getCausaMuerte() {
-        return causa_muerte;
+        return causaMuerte;
     }
 
     public void setCausaMuerte(Character causaMuerte) {
-        this.causa_muerte = causaMuerte;
+        this.causaMuerte = causaMuerte;
     }
 
     public Date getFechaCorte() {
-        return fecha_corte;
+        return fechaCorte;
     }
 
     public void setFechaCorte(Date fechaCorte) {
-        this.fecha_corte = fechaCorte;
+        this.fechaCorte = fechaCorte;
     }
 
     public String getCodigoSerial() {
-        return codigo_serial;
+        return codigoSerial;
     }
 
     public void setCodigoSerial(String codigoSerial) {
-        this.codigo_serial = codigoSerial;
+        this.codigoSerial = codigoSerial;
     }
 
-    public Paciente getIdPaciente() {
-        return id_paciente;
+    public CmPaciente getIdPaciente() {
+        return idPaciente;
     }
 
-    public void setIdPaciente(Paciente idPaciente) {
-        this.id_paciente = idPaciente;
+    public void setIdPaciente(CmPaciente idPaciente) {
+        this.idPaciente = idPaciente;
     }
-
 }

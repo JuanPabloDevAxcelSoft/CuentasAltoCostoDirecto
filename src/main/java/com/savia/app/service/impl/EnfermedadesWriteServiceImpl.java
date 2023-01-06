@@ -5,12 +5,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.savia.app.model.EnfermedadesWriteModel;
+import com.savia.app.model.CmEnfermedades;
 import com.savia.app.repository.EnfermedadesWriteRepository;
 import com.savia.app.service.EnfermedadesWriteService;
 import com.savia.app.vo.ResponseMessage;
-
-import java.util.Date;
 
 @Service
 public class EnfermedadesWriteServiceImpl implements EnfermedadesWriteService {
@@ -38,8 +36,9 @@ public class EnfermedadesWriteServiceImpl implements EnfermedadesWriteService {
         ResponseMessage response = new ResponseMessage();
         try {
             if (!nombreEnfermedad.isEmpty()) {
-                enfermedadesRepository.save(new EnfermedadesWriteModel(idEnfermedad,
-                        "tbl_" + nombreEnfermedad.toLowerCase() + "_paso", new Date(), true));
+                String nombreTabla = "cm_" + nombreEnfermedad.toLowerCase() + "_paso";
+                enfermedadesRepository
+                        .save(new CmEnfermedades(idEnfermedad, nombreTabla, nombreEnfermedad.toLowerCase()));
             }
             response.setMessage((!nombreEnfermedad.isEmpty()) ? "Se cargo la enfermedad correctamente"
                     : "El nombre de la enfermedad no puede ser vacio");
@@ -55,9 +54,8 @@ public class EnfermedadesWriteServiceImpl implements EnfermedadesWriteService {
         ResponseMessage response = new ResponseMessage();
         try {
             if (!nombreEnfermedad.isEmpty()) {
-                enfermedadesRepository.save(
-                        new EnfermedadesWriteModel("tbl_" + nombreEnfermedad.toLowerCase() + "_paso",
-                                nombreEnfermedad.toLowerCase(), new Date(), true));
+                String nombreTabla = "cm_" + nombreEnfermedad.toLowerCase() + "_paso";
+                enfermedadesRepository.save(new CmEnfermedades(nombreTabla, nombreEnfermedad.toLowerCase()));
             }
             response.setMessage((!nombreEnfermedad.isEmpty()) ? "Se cargo la enfermedad correctamente"
                     : "El nombre de la enfermedad  no puede ser vacio");
