@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.savia.app.dto.EnfermedadesReadDto;
 import com.savia.app.service.CargaDirectaService;
 import com.savia.app.service.EnfermedadesReadService;
-import com.savia.app.util.ResponseEntityJson;
+import com.savia.app.vo.ResponseMessage;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -27,16 +27,22 @@ public class CargaDirectaImpl implements CargaDirectaService {
 
     @Override
     @Transactional(rollbackFor = { Exception.class }, propagation = Propagation.REQUIRED)
-    public ResponseEntity<String> loadDataBaseDirect(String ruta, Integer id) {
-        ResponseEntityJson jsonResponse = new ResponseEntityJson();
+    public ResponseEntity<ResponseMessage> loadDataBaseDirect(String ruta, Integer id) {
+        ResponseMessage response = new ResponseMessage();
         String message = "";
-        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+        HttpStatus status = HttpStatus.ACCEPTED;
         try {
             if ((!ruta.isEmpty()) && (id > 0)) {
                 EnfermedadesReadDto enfermedadesReadDtoObj = enfermedadesServiceDirect.findIllnessById(id);
                 if (enfermedadesReadDtoObj != null) {
+<<<<<<< HEAD
                     String pureSql="LOAD DATA LOCAL INFILE '" +ruta+
                             "' INTO TABLE "+enfermedadesReadDtoObj.getNameTables()+" FIELDS TERMINATED BY ';' LINES TERMINATED BY '\\n' IGNORE 1 ROWS;";
+=======
+                    String pureSql = "LOAD DATA LOCAL INFILE '" + ruta +
+                            "' INTO TABLE " + enfermedadesReadDtoObj.getNameTables()
+                            + " FIELDS TERMINATED BY ';' LINES TERMINATED BY '\\n' IGNORE 1 ROWS;";
+>>>>>>> 735716eab881ede5890ab6dd23b02b3132ebf2a0
                     Query nativeQuery = entityManager.createNativeQuery(pureSql);
                     nativeQuery.executeUpdate();
                     status = HttpStatus.OK;
@@ -52,14 +58,8 @@ public class CargaDirectaImpl implements CargaDirectaService {
         } catch (Exception e) {
             message = "El archivo: tiene un error : " + e.getLocalizedMessage();
         }
-        return jsonResponse.ResponseHttp(message, status, null);
-    }
-
-    @Override
-    @Transactional
-    public void loadDataBase(String ruta, String tabla) {
-        String pureSql = "COPY " + tabla + " from '" + ruta + "' with DELIMITER ';' CSV HEADER;";
-        Query nativeQuery = entityManager.createNativeQuery(pureSql);
-        nativeQuery.executeUpdate();
+        response.setMessage(message);
+        response.setStatus(status);
+        return ResponseEntity.ok().body(response);
     }
 }

@@ -8,6 +8,7 @@ import com.savia.app.dto.IpsReadDto;
 import com.savia.app.model.IpsReadModel;
 import com.savia.app.service.IpsReadService;
 import com.savia.app.service.IpsWriteService;
+import com.savia.app.vo.ResponseMessage;
 
 import java.util.List;
 
@@ -41,18 +42,18 @@ public class IpsController {
     }
 
     @PutMapping("/ips")
-    public ResponseEntity<String> updateIps(@RequestParam("idIps") int idIps,
+    public ResponseEntity<ResponseMessage> updateIps(@RequestParam("idIps") int idIps,
             @RequestParam("enfermedad") String nombreIps) {
         return ipsWriteService.updateIps(idIps, nombreIps);
     }
 
     @PostMapping("/ips")
-    public ResponseEntity<String> saveIps(@RequestParam("ips") String nombreIps) {
+    public ResponseEntity<ResponseMessage> saveIps(@RequestParam("ips") String nombreIps) {
         return ipsWriteService.saveIps(nombreIps);
     }
 
     @DeleteMapping("/ips/{idIps}")
-    public ResponseEntity<String> updateIps(@PathVariable("idIps") int idIps) {
+    public ResponseEntity<ResponseMessage> updateIps(@PathVariable("idIps") int idIps) {
         return ipsWriteService.deleteIps(idIps);
     }
 }
