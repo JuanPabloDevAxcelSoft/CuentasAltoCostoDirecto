@@ -13,14 +13,11 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
@@ -87,7 +84,9 @@ public class CmDetallePaciente implements Serializable {
         this.id = id;
     }
 
-    public CmDetallePaciente(Long id, Character regimenAfiliacion, int municipioResidencia, String telefono, String codigoEapb, Date fechaAfilicionEapb, Date fechaMuerte, Character causaMuerte, Date fechaCorte, String codigoSerial) {
+    public CmDetallePaciente(Long id, Character regimenAfiliacion, int municipioResidencia, String telefono,
+            String codigoEapb, Date fechaAfilicionEapb, Date fechaMuerte, Character causaMuerte, Date fechaCorte,
+            String codigoSerial) {
         this.id = id;
         this.regimenAfiliacion = regimenAfiliacion;
         this.municipioResidencia = municipioResidencia;
@@ -212,5 +211,5 @@ public class CmDetallePaciente implements Serializable {
     public String toString() {
         return "entity.CmDetallePaciente[ id=" + id + " ]";
     }
-    
+
 }
