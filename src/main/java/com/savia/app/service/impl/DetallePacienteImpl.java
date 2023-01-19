@@ -5,6 +5,7 @@ import java.util.List;
 import com.savia.app.model.CmPaciente;
 import com.savia.app.service.EnfermedadesReadService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -50,16 +51,18 @@ public class DetallePacienteImpl implements DetallePacienteService {
     }
 
     @Override
-    public ResponseEntity<ResponseMessage> getDetallePaciente(int idEnfermedad) {
+    public ResponseEntity<ResponseMessage> getDetallePaciente(int idEnfermedad,int idIps, int limit,int page) {
         ResponseMessage response = new ResponseMessage();
         //sacando nombre de la tabla final
         String nombreTablaFinal=enfermedadesReadService.nomtabFin(idEnfermedad);
+        //page
+        page=(page-1)*limit;
         try {
             String sql="SELECT cm_paciente.*, cm_detalle_paciente.id as id_detalle_paciente, "+nombreTablaFinal+".id as id_hemofilia_paciente\n" +
                     "FROM cm_paciente\n" +
                     "JOIN cm_detalle_paciente ON cm_paciente.id = cm_detalle_paciente.id_paciente\n" +
                     "JOIN cm_paciente_hemofilia ON cm_paciente.id = "+nombreTablaFinal+".id_paciente\n" +
-                    "limit 5 offset 0;";
+                    "limit "+limit+" offset "+page+";";
             Query query = entityManager.createNativeQuery(sql);
             List listPaciente=query.getResultList();
             response.setMessage((listPaciente.isEmpty()) ? "No hay registros para mostrar"

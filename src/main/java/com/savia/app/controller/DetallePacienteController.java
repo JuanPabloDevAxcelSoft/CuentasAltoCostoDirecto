@@ -17,8 +17,10 @@ public class DetallePacienteController {
     private DetallePacienteService detallePacienteService;
 
     @GetMapping("/consulta/paciente")
-    public ResponseEntity<ResponseMessage> getPaciente(@Param("idEnfermedad") int idEnfermedad) {
-        return this.detallePacienteService.getDetallePaciente(idEnfermedad);
+    public ResponseEntity<ResponseMessage> getPaciente(@Param("idEnfermedad") int idEnfermedad,
+                                                       @Param("idIps") int idIps,@Param("limit") int limit,
+                                                       @Param("page") int page) {
+        return this.detallePacienteService.getDetallePaciente(idEnfermedad,idIps,limit,page);
     }
 
 }
