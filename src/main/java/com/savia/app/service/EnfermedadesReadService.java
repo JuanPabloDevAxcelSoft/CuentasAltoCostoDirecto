@@ -12,4 +12,6 @@ public interface EnfermedadesReadService {
 
     EnfermedadesReadDto findIllnessById(Integer id);
 
+    String nomtabFin(Integer id);
+
 }

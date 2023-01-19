@@ -45,8 +45,8 @@ public class WriteCmEnfermedades implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
-    @Column(name = "name_tables")
-    private String nameTables;
+    @Column(name = "nom_tab_fin")
+    private String nomTabFin;
 
 
     public WriteCmEnfermedades() {
@@ -56,12 +56,12 @@ public class WriteCmEnfermedades implements Serializable {
         this.id = id;
     }
 
-    public WriteCmEnfermedades(Integer id, String nombreTabla, String nombre, String nameEnfermedadFrond, String nameTables) {
+    public WriteCmEnfermedades(Integer id, String nombreTabla, String nombre, String nameEnfermedadFrond, String nomTabFin) {
         this.id = id;
         this.nombreTabla = nombreTabla;
         this.nombre = nombre;
         this.nameEnfermedadFrond = nameEnfermedadFrond;
-        this.nameTables = nameTables;
+        this.nomTabFin = nomTabFin;
     }
 
     public WriteCmEnfermedades(int id, String nombreTabla, Date fechaCreacion, boolean estado) {
@@ -119,12 +119,12 @@ public class WriteCmEnfermedades implements Serializable {
         this.nameEnfermedadFrond = nameEnfermedadFrond;
     }
 
-    public String getNameTables() {
-        return nameTables;
+    public String getNomTabFin() {
+        return nomTabFin;
     }
 
-    public void setNameTables(String nameTables) {
-        this.nameTables = nameTables;
+    public void setNomTabFin(String nomTabFin) {
+        this.nomTabFin = nomTabFin;
     }
 
 

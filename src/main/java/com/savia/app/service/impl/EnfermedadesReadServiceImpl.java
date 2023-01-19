@@ -12,12 +12,17 @@ import com.savia.app.service.EnfermedadesReadService;
 
 import com.savia.app.vo.ResponseMessage;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 @Service
 public class EnfermedadesReadServiceImpl implements EnfermedadesReadService {
+    @PersistenceContext
+    private EntityManager entityManager;
     @Autowired
     EnfermedadesReadRepository enfermedadesRepository;
 
@@ -45,7 +50,7 @@ public class EnfermedadesReadServiceImpl implements EnfermedadesReadService {
         EnfermedadesReadDto enferReadDtoResponse = null;
         if (enfermedadesReadModel != null) {
             enferReadDtoResponse = new EnfermedadesReadDto(enfermedadesReadModel.getId(),
-                    enfermedadesReadModel.getNameTables(),
+                    enfermedadesReadModel.getNomTabFin(),
                     enfermedadesReadModel.getFechaCreacion(), enfermedadesReadModel.getEstado());
 
             response.setMessage("Información de la enfermedad");
@@ -63,10 +68,18 @@ public class EnfermedadesReadServiceImpl implements EnfermedadesReadService {
         EnfermedadesReadDto enferReadDtoResponse = null;
         if (enfermedadesReadModel != null) {
             enferReadDtoResponse = new EnfermedadesReadDto(enfermedadesReadModel.getId(),
-                    enfermedadesReadModel.getNameTables(),
+                    enfermedadesReadModel.getNomTabFin(),
                     enfermedadesReadModel.getFechaCreacion(), enfermedadesReadModel.getEstado());
         }
         return enferReadDtoResponse;
+    }
+
+    @Override
+    public String nomtabFin(Integer id) {
+        String sql= "select cm_enfermedades.nom_tab_fin from cm_enfermedades  where id ="+id+" and Estado=1;";
+        Query query= entityManager.createNativeQuery(sql);
+
+        return query.getSingleResult().toString();
     }
 
 }

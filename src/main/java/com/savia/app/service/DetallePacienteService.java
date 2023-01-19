@@ -7,6 +7,6 @@ import com.savia.app.vo.ResponseMessage;
 public interface DetallePacienteService {
     public ResponseEntity<ResponseMessage> getAllPacientePaginated();
 
-    public ResponseEntity<ResponseMessage> getDetallePaciente(Long id);
+    public ResponseEntity<ResponseMessage> getDetallePaciente(int idEnfermedad);
 
 }
