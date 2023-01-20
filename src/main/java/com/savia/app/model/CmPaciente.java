@@ -24,6 +24,9 @@ public class CmPaciente implements Serializable {
     @Basic(optional = false)
     @NotNull
     private Long id;
+    @Column(name = "fecha_ingreso")
+    @Temporal(TemporalType.DATE)
+    private Date fechaIngreso;
     @Size(max = 20)
     @Column(name = "primer_nombre")
     private String primerNombre;
@@ -64,6 +67,14 @@ public class CmPaciente implements Serializable {
         this.id = id;
         this.tipoIdentificacion = tipoIdentificacion;
         this.numeroIdentificacion = numeroIdentificacion;
+    }
+
+    public Date getFechaIngreso() {
+        return fechaIngreso;
+    }
+
+    public void setFechaIngreso(Date fechaIngreso) {
+        this.fechaIngreso = fechaIngreso;
     }
 
     public Long getId() {

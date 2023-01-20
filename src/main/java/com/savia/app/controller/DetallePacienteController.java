@@ -1,5 +1,6 @@
 package com.savia.app.controller;
 
+import com.savia.app.dto.ListarPacienteDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +18,8 @@ public class DetallePacienteController {
     private DetallePacienteService detallePacienteService;
 
     @GetMapping("/consulta/paciente")
-    public ResponseEntity<ResponseMessage> getPaciente(@Param("idEnfermedad") int idEnfermedad,
-                                                       @Param("idIps") int idIps,@Param("limit") int limit,
-                                                       @Param("page") int page) {
-        return this.detallePacienteService.getDetallePaciente(idEnfermedad,idIps,limit,page);
+    public ResponseEntity<ResponseMessage> getPaciente(@RequestBody ListarPacienteDto listarPacienteDto) {
+        return this.detallePacienteService.getDetallePaciente(listarPacienteDto);
     }
 
 }

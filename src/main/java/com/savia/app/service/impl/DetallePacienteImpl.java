@@ -2,6 +2,7 @@ package com.savia.app.service.impl;
 
 import java.util.List;
 
+import com.savia.app.dto.ListarPacienteDto;
 import com.savia.app.model.CmPaciente;
 import com.savia.app.service.EnfermedadesReadService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,19 +52,40 @@ public class DetallePacienteImpl implements DetallePacienteService {
     }
 
     @Override
-    public ResponseEntity<ResponseMessage> getDetallePaciente(int idEnfermedad,int idIps, int limit,int page) {
+    public ResponseEntity<ResponseMessage> getDetallePaciente(ListarPacienteDto listarPacienteDto) {
         ResponseMessage response = new ResponseMessage();
         //sacando nombre de la tabla final
-        String nombreTablaFinal=enfermedadesReadService.nomtabFin(idEnfermedad);
+        String nombreTablaFinal=enfermedadesReadService.nomtabFin(listarPacienteDto.getIdEnfermedad());
         //page
-        page=(page-1)*limit;
+        int limit= listarPacienteDto.getLimit();
+        int page=(listarPacienteDto.getPage()-1)*limit;
         try {
-            String sql="SELECT cm_paciente.*, cm_detalle_paciente.id as id_detalle_paciente, "+nombreTablaFinal+".id as id_hemofilia_paciente\n" +
-                    "FROM cm_paciente\n" +
-                    "JOIN cm_detalle_paciente ON cm_paciente.id = cm_detalle_paciente.id_paciente\n" +
-                    "JOIN cm_paciente_hemofilia ON cm_paciente.id = "+nombreTablaFinal+".id_paciente\n" +
-                    "limit "+limit+" offset "+page+";";
-            Query query = entityManager.createNativeQuery(sql);
+            String pureSql="SELECT cm_paciente.*, cm_detalle_paciente.id as id_detalle_paciente, "+nombreTablaFinal+".id as id_hemofilia_paciente\n";
+            pureSql+=" FROM cm_paciente\n";
+            pureSql+=" JOIN cm_detalle_paciente ON cm_paciente.id = cm_detalle_paciente.id_paciente ";
+            pureSql+="JOIN cm_paciente_hemofilia ON cm_paciente.id = "+nombreTablaFinal+".id_paciente\n";
+            pureSql+="WHERE ";
+            boolean estadoMayorvali=false;
+            if (!listarPacienteDto.getTipoDocumento().equals("")){
+                estadoMayorvali=true;
+                pureSql+="tipo_identificacion ='"+listarPacienteDto.getTipoDocumento()+"' ";
+            }
+            if(!listarPacienteDto.getTipoDocumento().equals("")&&(!listarPacienteDto.getDocumento().equals(""))){
+                pureSql+=" AND numero_identificacion = '"+listarPacienteDto.getDocumento()+"' ";
+            }
+            if(!listarPacienteDto.getDesde().equals("")&&(!listarPacienteDto.getHasta().equals(""))){
+                if (estadoMayorvali){
+                    pureSql+=" AND ";
+                }
+                estadoMayorvali=true;
+                pureSql+="  fecha_ingreso BETWEEN '"+listarPacienteDto.getDesde()+"' AND '"+ listarPacienteDto.getHasta()+"' ";
+            }
+            if (estadoMayorvali==false){
+                pureSql.replace("WHERE","");
+            }
+            pureSql+="limit "+limit+" offset "+page+";";
+
+            Query query = entityManager.createNativeQuery(pureSql);
             List listPaciente=query.getResultList();
             response.setMessage((listPaciente.isEmpty()) ? "No hay registros para mostrar"
                     : "Cantidad de resultados encontrados : " + listPaciente.size());
