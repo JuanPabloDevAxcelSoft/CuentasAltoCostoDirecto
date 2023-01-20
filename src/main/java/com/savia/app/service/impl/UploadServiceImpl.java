@@ -39,7 +39,7 @@ public class UploadServiceImpl implements UploadService {
 		if (!file.isEmpty()) {
 			try {
 				byte[] bytes = file.getBytes();
-				Path path = Paths.get(folder + idEnfermedad + ipsEmisora + format.format(date) + ".csv");
+				Path path = Paths.get(folder + idEnfermedad + ipsEmisora+"-" + format.format(date) + ".csv");
 				Files.write(path, bytes);
 				String pathFile = String.valueOf(path).replace("\\", "/");
 				cargaDirectaService.loadDataBaseDirect(pathFile, idEnfermedad);
