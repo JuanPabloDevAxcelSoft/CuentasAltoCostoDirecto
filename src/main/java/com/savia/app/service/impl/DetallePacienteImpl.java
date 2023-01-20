@@ -6,16 +6,10 @@ import com.savia.app.dto.ListarPacienteDto;
 import com.savia.app.model.CmPaciente;
 import com.savia.app.service.EnfermedadesReadService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-// import com.savia.app.model.DetallePaciente;
-<<<<<<< HEAD
-import com.savia.app.model.CmPaciente;
-=======
->>>>>>> juan.dev
 import com.savia.app.repository.DetallePacienteRepository;
 import com.savia.app.service.DetallePacienteService;
 import com.savia.app.vo.ResponseMessage;

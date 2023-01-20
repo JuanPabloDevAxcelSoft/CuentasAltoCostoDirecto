@@ -6,14 +6,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-<<<<<<< HEAD
-import com.savia.app.model.CmEnfermedades;
-=======
-
->>>>>>> juan.dev
 import com.savia.app.repository.EnfermedadesWriteRepository;
 import com.savia.app.service.EnfermedadesWriteService;
 import com.savia.app.vo.ResponseMessage;
+
+import java.util.Date;
 
 @Service
 public class EnfermedadesWriteServiceImpl implements EnfermedadesWriteService {
@@ -41,14 +38,8 @@ public class EnfermedadesWriteServiceImpl implements EnfermedadesWriteService {
         ResponseMessage response = new ResponseMessage();
         try {
             if (!nombreEnfermedad.isEmpty()) {
-<<<<<<< HEAD
-                String nombreTabla = "cm_" + nombreEnfermedad.toLowerCase() + "_paso";
-                enfermedadesRepository
-                        .save(new CmEnfermedades(idEnfermedad, nombreTabla, nombreEnfermedad.toLowerCase()));
-=======
                 enfermedadesRepository.save(new WriteCmEnfermedades(idEnfermedad,
                         "cm_" + nombreEnfermedad.toLowerCase() + "_paso", new Date(), true));
->>>>>>> juan.dev
             }
             response.setMessage((!nombreEnfermedad.isEmpty()) ? "Se cargo la enfermedad correctamente"
                     : "El nombre de la enfermedad no puede ser vacio");

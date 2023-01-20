@@ -1,13 +1,5 @@
 package com.savia.app.repository;
 
-// import com.savia.app.model.DetallePaciente;
-<<<<<<< HEAD
-import com.savia.app.model.CmPaciente;
-=======
-
->>>>>>> juan.dev
-
-// import java.util.List;
 
 import com.savia.app.model.CmPaciente;
 import org.springframework.data.jpa.repository.JpaRepository;

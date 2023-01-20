@@ -4,14 +4,7 @@ import com.savia.app.model.WriteCmEnfermedades;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-<<<<<<< HEAD
-import com.savia.app.model.CmEnfermedades;
-
-@Repository
-public interface EnfermedadesWriteRepository extends JpaRepository<CmEnfermedades, Integer> {
-=======
 
 @Repository
 public interface EnfermedadesWriteRepository extends JpaRepository<WriteCmEnfermedades, Integer> {
->>>>>>> juan.dev
 }
