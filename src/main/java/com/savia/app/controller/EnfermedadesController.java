@@ -42,10 +42,10 @@ public class EnfermedadesController {
         return enfermedadesWriteService.updateEnfermedad(idEnfermedad, nombreEnfermedad);
     }
 
-    @PostMapping("/enfermedades")
+/*    @PostMapping("/enfermedades")
     public ResponseEntity<ResponseMessage> saveEnfermedad(@RequestParam("enfermedad") String nombreEnfermedad) {
         return enfermedadesWriteService.saveEnfermedad(nombreEnfermedad);
-    }
+    }*/
 
     @DeleteMapping("/enfermedades/{idEnfermedad}")
     public ResponseEntity<ResponseMessage> updateIllness(@PathVariable("idEnfermedad") int idEnfermedad) {

@@ -32,9 +32,9 @@ public class CargaDirectaImpl implements CargaDirectaService {
             if ((!ruta.isEmpty()) && (id > 0)) {
                 EnfermedadesReadDto enfermedadesReadDtoObj = enfermedadesServiceDirect.findIllnessById(id);
                 if (enfermedadesReadDtoObj != null) {
-                    String pureSql = "LOAD DATA LOCAL INFILE '" + ruta +
-                            "' INTO TABLE " + enfermedadesReadDtoObj.getNameTables()
-                            + " FIELDS TERMINATED BY ';' LINES TERMINATED BY '\\n' IGNORE 1 ROWS;";
+
+                    String pureSql="LOAD DATA LOCAL INFILE '" +ruta+
+                            "' INTO TABLE "+enfermedadesReadDtoObj.getNameTables()+" FIELDS TERMINATED BY ';' LINES TERMINATED BY '\\n' IGNORE 1 ROWS;";
                     Query nativeQuery = entityManager.createNativeQuery(pureSql);
                     nativeQuery.executeUpdate();
                     status = HttpStatus.OK;

@@ -1,30 +1,43 @@
 package com.savia.app.service.impl;
 
+import com.savia.app.model.ReadCmEnfermedades;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.savia.app.dto.EnfermedadesReadDto;
+<<<<<<< HEAD
 import com.savia.app.model.CmEnfermedades;
+=======
+>>>>>>> juan.dev
 import com.savia.app.repository.EnfermedadesReadRepository;
 import com.savia.app.service.EnfermedadesReadService;
 
 import com.savia.app.vo.ResponseMessage;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 @Service
 public class EnfermedadesReadServiceImpl implements EnfermedadesReadService {
+    @PersistenceContext
+    private EntityManager entityManager;
     @Autowired
     EnfermedadesReadRepository enfermedadesRepository;
 
     @Override
     public ResponseEntity<ResponseMessage> allIllness() {
         ResponseMessage response = new ResponseMessage();
+<<<<<<< HEAD
         List<CmEnfermedades> list = new ArrayList<>();
+=======
+        List<ReadCmEnfermedades> list = new ArrayList<>();
+>>>>>>> juan.dev
         try {
             list = enfermedadesRepository.findAllByEstado(true);
             response.setStatus((!list.isEmpty()) ? HttpStatus.OK : HttpStatus.ACCEPTED);
@@ -41,11 +54,19 @@ public class EnfermedadesReadServiceImpl implements EnfermedadesReadService {
     public ResponseEntity<ResponseMessage> tblIllness(Integer id) {
         ResponseMessage response = new ResponseMessage();
 
+<<<<<<< HEAD
         CmEnfermedades enfermedadesReadModel = enfermedadesRepository.getById(id);
         EnfermedadesReadDto enferReadDtoResponse = null;
         if (enfermedadesReadModel != null) {
             enferReadDtoResponse = new EnfermedadesReadDto(enfermedadesReadModel.getId(),
                     enfermedadesReadModel.getNombreTabla(),
+=======
+        ReadCmEnfermedades enfermedadesReadModel = enfermedadesRepository.getById(id);
+        EnfermedadesReadDto enferReadDtoResponse = null;
+        if (enfermedadesReadModel != null) {
+            enferReadDtoResponse = new EnfermedadesReadDto(enfermedadesReadModel.getId(),
+                    enfermedadesReadModel.getNomTabFin(),
+>>>>>>> juan.dev
                     enfermedadesReadModel.getFechaCreacion(), enfermedadesReadModel.getEstado());
 
             response.setMessage("Información de la enfermedad");
@@ -59,14 +80,30 @@ public class EnfermedadesReadServiceImpl implements EnfermedadesReadService {
 
     @Override
     public EnfermedadesReadDto findIllnessById(Integer id) {
+<<<<<<< HEAD
         CmEnfermedades enfermedadesReadModel = enfermedadesRepository.getById(id);
         EnfermedadesReadDto enferReadDtoResponse = null;
         if (enfermedadesReadModel != null) {
             enferReadDtoResponse = new EnfermedadesReadDto(enfermedadesReadModel.getId(),
                     enfermedadesReadModel.getNombreTabla(),
+=======
+        ReadCmEnfermedades enfermedadesReadModel = enfermedadesRepository.getById(id);
+        EnfermedadesReadDto enferReadDtoResponse = null;
+        if (enfermedadesReadModel != null) {
+            enferReadDtoResponse = new EnfermedadesReadDto(enfermedadesReadModel.getId(),
+                    enfermedadesReadModel.getNomTabFin(),
+>>>>>>> juan.dev
                     enfermedadesReadModel.getFechaCreacion(), enfermedadesReadModel.getEstado());
         }
         return enferReadDtoResponse;
+    }
+
+    @Override
+    public String nomtabFin(Integer id) {
+        String sql= "select cm_enfermedades.nom_tab_fin from cm_enfermedades  where id ="+id+" and Estado=1;";
+        Query query= entityManager.createNativeQuery(sql);
+
+        return query.getSingleResult().toString();
     }
 
 }
