@@ -68,15 +68,22 @@ public class EnfermedadesReadServiceImpl implements EnfermedadesReadService {
         EnfermedadesReadDto enferReadDtoResponse = null;
         if (enfermedadesReadModel != null) {
             enferReadDtoResponse = new EnfermedadesReadDto(enfermedadesReadModel.getId(),
-                    enfermedadesReadModel.getNomTabFin(),
+                    enfermedadesReadModel.getNombreTabla(),
                     enfermedadesReadModel.getFechaCreacion(), enfermedadesReadModel.getEstado());
         }
         return enferReadDtoResponse;
     }
 
     @Override
-    public String nomtabFin(Integer id) {
+    public String nomTabFin(Integer id) {
         String sql= "select cm_enfermedades.nom_tab_fin from cm_enfermedades  where id ="+id+" and Estado=1;";
+        Query query= entityManager.createNativeQuery(sql);
+
+        return query.getSingleResult().toString();
+    }
+    @Override
+    public String nomTabPaso(Integer id) {
+        String sql= "select cm_enfermedades.nombre_tabla from cm_enfermedades  where id ="+id+" and Estado=1;";
         Query query= entityManager.createNativeQuery(sql);
 
         return query.getSingleResult().toString();

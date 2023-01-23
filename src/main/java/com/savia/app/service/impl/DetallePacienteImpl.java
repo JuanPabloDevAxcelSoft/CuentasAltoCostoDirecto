@@ -53,7 +53,7 @@ public class DetallePacienteImpl implements DetallePacienteService {
     public ResponseEntity<ResponseMessage> getDetallePaciente(ListarPacienteDto listarPacienteDto) {
         ResponseMessage response = new ResponseMessage();
         // sacando nombre de la tabla final
-        String nombreTablaFinal = enfermedadesReadService.nomtabFin(listarPacienteDto.getIdEnfermedad());
+        String nombreTablaFinal = enfermedadesReadService.nomTabFin(listarPacienteDto.getIdEnfermedad());
         // page
         int limit = listarPacienteDto.getLimit();
         int page = (listarPacienteDto.getPage() - 1) * limit;
