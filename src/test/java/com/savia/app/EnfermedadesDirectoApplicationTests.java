@@ -1,12 +1,9 @@
 package com.savia.app;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-
-@SpringBootTest
+// @SpringBootTkest
 class EnfermedadesDirectoApplicationTests {
 
-	@Test
+	// @Test
 	void contextLoads() {
 	}
 

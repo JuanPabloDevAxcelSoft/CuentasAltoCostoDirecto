@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-// import com.savia.app.model.DetallePaciente;
 import com.savia.app.model.CmPaciente;
 import com.savia.app.repository.DetallePacienteRepository;
 import com.savia.app.service.DetallePacienteService;

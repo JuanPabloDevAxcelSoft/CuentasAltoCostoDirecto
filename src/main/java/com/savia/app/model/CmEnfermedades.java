@@ -25,7 +25,7 @@ public class CmEnfermedades implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
-    @Column(name = "nombre_tabla")
+    @Column(name = "nombre")
     private String nombre;
 
     private Boolean estado;
