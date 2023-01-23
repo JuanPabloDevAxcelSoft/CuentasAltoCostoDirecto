@@ -1,28 +1,10 @@
-# POST http://localhost:8081/documento/v1/test
-# Content-Type: application/json
 
-# # {
-# #     "ruta": "C:/Users/Angel Gonzalez/Desktop/FILESERVERTEST_LOCAL/Hemofilia_Estructura_Reporte_2022_Direct.csv",
-# #     "id" : 1
-# # }
-
-
-# POST http://localhost:8081/documento/v1/test HTTP/1.1
-# Content-Type: multipart/form-data; boundary=MfnBoundry
-# Content-Disposition: form-data; id="11"; name="asdasd"
+############## Obtener la lista de enfermedades
+# GET http://localhost:8081/api/v1/enfermedades
 # Content-Type: application/json
 
 
-# POST http://localhost:8081/documento/v1/carga/bd
-# Content-Type: application/json
-# Access-Control-Allow-Origin: *
-
-# {
-#     "ruta": "2022120915233511hemofiliaestructurareporte2022direct.csv",
-#     "idEnfermedad": 1,
-#     "idIps": 0
-# }
-
-
-GET http://localhost:8081/api/v1/enfermedades
+############## Enviar notificaciones al front-end
+# POST http://localhost:8081/api/v1/notificacion/evento?message="hay nuevos mensajes para ti!!"
+POST http://localhost:8081/api/v1/notificacion/evento?message="hay nuevos mensajes para ti!!"
 Content-Type: application/json

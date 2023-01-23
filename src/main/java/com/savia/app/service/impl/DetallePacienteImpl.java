@@ -10,6 +10,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+<<<<<<< HEAD
+import com.savia.app.model.CmPaciente;
+=======
+>>>>>>> origin/Dev
 import com.savia.app.repository.DetallePacienteRepository;
 import com.savia.app.service.DetallePacienteService;
 import com.savia.app.vo.ResponseMessage;
