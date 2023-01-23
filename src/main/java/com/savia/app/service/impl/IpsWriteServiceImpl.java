@@ -1,11 +1,11 @@
 package com.savia.app.service.impl;
 
+import com.savia.app.model.WriteCmIps;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.savia.app.model.IpsWriteModel;
 import com.savia.app.repository.IpsWriteRepository;
 import com.savia.app.service.IpsWriteService;
 import com.savia.app.vo.ResponseMessage;
@@ -38,7 +38,7 @@ public class IpsWriteServiceImpl implements IpsWriteService {
         ResponseMessage response = new ResponseMessage();
         try {
             if ((idIps > 0) && (!nombreIps.isEmpty())) {
-                ipsWriteRepository.save(new IpsWriteModel(idIps, nombreIps.toLowerCase(), new Date(), true));
+                ipsWriteRepository.save(new WriteCmIps(idIps, nombreIps.toLowerCase(), new Date(), true));
             }
             response.setMessage(((idIps > 0) && (!nombreIps.isEmpty())) ? "Se actualizo la Ips correctamente"
                     : "Los datos enviado no son aceptados");
@@ -49,12 +49,12 @@ public class IpsWriteServiceImpl implements IpsWriteService {
         return ResponseEntity.ok().body(response);
     }
 
-    @Override
+    /*@Override
     public ResponseEntity<ResponseMessage> saveIps(String nombreIps) {
         ResponseMessage response = new ResponseMessage();
         try {
             if (!nombreIps.isEmpty()) {
-                ipsWriteRepository.save(new IpsWriteModel(nombreIps.toLowerCase(), new Date(), true));
+                ipsWriteRepository.save(new WriteCmIps(nombreIps.toLowerCase(), new Date(), true));
             }
             response.setMessage(
                     (!nombreIps.isEmpty()) ? "Se cargo la Ips correctamente" : "Los datos enviado no son aceptados");
@@ -63,5 +63,5 @@ public class IpsWriteServiceImpl implements IpsWriteService {
             response.setMessage("Ocurrio un error al momento de guardar la Ipss : " + e.getLocalizedMessage());
         }
         return ResponseEntity.ok().body(response);
-    }
+    }*/
 }

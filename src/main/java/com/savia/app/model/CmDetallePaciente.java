@@ -18,7 +18,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
+
 
 /**
  *
@@ -26,7 +26,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name = "cm_detalle_paciente")
-@XmlRootElement
 public class CmDetallePaciente implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -81,6 +80,11 @@ public class CmDetallePaciente implements Serializable {
 
     public CmDetallePaciente() {
     }
+
+    public CmDetallePaciente(Long id) {
+        this.id = id;
+    }
+
 
     public CmDetallePaciente(Long id, Character regimenAfiliacion, int municipioResidencia, String telefono,
             String codigoEapb, Date fechaAfilicionEapb, Date fechaMuerte, Character causaMuerte, Date fechaCorte,
@@ -184,4 +188,32 @@ public class CmDetallePaciente implements Serializable {
     public void setIdPaciente(CmPaciente idPaciente) {
         this.idPaciente = idPaciente;
     }
+
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof CmDetallePaciente)) {
+            return false;
+        }
+        CmDetallePaciente other = (CmDetallePaciente) object;
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "entity.CmDetallePaciente[ id=" + id + " ]";
+    }
+
+
 }

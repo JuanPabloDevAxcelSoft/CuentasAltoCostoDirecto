@@ -1,3 +1,4 @@
+
 package com.savia.app.model;
 
 import java.io.Serializable;
@@ -11,9 +12,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  *
@@ -21,7 +20,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 @Entity
 @Table(name = "cm_paciente")
-@XmlRootElement
 public class CmPaciente implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -29,6 +27,9 @@ public class CmPaciente implements Serializable {
     @Basic(optional = false)
     @NotNull
     private Long id;
+    @Column(name = "fecha_ingreso")
+    @Temporal(TemporalType.DATE)
+    private Date fechaIngreso;
     @Size(max = 20)
     @Column(name = "primer_nombre")
     private String primerNombre;
@@ -61,97 +62,107 @@ public class CmPaciente implements Serializable {
     public CmPaciente() {
     }
 
+    public CmPaciente(Long id) {
+        this.id = id;
+    }
+
     public CmPaciente(Long id, String tipoIdentificacion, String numeroIdentificacion) {
         this.id = id;
         this.tipoIdentificacion = tipoIdentificacion;
         this.numeroIdentificacion = numeroIdentificacion;
     }
 
+    public Date getFechaIngreso() {
+        return fechaIngreso;
+    }
+
+    public void setFechaIngreso(Date fechaIngreso) {
+        this.fechaIngreso = fechaIngreso;
+    }
+
     public Long getId() {
         return id;
     }
-
     public void setId(Long id) {
         this.id = id;
     }
-
-    @JsonProperty("primer_nombre")
     public String getPrimerNombre() {
         return primerNombre;
     }
-
     public void setPrimerNombre(String primerNombre) {
         this.primerNombre = primerNombre;
     }
-
-    @JsonProperty("segundo_nombre")
     public String getSegundoNombre() {
         return segundoNombre;
     }
-
     public void setSegundoNombre(String segundoNombre) {
         this.segundoNombre = segundoNombre;
     }
-
-    @JsonProperty("primer_apellido")
     public String getPrimerApellido() {
         return primerApellido;
     }
-
     public void setPrimerApellido(String primerApellido) {
         this.primerApellido = primerApellido;
     }
-
-    @JsonProperty("segundo_apellido")
     public String getSegundoApellido() {
         return segundoApellido;
     }
-
     public void setSegundoApellido(String segundoApellido) {
         this.segundoApellido = segundoApellido;
     }
-
-    @JsonProperty("tipo_identificacion")
     public String getTipoIdentificacion() {
         return tipoIdentificacion;
     }
-
     public void setTipoIdentificacion(String tipoIdentificacion) {
         this.tipoIdentificacion = tipoIdentificacion;
     }
-
-    @JsonProperty("numero_identificacion")
     public String getNumeroIdentificacion() {
         return numeroIdentificacion;
     }
-
     public void setNumeroIdentificacion(String numeroIdentificacion) {
         this.numeroIdentificacion = numeroIdentificacion;
     }
-
-    @JsonProperty("fecha_nacimiento")
     public Date getFechaNacimiento() {
         return fechaNacimiento;
     }
-
     public void setFechaNacimiento(Date fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;
     }
-
     public Character getSexo() {
         return sexo;
     }
-
     public void setSexo(Character sexo) {
         this.sexo = sexo;
     }
-
-    @JsonProperty("codigo_pertenencia_etnica")
     public Character getCodigoPertenenciaEtnica() {
         return codigoPertenenciaEtnica;
     }
-
     public void setCodigoPertenenciaEtnica(Character codigoPertenenciaEtnica) {
         this.codigoPertenenciaEtnica = codigoPertenenciaEtnica;
     }
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof CmPaciente)) {
+            return false;
+        }
+        CmPaciente other = (CmPaciente) object;
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "entity.CmPaciente[ id=" + id + " ]";
+    }
+
 }
