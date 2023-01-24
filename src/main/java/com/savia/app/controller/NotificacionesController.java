@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -41,12 +40,12 @@ public class NotificacionesController {
 
     /* Metodo para disparar un evento a todos los clientes subcritos */
     @RequestMapping(value = "/evento", method = RequestMethod.POST, consumes = { "application/json" })
-    public void getDispirarEvento(@RequestParam("message") String message) {
-
+    public void getDispirarEvento() {
+        String json = "{ color: 'success', message: 'Se ha terminado de cargar y validar los registros'}";
         String messageLogger = "";
         for (SseEmitter emitter : this.listSseEmitter) {
             try {
-                emitter.send(SseEmitter.event().name(KeySsEmitter.KEY_ULTIMAS_NOTICIAS.toString()).data(message));
+                emitter.send(SseEmitter.event().name(KeySsEmitter.KEY_ULTIMAS_NOTICIAS.toString()).data(json));
                 messageLogger = "Notificacion enviada al usuario subscrito";
             } catch (Exception e) {
                 this.listSseEmitter.remove(emitter);

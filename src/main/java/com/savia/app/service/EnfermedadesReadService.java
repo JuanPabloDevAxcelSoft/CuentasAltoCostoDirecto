@@ -8,10 +8,10 @@ import com.savia.app.vo.ResponseMessage;
 public interface EnfermedadesReadService {
     ResponseEntity<ResponseMessage> tblIllness(Integer id);
 
-    ResponseEntity<ResponseMessage> allIllness();
+    ResponseEntity<ResponseMessage> allEnfermedades();
 
-    EnfermedadesReadDto findIllnessById(Integer id);
+    EnfermedadesReadDto findEnfermedadById(Integer id);
 
-    String nomtabFin(Integer id);
+    String getNombreTablaFinal(Integer id);
 
 }

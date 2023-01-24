@@ -21,7 +21,7 @@ public class EnfermedadesController {
     @GetMapping("/enfermedades")
     public ResponseEntity<ResponseMessage> getAllEnfermedad() {
         try {
-            return enfermedadesReadService.allIllness();
+            return enfermedadesReadService.allEnfermedades();
         } catch (Exception e) {
             return null;
         }
@@ -41,11 +41,6 @@ public class EnfermedadesController {
             @RequestParam("enfermedad") String nombreEnfermedad) {
         return enfermedadesWriteService.updateEnfermedad(idEnfermedad, nombreEnfermedad);
     }
-
-/*    @PostMapping("/enfermedades")
-    public ResponseEntity<ResponseMessage> saveEnfermedad(@RequestParam("enfermedad") String nombreEnfermedad) {
-        return enfermedadesWriteService.saveEnfermedad(nombreEnfermedad);
-    }*/
 
     @DeleteMapping("/enfermedades/{idEnfermedad}")
     public ResponseEntity<ResponseMessage> updateIllness(@PathVariable("idEnfermedad") int idEnfermedad) {
