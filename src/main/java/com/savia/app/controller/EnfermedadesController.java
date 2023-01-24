@@ -43,6 +43,14 @@ public class EnfermedadesController {
             return null;
         }
     }
+    @GetMapping("/nombre/clase/validacion/{idEnfermedad}")
+    public String getNombreClaseValidacion(@PathVariable("idEnfermedad") int idEnfermedad) {
+        try {
+            return enfermedadesReadService.nomClaseValidacion(idEnfermedad);
+        } catch (Exception e) {
+            return null;
+        }
+    }
 
     @PutMapping("/enfermedades")
     public ResponseEntity<ResponseMessage> updateEnfermedad(@RequestParam("idEnfermedad") int idEnfermedad,

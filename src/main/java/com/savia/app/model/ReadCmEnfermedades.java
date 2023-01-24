@@ -46,8 +46,8 @@ public class ReadCmEnfermedades implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
-    @Column(name = "name_enfermedad_frond")
-    private String nameEnfermedadFrond;
+    @Column(name = "nombre_clase_validacion ")
+    private String nombreClaseValidacion;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
@@ -62,11 +62,11 @@ public class ReadCmEnfermedades implements Serializable {
         this.id = id;
     }
 
-    public ReadCmEnfermedades(Integer id, String nombreTabla, String nombre, String nameEnfermedadFrond, String nomTabFin) {
+    public ReadCmEnfermedades(Integer id, String nombreTabla, String nombre, String nombreClaseValidacion, String nomTabFin) {
         this.id = id;
         this.nombreTabla = nombreTabla;
         this.nombre = nombre;
-        this.nameEnfermedadFrond = nameEnfermedadFrond;
+        this.nombreClaseValidacion = nombreClaseValidacion;
         this.nomTabFin = nomTabFin;
     }
 
@@ -110,12 +110,12 @@ public class ReadCmEnfermedades implements Serializable {
         this.fechaCreacion = fechaCreacion;
     }
 
-    public String getNameEnfermedadFrond() {
-        return nameEnfermedadFrond;
+    public String getNombreClaseValidacion() {
+        return nombreClaseValidacion;
     }
 
-    public void setNameEnfermedadFrond(String nameEnfermedadFrond) {
-        this.nameEnfermedadFrond = nameEnfermedadFrond;
+    public void setNombreClaseValidacion(String nombreClaseValidacion) {
+        this.nombreClaseValidacion = nombreClaseValidacion;
     }
 
     public String getNomTabFin() {

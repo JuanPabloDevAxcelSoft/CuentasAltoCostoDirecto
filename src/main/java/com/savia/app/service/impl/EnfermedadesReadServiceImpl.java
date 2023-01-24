@@ -88,5 +88,12 @@ public class EnfermedadesReadServiceImpl implements EnfermedadesReadService {
 
         return query.getSingleResult().toString();
     }
+    @Override
+    public String nomClaseValidacion(Integer id) {
+        String sql= "select cm_enfermedades.nombre_clase_validacion from cm_enfermedades  where id ="+id+" and Estado=1;";
+        Query query= entityManager.createNativeQuery(sql);
+
+        return query.getSingleResult().toString();
+    }
 
 }

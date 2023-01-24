@@ -11,5 +11,6 @@ public interface EnfermedadesReadService {
     EnfermedadesReadDto findIllnessById(Integer id);
     String nomTabFin(Integer id);
     String nomTabPaso(Integer id);
+    String nomClaseValidacion(Integer id);
 
 }
