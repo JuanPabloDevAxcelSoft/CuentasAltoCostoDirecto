@@ -3,6 +3,7 @@ package com.savia.app.dto;
 import java.util.Date;
 
 public class EnfermedadesReadDto {
+    
     private Integer id;
     private String tabla;
     private Date fechaCreacion;
