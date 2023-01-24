@@ -6,8 +6,8 @@ import org.springframework.http.ResponseEntity;
 import com.savia.app.vo.ResponseMessage;
 
 public interface DetallePacienteService {
-    public ResponseEntity<ResponseMessage> getAllPacientePaginated();
-
-    public ResponseEntity<ResponseMessage> getDetallePaciente(ListarPacienteDto listarPacienteDto);
+     ResponseEntity<ResponseMessage> getAllPacientePaginated();
+     ResponseEntity<ResponseMessage> getCmPaciente(ListarPacienteDto listarPacienteDto);
+     ResponseEntity<ResponseMessage> getDetallePaciente(int idDetallePaciente);
 
 }

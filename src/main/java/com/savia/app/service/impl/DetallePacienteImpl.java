@@ -3,14 +3,16 @@ package com.savia.app.service.impl;
 import java.util.List;
 
 import com.savia.app.dto.ListarPacienteDto;
+import com.savia.app.model.CmDetallePaciente;
 import com.savia.app.model.CmPaciente;
+import com.savia.app.repository.CmDetallePacienteRepository;
 import com.savia.app.service.EnfermedadesReadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.savia.app.repository.DetallePacienteRepository;
+import com.savia.app.repository.CmPacienteRepository;
 import com.savia.app.service.DetallePacienteService;
 import com.savia.app.vo.ResponseMessage;
 import org.springframework.transaction.annotation.Propagation;
@@ -21,6 +23,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.NoSuchElementException;
 
 @Service
 public class DetallePacienteImpl implements DetallePacienteService {
@@ -28,7 +31,9 @@ public class DetallePacienteImpl implements DetallePacienteService {
     private EntityManager entityManager;
 
     @Autowired
-    private DetallePacienteRepository detallePacienteRepository;
+    private CmPacienteRepository cmPacienteRepository;
+    @Autowired
+    private CmDetallePacienteRepository cmDetallePacienteRepository;
     @Autowired
     EnfermedadesReadService enfermedadesReadService;
 
@@ -38,7 +43,7 @@ public class DetallePacienteImpl implements DetallePacienteService {
         ResponseMessage response = new ResponseMessage();
         List<CmPaciente> list = new ArrayList<>();
         try {
-            list = detallePacienteRepository.findAll();
+            list = cmPacienteRepository.findAll();
             response.setMessage((list.isEmpty()) ? "No hay registros para mostrar"
                     : "Cantidad de resultados encontrados : " + list.size());
             response.setStatus((list.isEmpty()) ? HttpStatus.NO_CONTENT : HttpStatus.OK);
@@ -50,7 +55,7 @@ public class DetallePacienteImpl implements DetallePacienteService {
     }
 
     @Override
-    public ResponseEntity<ResponseMessage> getDetallePaciente(ListarPacienteDto listarPacienteDto) {
+    public ResponseEntity<ResponseMessage> getCmPaciente(ListarPacienteDto listarPacienteDto) {
         ResponseMessage response = new ResponseMessage();
         // sacando nombre de la tabla final
         String nombreTablaFinal = enfermedadesReadService.nomTabFin(listarPacienteDto.getIdEnfermedad());
@@ -97,5 +102,20 @@ public class DetallePacienteImpl implements DetallePacienteService {
         }
         return ResponseEntity.ok().body(response);
     }
-
+    @Override
+    public   ResponseEntity<ResponseMessage> getDetallePaciente(int idDetallePaciente){
+        ResponseMessage response = new ResponseMessage();
+        try{
+            Long id= Long.valueOf(idDetallePaciente);
+           List cmDetallePacienteList= new ArrayList<>();
+           cmDetallePacienteList.add(cmDetallePacienteRepository.findById(id).get());
+           response.setData(cmDetallePacienteList);
+        }catch (NullPointerException e){
+            response.setMessage("el registro se encuentra vació ");
+            e.printStackTrace();
+        }catch (NoSuchElementException e){
+            response.setMessage("No se encontró ningún registro con ese id");
+        }
+        return ResponseEntity.ok().body(response);
+    }
 }
