@@ -26,7 +26,6 @@ public class DetallePacienteImpl implements DetallePacienteService {
     @Autowired
     EnfermedadesReadService enfermedadesReadService;
 
-
     @Override
     public ResponseEntity<ResponsePaciente> getDetallePaciente(ListarPacienteDto listarPacienteDto) {
         ResponsePaciente response = new ResponsePaciente();
