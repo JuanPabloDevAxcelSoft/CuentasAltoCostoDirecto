@@ -13,6 +13,7 @@ import com.savia.app.vo.ResponseMessage;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.transaction.Transactional;
 
 @Service
 public class CargaDirectaImpl implements CargaDirectaService {
@@ -24,6 +25,7 @@ public class CargaDirectaImpl implements CargaDirectaService {
     EnfermedadesReadService enfermedadesServiceDirect;
 
     @Override
+    @Transactional
     public ResponseEntity<ResponseMessage> loadDataBaseDirect(String ruta, Integer id) {
         ResponseMessage response = new ResponseMessage();
         String message = "";
@@ -32,7 +34,6 @@ public class CargaDirectaImpl implements CargaDirectaService {
             if ((!ruta.isEmpty()) && (id > 0)) {
                 EnfermedadesReadDto enfermedadesReadDtoObj = enfermedadesServiceDirect.findIllnessById(id);
                 if (enfermedadesReadDtoObj != null) {
-
                     String pureSql="LOAD DATA LOCAL INFILE '" +ruta+
                             "' INTO TABLE "+enfermedadesReadDtoObj.getNameTables()+" FIELDS TERMINATED BY ';' LINES TERMINATED BY '\\n' IGNORE 1 ROWS;";
                     Query nativeQuery = entityManager.createNativeQuery(pureSql);
