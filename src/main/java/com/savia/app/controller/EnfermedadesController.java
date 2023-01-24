@@ -35,6 +35,14 @@ public class EnfermedadesController {
             return null;
         }
     }
+    @GetMapping("/nombre/paso/{idEnfermedad}")
+    public String getNombreTablaPaso(@PathVariable("idEnfermedad") int idEnfermedad) {
+        try {
+            return enfermedadesReadService.getNombreTablaFinal(idEnfermedad);
+        } catch (Exception e) {
+            return null;
+        }
+    }
 
     @PutMapping("/enfermedades")
     public ResponseEntity<ResponseMessage> updateEnfermedad(@RequestParam("idEnfermedad") int idEnfermedad,

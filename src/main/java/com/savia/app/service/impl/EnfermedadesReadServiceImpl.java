@@ -70,7 +70,7 @@ public class EnfermedadesReadServiceImpl implements EnfermedadesReadService {
         EnfermedadesReadDto enferReadDtoResponse = null;
         if (enfermedadesReadModel != null) {
             enferReadDtoResponse = new EnfermedadesReadDto(enfermedadesReadModel.getId(),
-                    enfermedadesReadModel.getNomTabFin(),
+                    enfermedadesReadModel.getNombreTabla(),
                     enfermedadesReadModel.getFechaCreacion(), enfermedadesReadModel.getEstado());
         }
         return enferReadDtoResponse;
@@ -83,5 +83,4 @@ public class EnfermedadesReadServiceImpl implements EnfermedadesReadService {
 
         return query.getSingleResult().toString();
     }
-
 }

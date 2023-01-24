@@ -3,7 +3,6 @@ package com.savia.app.service.impl;
 import java.util.List;
 
 import com.savia.app.dto.ListarPacienteDto;
-import com.savia.app.model.CmPaciente;
 import com.savia.app.model.PacientesConsulta;
 import com.savia.app.service.EnfermedadesReadService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,48 +10,22 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.savia.app.repository.DetallePacienteRepository;
 import com.savia.app.service.DetallePacienteService;
-import com.savia.app.vo.ResponseMessage;
 import com.savia.app.vo.ResponsePaciente;
-
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.ArrayList;
-import java.util.Arrays;
 @SuppressWarnings("unchecked") 
 @Service
 public class DetallePacienteImpl implements DetallePacienteService {
     
     @PersistenceContext
     private EntityManager entityManager;
-
-    @Autowired
-    private DetallePacienteRepository detallePacienteRepository;
     
     @Autowired
     EnfermedadesReadService enfermedadesReadService;
 
-    @Override
-    @Transactional(rollbackFor = { Exception.class }, propagation = Propagation.REQUIRED)
-    public ResponseEntity<ResponseMessage> getAllPacientePaginated() {
-        ResponseMessage response = new ResponseMessage();
-        List<CmPaciente> list = new ArrayList<>();
-        try {
-            list = detallePacienteRepository.findAll();
-            response.setMessage((list.isEmpty()) ? "No hay registros para mostrar"
-                    : "Cantidad de resultados encontrados : " + list.size());
-            response.setStatus((list.isEmpty()) ? HttpStatus.NO_CONTENT : HttpStatus.OK);
-            response.setData(Arrays.asList(list.toArray()));
-        } catch (Exception e) {
-            response.setMessage("Ocurrio un error : " + e.getMessage());
-        }
-        return ResponseEntity.ok().body(response);
-    }
 
     @Override
     public ResponseEntity<ResponsePaciente> getDetallePaciente(ListarPacienteDto listarPacienteDto) {
