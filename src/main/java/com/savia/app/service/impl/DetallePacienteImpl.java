@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.ArrayList;
@@ -106,14 +107,15 @@ public class DetallePacienteImpl implements DetallePacienteService {
     public   ResponseEntity<ResponseMessage> getDetallePaciente(int idDetallePaciente){
         ResponseMessage response = new ResponseMessage();
         try{
-            Long id= Long.valueOf(idDetallePaciente);
+            String pureSql="SELECT * FROM cm_detalle_paciente WHERE id="+idDetallePaciente;
+            Query query = entityManager.createNativeQuery(pureSql);
            List cmDetallePacienteList= new ArrayList<>();
-           cmDetallePacienteList.add(cmDetallePacienteRepository.findById(id).get());
+           cmDetallePacienteList.add(query.getSingleResult());
            response.setData(cmDetallePacienteList);
         }catch (NullPointerException e){
             response.setMessage("el registro se encuentra vació ");
             e.printStackTrace();
-        }catch (NoSuchElementException e){
+        }catch (NoResultException e){
             response.setMessage("No se encontró ningún registro con ese id");
         }
         return ResponseEntity.ok().body(response);
