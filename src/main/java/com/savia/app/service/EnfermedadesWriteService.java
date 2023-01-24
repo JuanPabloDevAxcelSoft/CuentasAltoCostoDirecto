@@ -5,7 +5,6 @@ import org.springframework.http.ResponseEntity;
 import com.savia.app.vo.ResponseMessage;
 
 public interface EnfermedadesWriteService {
-    /*ResponseEntity<ResponseMessage> saveEnfermedad(String nombreEnfermedad);*/
 
     ResponseEntity<ResponseMessage> updateEnfermedad(int idEnfermedad, String nombreEnfermedad);
 

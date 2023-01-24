@@ -27,7 +27,7 @@ public class EnfermedadesReadServiceImpl implements EnfermedadesReadService {
     EnfermedadesReadRepository enfermedadesRepository;
 
     @Override
-    public ResponseEntity<ResponseMessage> allIllness() {
+    public ResponseEntity<ResponseMessage> allEnfermedades() {
         ResponseMessage response = new ResponseMessage();
         List<ReadCmEnfermedades> list = new ArrayList<>();
         try {
@@ -63,7 +63,7 @@ public class EnfermedadesReadServiceImpl implements EnfermedadesReadService {
     }
 
     @Override
-    public EnfermedadesReadDto findIllnessById(Integer id) {
+    public EnfermedadesReadDto findEnfermedadById(Integer id) {
         ReadCmEnfermedades enfermedadesReadModel = enfermedadesRepository.getById(id);
         EnfermedadesReadDto enferReadDtoResponse = null;
         if (enfermedadesReadModel != null) {
@@ -75,7 +75,7 @@ public class EnfermedadesReadServiceImpl implements EnfermedadesReadService {
     }
 
     @Override
-    public String nomtabFin(Integer id) {
+    public String getNombreTablaFinal(Integer id) {
         String sql= "select cm_enfermedades.nom_tab_fin from cm_enfermedades  where id ="+id+" and Estado=1;";
         Query query= entityManager.createNativeQuery(sql);
 

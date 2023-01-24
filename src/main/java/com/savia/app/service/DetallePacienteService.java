@@ -4,10 +4,11 @@ import com.savia.app.dto.ListarPacienteDto;
 import org.springframework.http.ResponseEntity;
 
 import com.savia.app.vo.ResponseMessage;
+import com.savia.app.vo.ResponsePaciente;
 
 public interface DetallePacienteService {
     public ResponseEntity<ResponseMessage> getAllPacientePaginated();
 
-    public ResponseEntity<ResponseMessage> getDetallePaciente(ListarPacienteDto listarPacienteDto);
+    public ResponseEntity<ResponsePaciente> getDetallePaciente(ListarPacienteDto listarPacienteDto);
 
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.savia.app.dto.ListarPacienteDto;
 import com.savia.app.model.CmPaciente;
+import com.savia.app.model.PacientesConsulta;
 import com.savia.app.service.EnfermedadesReadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,8 @@ import org.springframework.stereotype.Service;
 import com.savia.app.repository.DetallePacienteRepository;
 import com.savia.app.service.DetallePacienteService;
 import com.savia.app.vo.ResponseMessage;
+import com.savia.app.vo.ResponsePaciente;
+
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,7 +24,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.Arrays;
-
+@SuppressWarnings("unchecked") 
 @Service
 public class DetallePacienteImpl implements DetallePacienteService {
     @PersistenceContext
@@ -50,52 +53,73 @@ public class DetallePacienteImpl implements DetallePacienteService {
     }
 
     @Override
-    public ResponseEntity<ResponseMessage> getDetallePaciente(ListarPacienteDto listarPacienteDto) {
-        ResponseMessage response = new ResponseMessage();
-        // sacando nombre de la tabla final
-        String nombreTablaFinal = enfermedadesReadService.nomtabFin(listarPacienteDto.getIdEnfermedad());
-        // page
-        int limit = listarPacienteDto.getLimit();
-        int page = (listarPacienteDto.getPage() - 1) * limit;
+    public ResponseEntity<ResponsePaciente> getDetallePaciente(ListarPacienteDto listarPacienteDto) {
+        ResponsePaciente response = new ResponsePaciente();
+
+        String tablaFinal = enfermedadesReadService.getNombreTablaFinal(listarPacienteDto.getIdEnfermedad());
+        String tablaPaciente = "cm_paciente";
+        String tablaDetalle = "cm_detalle_paciente";
+        Integer page = listarPacienteDto.getPage();
+        Integer limit = listarPacienteDto.getLimit();
+
         try {
-            String pureSql = "SELECT cm_paciente.*, cm_detalle_paciente.id as id_detalle_paciente, " + nombreTablaFinal
-                    + ".id as id_hemofilia_paciente\n";
-            pureSql += " FROM cm_paciente\n";
-            pureSql += " JOIN cm_detalle_paciente ON cm_paciente.id = cm_detalle_paciente.id_paciente ";
-            pureSql += "JOIN cm_paciente_hemofilia ON cm_paciente.id = " + nombreTablaFinal + ".id_paciente\n";
-            pureSql += "WHERE ";
-            boolean estadoMayorvali = false;
-            if (!listarPacienteDto.getTipoDocumento().equals("")) {
-                estadoMayorvali = true;
-                pureSql += "tipo_identificacion ='" + listarPacienteDto.getTipoDocumento() + "' ";
-            }
-            if (!listarPacienteDto.getTipoDocumento().equals("") && (!listarPacienteDto.getDocumento().equals(""))) {
-                pureSql += " AND numero_identificacion = '" + listarPacienteDto.getDocumento() + "' ";
-            }
-            if (!listarPacienteDto.getDesde().equals("") && (!listarPacienteDto.getHasta().equals(""))) {
-                if (estadoMayorvali) {
-                    pureSql += " AND ";
-                }
-                estadoMayorvali = true;
-                pureSql += "  fecha_ingreso BETWEEN '" + listarPacienteDto.getDesde() + "' AND '"
-                        + listarPacienteDto.getHasta() + "' ";
-            }
-            if (estadoMayorvali == false) {
-                pureSql.replace("WHERE", "");
-            }
-            pureSql += "limit " + limit + " offset " + page + ";";
+            String pureSql = "SELECT pac.*, det.id AS id_detalle, tfi.id AS id_carga";
+            pureSql += " FROM " + tablaPaciente + " AS pac";
+            pureSql += " INNER JOIN " + tablaDetalle + " AS det ON ";
+            pureSql += " pac.id = det.id_paciente ";
+            pureSql += " INNER JOIN " + tablaFinal + " AS tfi ON ";
+            pureSql += " pac.id = tfi.id_paciente ";
+            pureSql += " ORDER BY pac.id ";
+            String where = this.getWhere(listarPacienteDto);
+            pureSql += where;
+            pureSql += " LIMIT " + ((page - 1) * limit) + ", " + limit + ";";
 
             Query query = entityManager.createNativeQuery(pureSql);
-            List listPaciente = query.getResultList();
-            response.setMessage((listPaciente.isEmpty()) ? "No hay registros para mostrar"
-                    : "Cantidad de resultados encontrados : " + listPaciente.size());
-            response.setStatus((listPaciente.isEmpty()) ? HttpStatus.NO_CONTENT : HttpStatus.OK);
-            response.setData(Arrays.asList(listPaciente.toArray()));
-            response.setData(listPaciente);
+            List<Object> listPacienteTemp = query.getResultList();
+
+            List<PacientesConsulta> list = this.setConverListToListObject(listPacienteTemp);
+            response.setMessage((!list.isEmpty()) ? "Lista de pacientes cargados" : "No hay registros para mostrar");
+            response.setStatus(HttpStatus.OK);
+            response.setData(list);
+
         } catch (Exception e) {
             response.setMessage("Ocurrio un error al momento de consultar el detalle : " + e.getMessage());
         }
         return ResponseEntity.ok().body(response);
+    }
+
+    private String getWhere(ListarPacienteDto lista) {
+        String where = " WHERE ";
+        boolean entrada = false;
+
+        if ((!lista.getTipoDocumento().equals("")) && (!lista.getDocumento().equals(""))) {
+            where += " tipo_identificacion = '" + lista.getTipoDocumento() + "' AND ";
+            where += " numero_identificacion = '" + lista.getDocumento() + "'";
+            entrada = true;
+        }
+
+        if (!lista.getTipoDocumento().equals("") && (!entrada)) {
+            where += " tipo_identificacion = '" + lista.getTipoDocumento() + "'";
+            entrada = true;
+        }
+
+        if ((!lista.getDesde().equals("")) && (!lista.getHasta().equals(""))) {
+            where += " fecha_ingreso BETWEEN '" + lista.getDesde() + "' AND ";
+            where += " '" + lista.getHasta() + "'";
+            entrada = true;
+        }
+        return (entrada) ? where : "";
+    }
+
+    private List<PacientesConsulta> setConverListToListObject(List<Object> listPacienteTemp) {
+        List<PacientesConsulta> listPaciente = new ArrayList<>();
+        try {
+            for (Object object : listPacienteTemp) {
+                listPaciente.add(new PacientesConsulta(object));
+            }
+        } catch (Exception e) {
+        }
+        return listPaciente;
     }
 
 }
