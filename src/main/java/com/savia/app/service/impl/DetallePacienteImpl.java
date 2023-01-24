@@ -27,11 +27,13 @@ import java.util.Arrays;
 @SuppressWarnings("unchecked") 
 @Service
 public class DetallePacienteImpl implements DetallePacienteService {
+    
     @PersistenceContext
     private EntityManager entityManager;
 
     @Autowired
     private DetallePacienteRepository detallePacienteRepository;
+    
     @Autowired
     EnfermedadesReadService enfermedadesReadService;
 

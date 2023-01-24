@@ -21,8 +21,10 @@ import java.util.List;
 
 @Service
 public class EnfermedadesReadServiceImpl implements EnfermedadesReadService {
+    
     @PersistenceContext
     private EntityManager entityManager;
+    
     @Autowired
     EnfermedadesReadRepository enfermedadesRepository;
 
