@@ -38,7 +38,15 @@ public class EnfermedadesController {
     @GetMapping("/nombre/paso/{idEnfermedad}")
     public String getNombreTablaPaso(@PathVariable("idEnfermedad") int idEnfermedad) {
         try {
-            return enfermedadesReadService.getNombreTablaGeneric(false, idEnfermedad);
+            return enfermedadesReadService.getNombreTablaGeneric("nombre_tabla", idEnfermedad);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+    @GetMapping("/nombre/clase/validacion/{idEnfermedad}")
+    public String getNombreClaseValidacion(@PathVariable("idEnfermedad") int idEnfermedad) {
+        try {
+            return enfermedadesReadService.getNombreTablaGeneric("nombre_clase_validacion",idEnfermedad);
         } catch (Exception e) {
             return null;
         }

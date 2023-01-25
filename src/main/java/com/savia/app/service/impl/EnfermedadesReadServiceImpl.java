@@ -76,18 +76,15 @@ public class EnfermedadesReadServiceImpl implements EnfermedadesReadService {
 
     /*
      * Metodo que retorna el nombre de la tabla segun el tipo de parametros
-     * True: Retorna el nombre de la tabla final
-     * False: Retorna el nombre de la tablas de paso
     */
     @Override
-    public String getNombreTablaGeneric (boolean table, Integer id) {
-        String data = (table) ? "enf.nom_tab_fin" : "enf.nombre_tabla";
-        String pureSql = "SELECT " + data +" FROM cm_enfermedades AS enf ";
+    public String getNombreTablaGeneric (String columna, Integer id) {
+        
+        String pureSql = "SELECT " + columna +" FROM cm_enfermedades AS enf ";
         pureSql += "WHERE enf.id =" + id + " AND enf.estado=1;";
         
         Query query = entityManager.createNativeQuery(pureSql);
 
         return query.getSingleResult().toString();
     }
-
 }

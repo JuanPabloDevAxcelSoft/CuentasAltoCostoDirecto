@@ -12,7 +12,6 @@ public interface EnfermedadesReadService {
 
     EnfermedadesReadDto findEnfermedadById(Integer id);
 
-    /* True: consulta tablas finales, False: Tablas de de paso */
-    public String getNombreTablaGeneric(boolean tabla, Integer id);
+    public String getNombreTablaGeneric(String columna, Integer id);
 
 }

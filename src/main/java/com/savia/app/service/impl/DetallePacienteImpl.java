@@ -58,7 +58,7 @@ public class DetallePacienteImpl implements DetallePacienteService {
     public ResponseEntity<ResponsePaciente> getCmPaciente(ListarPacienteDto listarPacienteDto) {
         ResponsePaciente response = new ResponsePaciente();
 
-        String tablaFinal = enfermedadesReadService.getNombreTablaGeneric(true, listarPacienteDto.getIdEnfermedad());
+        String tablaFinal = enfermedadesReadService.getNombreTablaGeneric("nom_tab_fin", listarPacienteDto.getIdEnfermedad());
         final String tblPaciente = "cm_paciente";
         final String tblDetalle = "cm_detalle_paciente";
 
