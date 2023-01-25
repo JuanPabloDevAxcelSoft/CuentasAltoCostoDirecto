@@ -25,7 +25,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.Arrays;
-
+@SuppressWarnings("unchecked")
 @Service
 public class DetallePacienteImpl implements DetallePacienteService {
     @PersistenceContext
