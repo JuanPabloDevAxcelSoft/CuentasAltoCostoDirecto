@@ -74,9 +74,7 @@ public class CmDetallePaciente implements Serializable {
     @Size(min = 1, max = 10)
     @Column(name = "codigo_serial")
     private String codigoSerial;
-    @JoinColumn(name = "id_paciente", referencedColumnName = "id")
-    @ManyToOne(optional = false)
-    private CmPaciente idPaciente;
+
 
     public CmDetallePaciente() {
     }
@@ -179,14 +177,6 @@ public class CmDetallePaciente implements Serializable {
 
     public void setCodigoSerial(String codigoSerial) {
         this.codigoSerial = codigoSerial;
-    }
-
-    public CmPaciente getIdPaciente() {
-        return idPaciente;
-    }
-
-    public void setIdPaciente(CmPaciente idPaciente) {
-        this.idPaciente = idPaciente;
     }
 
 

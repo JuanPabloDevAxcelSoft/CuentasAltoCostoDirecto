@@ -1,10 +1,13 @@
 package com.savia.app.service.impl;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import com.savia.app.dto.ListarPacienteDto;
 import com.savia.app.dto.Pacientes;
+import com.savia.app.model.CmDetallePaciente;
 import com.savia.app.model.CmPaciente;
+import com.savia.app.repository.CmDetallePacienteRepository;
 import com.savia.app.service.EnfermedadesReadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,7 +23,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.ArrayList;
@@ -33,6 +35,8 @@ public class DetallePacienteImpl implements DetallePacienteService {
 
     @Autowired
     private CmPacienteRepository cmPacienteRepository;
+    @Autowired
+    private CmDetallePacienteRepository cmDetallePacienteRepository;
 
     @Autowired
     EnfermedadesReadService enfermedadesReadService;
@@ -108,6 +112,9 @@ public class DetallePacienteImpl implements DetallePacienteService {
         }
 
         if ((!lista.getDesde().equals("")) && (!lista.getHasta().equals(""))) {
+            if(entrada){
+                where+=" AND";
+            }
             where += "pac.fecha_ingreso BETWEEN '" + lista.getDesde() + "' AND '" + lista.getHasta() + "'";
             entrada = true;
         }
@@ -123,22 +130,15 @@ public class DetallePacienteImpl implements DetallePacienteService {
         return listaFinal;
     }
 
-
     @Override
-    public ResponseEntity<ResponseMessage> getDetallePaciente(int idDetallePaciente) {
-        ResponseMessage response = new ResponseMessage();
-        try {
-            String pureSql = "SELECT * FROM cm_detalle_paciente WHERE id=" + idDetallePaciente;
-            Query query = entityManager.createNativeQuery(pureSql);
-            List<Object> cmDetallePacienteList = new ArrayList<>();
-            cmDetallePacienteList.add(query.getSingleResult());
-            response.setData(cmDetallePacienteList);
-        } catch (NullPointerException e) {
-            response.setMessage("el registro se encuentra vació ");
+    public CmDetallePaciente getDetallePacienteById(int idDetallePaciente) {
+        try{
+            Long id =Long.valueOf(idDetallePaciente);
+            return cmDetallePacienteRepository.findById(id).get();
+        }catch (NoSuchElementException e){
             e.printStackTrace();
-        } catch (NoResultException e) {
-            response.setMessage("No se encontró ningún registro con ese id");
+            return null;
         }
-        return ResponseEntity.ok().body(response);
+
     }
 }

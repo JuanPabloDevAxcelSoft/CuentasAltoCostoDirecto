@@ -1,6 +1,7 @@
 package com.savia.app.controller;
 
 import com.savia.app.dto.ListarPacienteDto;
+import com.savia.app.model.CmDetallePaciente;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,7 +27,7 @@ public class DetallePacienteController {
         return this.detallePacienteService.getCmPaciente(listarPacienteDto);
     }
     @GetMapping("/consulta/detalle/paciente")
-    public  ResponseEntity<ResponseMessage> getDetallePaciente(@RequestParam int idDetallePaciente){
-        return  this.detallePacienteService.getDetallePaciente(idDetallePaciente);
+    public CmDetallePaciente getDetallePaciente(@RequestParam int idDetallePaciente){
+        return  this.detallePacienteService.getDetallePacienteById(idDetallePaciente);
     }
 }
