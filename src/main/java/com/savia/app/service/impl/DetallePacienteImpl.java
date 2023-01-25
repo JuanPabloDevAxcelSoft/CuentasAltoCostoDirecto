@@ -1,6 +1,7 @@
 package com.savia.app.service.impl;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import com.savia.app.dto.ListarPacienteDto;
 import com.savia.app.dto.Pacientes;
@@ -26,8 +27,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.NoSuchElementException;
-
+@SuppressWarnings("unchecked")
 @Service
 public class DetallePacienteImpl implements DetallePacienteService {
     @PersistenceContext
