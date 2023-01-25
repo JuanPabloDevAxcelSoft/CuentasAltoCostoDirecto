@@ -112,6 +112,9 @@ public class DetallePacienteImpl implements DetallePacienteService {
         }
 
         if ((!lista.getDesde().equals("")) && (!lista.getHasta().equals(""))) {
+            if(entrada){
+                where+=" AND";
+            }
             where += "pac.fecha_ingreso BETWEEN '" + lista.getDesde() + "' AND '" + lista.getHasta() + "'";
             entrada = true;
         }
