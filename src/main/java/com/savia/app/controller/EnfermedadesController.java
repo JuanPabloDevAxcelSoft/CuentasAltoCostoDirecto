@@ -21,7 +21,7 @@ public class EnfermedadesController {
     @GetMapping("/enfermedades")
     public ResponseEntity<ResponseMessage> getAllEnfermedad() {
         try {
-            return enfermedadesReadService.allIllness();
+            return enfermedadesReadService.getAllEnfermedades();
         } catch (Exception e) {
             return null;
         }
@@ -38,7 +38,7 @@ public class EnfermedadesController {
     @GetMapping("/nombre/paso/{idEnfermedad}")
     public String getNombreTablaPaso(@PathVariable("idEnfermedad") int idEnfermedad) {
         try {
-            return enfermedadesReadService.nomTabPaso(idEnfermedad);
+            return enfermedadesReadService.getNombreTablaGeneric("nombre_tabla", idEnfermedad);
         } catch (Exception e) {
             return null;
         }
@@ -46,7 +46,7 @@ public class EnfermedadesController {
     @GetMapping("/nombre/clase/validacion/{idEnfermedad}")
     public String getNombreClaseValidacion(@PathVariable("idEnfermedad") int idEnfermedad) {
         try {
-            return enfermedadesReadService.nomClaseValidacion(idEnfermedad);
+            return enfermedadesReadService.getNombreTablaGeneric("nombre_clase_validacion",idEnfermedad);
         } catch (Exception e) {
             return null;
         }
@@ -58,14 +58,8 @@ public class EnfermedadesController {
         return enfermedadesWriteService.updateEnfermedad(idEnfermedad, nombreEnfermedad);
     }
 
-/*    @PostMapping("/enfermedades")
-    public ResponseEntity<ResponseMessage> saveEnfermedad(@RequestParam("enfermedad") String nombreEnfermedad) {
-        return enfermedadesWriteService.saveEnfermedad(nombreEnfermedad);
-    }*/
-
     @DeleteMapping("/enfermedades/{idEnfermedad}")
     public ResponseEntity<ResponseMessage> updateIllness(@PathVariable("idEnfermedad") int idEnfermedad) {
         return enfermedadesWriteService.deleteEnfermedad(idEnfermedad);
     }
-
 }

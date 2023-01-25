@@ -32,7 +32,7 @@ public class CargaDirectaImpl implements CargaDirectaService {
         HttpStatus status = HttpStatus.ACCEPTED;
         try {
             if ((!ruta.isEmpty()) && (id > 0)) {
-                EnfermedadesReadDto enfermedadesReadDtoObj = enfermedadesServiceDirect.findIllnessById(id);
+                EnfermedadesReadDto enfermedadesReadDtoObj = enfermedadesServiceDirect.findEnfermedadById(id);
                 if (enfermedadesReadDtoObj != null) {
                     String pureSql="LOAD DATA LOCAL INFILE '" +ruta+
                             "' INTO TABLE "+enfermedadesReadDtoObj.getNameTables()+" FIELDS TERMINATED BY ';' LINES TERMINATED BY '\\n' IGNORE 1 ROWS;";
