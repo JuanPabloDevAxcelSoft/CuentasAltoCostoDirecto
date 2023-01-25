@@ -27,7 +27,7 @@ public class EnfermedadesReadServiceImpl implements EnfermedadesReadService {
     EnfermedadesReadRepository enfermedadesRepository;
 
     @Override
-    public ResponseEntity<ResponseMessage> allIllness() {
+    public ResponseEntity<ResponseMessage> getAllEnfermedades() {
         ResponseMessage response = new ResponseMessage();
         List<ReadCmEnfermedades> list = new ArrayList<>();
         try {
@@ -63,7 +63,7 @@ public class EnfermedadesReadServiceImpl implements EnfermedadesReadService {
     }
 
     @Override
-    public EnfermedadesReadDto findIllnessById(Integer id) {
+    public EnfermedadesReadDto findEnfermedadById(Integer id) {
         ReadCmEnfermedades enfermedadesReadModel = enfermedadesRepository.getById(id);
         EnfermedadesReadDto enferReadDtoResponse = null;
         if (enfermedadesReadModel != null) {
@@ -74,17 +74,18 @@ public class EnfermedadesReadServiceImpl implements EnfermedadesReadService {
         return enferReadDtoResponse;
     }
 
+    /*
+     * Metodo que retorna el nombre de la tabla segun el tipo de parametros
+     * True: Retorna el nombre de la tabla final
+     * False: Retorna el nombre de la tablas de paso
+    */
     @Override
-    public String nomTabFin(Integer id) {
-        String sql= "select cm_enfermedades.nom_tab_fin from cm_enfermedades  where id ="+id+" and Estado=1;";
-        Query query= entityManager.createNativeQuery(sql);
-
-        return query.getSingleResult().toString();
-    }
-    @Override
-    public String nomTabPaso(Integer id) {
-        String sql= "select cm_enfermedades.nombre_tabla from cm_enfermedades  where id ="+id+" and Estado=1;";
-        Query query= entityManager.createNativeQuery(sql);
+    public String getNombreTablaGeneric (boolean table, Integer id) {
+        String data = (table) ? "enf.nom_tab_fin" : "enf.nombre_tabla";
+        String pureSql = "SELECT " + data +" FROM cm_enfermedades AS enf ";
+        pureSql += "WHERE enf.id =" + id + " AND enf.estado=1;";
+        
+        Query query = entityManager.createNativeQuery(pureSql);
 
         return query.getSingleResult().toString();
     }

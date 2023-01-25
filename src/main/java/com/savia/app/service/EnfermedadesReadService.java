@@ -7,9 +7,12 @@ import com.savia.app.vo.ResponseMessage;
 
 public interface EnfermedadesReadService {
     ResponseEntity<ResponseMessage> tblIllness(Integer id);
-    ResponseEntity<ResponseMessage> allIllness();
-    EnfermedadesReadDto findIllnessById(Integer id);
-    String nomTabFin(Integer id);
-    String nomTabPaso(Integer id);
+
+    ResponseEntity<ResponseMessage> getAllEnfermedades();
+
+    EnfermedadesReadDto findEnfermedadById(Integer id);
+
+    /* True: consulta tablas finales, False: Tablas de de paso */
+    public String getNombreTablaGeneric(boolean tabla, Integer id);
 
 }
