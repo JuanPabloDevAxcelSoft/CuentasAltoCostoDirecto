@@ -9,13 +9,8 @@ import com.savia.app.model.CmDetallePaciente;
 import com.savia.app.model.CmPaciente;
 import com.savia.app.repository.CmDetallePacienteRepository;
 import com.savia.app.service.EnfermedadesReadService;
-<<<<<<< HEAD
 import com.savia.app.util.ConvertListArrayToJson;
-import com.savia.app.util.ObtenerColumnasTabla;
-=======
-import com.savia.app.util.ObjetoJson;
 import com.savia.app.util.ConsultasSql;
->>>>>>> juan.dev
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -164,43 +159,18 @@ public class DetallePacienteImpl implements DetallePacienteService {
         Integer page = listarPacienteDto.getPage();
         Integer limit = listarPacienteDto.getLimit();
         try {
-<<<<<<< HEAD
-            final List<Object> listNombreColumnas = obtenerColumnasTabla.getListAllColumTable(tablaPaso);
-            String pureSql = "SELECT cep.* ";
-            pureSql += " FROM " + tablaPaso + " as cep ";
-            pureSql += " WHERE cep.campo_leido=1 AND ";
-            pureSql += " DATE(concat(SUBSTRING_INDEX(SUBSTRING_INDEX(cep.clave_archivo, '-', 2), '-', -1),'-',";
-            pureSql += " SUBSTRING_INDEX(SUBSTRING_INDEX(cep.clave_archivo, '-', 3), '-', -1),'-',";
-            pureSql += " SUBSTRING_INDEX(SUBSTRING_INDEX(cep.clave_archivo, '-', 4), '-', -1)))";
-            pureSql += " BETWEEN '" + listarPacienteDto.getDesde() + "' AND '" + listarPacienteDto.getHasta() + "' ";
-            pureSql += " ORDER BY cep.id ";
-            pureSql += " LIMIT " + ((page - 1) * limit) + ", " + limit + ";";
-            
-            Query query = entityManager.createNativeQuery(pureSql);
-            List<Object> listError = query.getResultList();
-
-            responseJsonGeneric.setMessage((listError.isEmpty())
-                    ? "No hay registros para mostrar"
-                    : "Cantidad de resultados encontrados : " + listError.size());
-
-            responseJsonGeneric.setStatus((listError.isEmpty()) ? HttpStatus.NO_CONTENT : HttpStatus.OK);
-            ArrayList<Object> listAllResult = convertListArrayToJson.setConvertListArrayToListJson(listError,
-                    listNombreColumnas);
-
-            responseJsonGeneric.setData(listAllResult);
-=======
             List<Object> listNombreColumnas = consultasSql.getListAllColumTable(tablaPaso);
             //Sancando los pacientes
             List<Object> listPacienteError = consultasSql.getPacienteError(tablaPaso,limit,page,listarPacienteDto.getDesde(),listarPacienteDto.getHasta());
-            String json="";
-            for (int i = 0; i < listPacienteError.size(); i++) {
-                List<Object> listPacienteErrorUno=Arrays.asList(listPacienteError.get(i));
-                 json=json+setConvertListToJson(listNombreColumnas,listPacienteErrorUno);
-            }
-            responsePaciente.setMessage((listPacienteError.isEmpty()) ? "No hay registros para mostrar" : "Cantidad de resultados encontrados : " + listPacienteError.size());
-            responsePaciente.setStatus((listPacienteError.isEmpty()) ? HttpStatus.NO_CONTENT : HttpStatus.OK);
-            responsePaciente.setItems(json);
->>>>>>> juan.dev
+            responseJsonGeneric.setMessage((listPacienteError.isEmpty())
+                    ? "No hay registros para mostrar"
+                    : "Cantidad de resultados encontrados : " + listPacienteError.size());
+
+            responseJsonGeneric.setStatus((listPacienteError.isEmpty()) ? HttpStatus.NO_CONTENT : HttpStatus.OK);
+            ArrayList<Object> listAllResult = convertListArrayToJson.setConvertListArrayToListJson(listPacienteError,
+                    listNombreColumnas);
+
+            responseJsonGeneric.setData(listAllResult);
         } catch (Exception e) {
             responseJsonGeneric
                     .setMessage("Ocurrio un error al momento de consultar los log de errores:" + e.getMessage());
