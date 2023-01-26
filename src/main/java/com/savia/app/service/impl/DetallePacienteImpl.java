@@ -9,8 +9,13 @@ import com.savia.app.model.CmDetallePaciente;
 import com.savia.app.model.CmPaciente;
 import com.savia.app.repository.CmDetallePacienteRepository;
 import com.savia.app.service.EnfermedadesReadService;
+<<<<<<< HEAD
 import com.savia.app.util.ConvertListArrayToJson;
 import com.savia.app.util.ObtenerColumnasTabla;
+=======
+import com.savia.app.util.ObjetoJson;
+import com.savia.app.util.ConsultasSql;
+>>>>>>> juan.dev
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,7 +51,7 @@ public class DetallePacienteImpl implements DetallePacienteService {
     EnfermedadesReadService enfermedadesReadService;
 
     @Autowired
-    ObtenerColumnasTabla obtenerColumnasTabla;
+    ConsultasSql consultasSql;
 
     @Autowired
     private ConvertListArrayToJson convertListArrayToJson;
@@ -159,6 +164,7 @@ public class DetallePacienteImpl implements DetallePacienteService {
         Integer page = listarPacienteDto.getPage();
         Integer limit = listarPacienteDto.getLimit();
         try {
+<<<<<<< HEAD
             final List<Object> listNombreColumnas = obtenerColumnasTabla.getListAllColumTable(tablaPaso);
             String pureSql = "SELECT cep.* ";
             pureSql += " FROM " + tablaPaso + " as cep ";
@@ -182,6 +188,19 @@ public class DetallePacienteImpl implements DetallePacienteService {
                     listNombreColumnas);
 
             responseJsonGeneric.setData(listAllResult);
+=======
+            List<Object> listNombreColumnas = consultasSql.getListAllColumTable(tablaPaso);
+            //Sancando los pacientes
+            List<Object> listPacienteError = consultasSql.getPacienteError(tablaPaso,limit,page,listarPacienteDto.getDesde(),listarPacienteDto.getHasta());
+            String json="";
+            for (int i = 0; i < listPacienteError.size(); i++) {
+                List<Object> listPacienteErrorUno=Arrays.asList(listPacienteError.get(i));
+                 json=json+setConvertListToJson(listNombreColumnas,listPacienteErrorUno);
+            }
+            responsePaciente.setMessage((listPacienteError.isEmpty()) ? "No hay registros para mostrar" : "Cantidad de resultados encontrados : " + listPacienteError.size());
+            responsePaciente.setStatus((listPacienteError.isEmpty()) ? HttpStatus.NO_CONTENT : HttpStatus.OK);
+            responsePaciente.setItems(json);
+>>>>>>> juan.dev
         } catch (Exception e) {
             responseJsonGeneric
                     .setMessage("Ocurrio un error al momento de consultar los log de errores:" + e.getMessage());
