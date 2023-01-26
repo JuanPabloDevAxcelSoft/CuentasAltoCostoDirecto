@@ -33,7 +33,7 @@ public class ReadCmEnfermedades implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
-    @Column(name = "nombre_tabla")
+    @Column(name = "nombre_tabla_paso")
     private String nombreTabla;
     @Basic(optional = false)
     @NotNull

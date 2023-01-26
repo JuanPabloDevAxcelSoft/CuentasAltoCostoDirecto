@@ -26,6 +26,10 @@ public class DetallePacienteController {
     public ResponseEntity<ResponsePaciente> getPaciente(@RequestBody ListarPacienteDto listarPacienteDto) {
         return this.detallePacienteService.getCmPaciente(listarPacienteDto);
     }
+    @PostMapping("/consulta/log/errores")
+    public ResponseEntity<ResponsePaciente> getErrores(@RequestBody ListarPacienteDto listarPacienteDto){
+        return this.detallePacienteService.getLogErrores(listarPacienteDto);
+    }
     @GetMapping("/consulta/detalle/paciente")
     public CmDetallePaciente getDetallePaciente(@RequestParam int idDetallePaciente){
         return  this.detallePacienteService.getDetallePacienteById(idDetallePaciente);
