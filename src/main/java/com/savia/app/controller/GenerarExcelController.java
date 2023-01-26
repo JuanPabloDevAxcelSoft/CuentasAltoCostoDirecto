@@ -1,7 +1,11 @@
 package com.savia.app.controller;
 
+import com.savia.app.dto.PacienteExcelDto;
+import com.savia.app.util.GenerarExcelApartirObjecto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,7 +16,8 @@ import com.savia.app.constants.KeySsEmitter;
 @RestController
 @RequestMapping(value = "/api/v1/excel")
 public class GenerarExcelController {
-    
+    @Autowired
+    GenerarExcelApartirObjecto generarExcelApartirObjecto;
 
     private final Logger logger = LoggerFactory.getLogger(NotificacionesController.class);
 
@@ -34,14 +39,13 @@ public class GenerarExcelController {
 
 
     @RequestMapping(value = "/descargar", method = RequestMethod.POST, consumes = { "application/json" })
-    public void getDispirarEvento() throws InterruptedException {
-
+    public void getDispirarEvento(@RequestBody PacienteExcelDto pacienteExcelDto) throws InterruptedException {
         String messageLogger = "";
+        /* CODIGO DE GENERAR EL EXCEL */
+        generarExcelApartirObjecto.isExcel(pacienteExcelDto);
+        /*
         for (int i = 0; i < 100; i++) {
             try {
-                /* CODIGO DE GENERAR EL EXCEL */
-                
-                
                 sseEmitter.send(SseEmitter.event().name(KeySsEmitter.KEY_PROCESS_GERERAR.toString()).data(i));
                 messageLogger = "Notificacion enviada al usuario subscrito";
             } catch (Exception e) {
@@ -49,7 +53,7 @@ public class GenerarExcelController {
             }
             this.logger.info(messageLogger);
             Thread.sleep(1000);
-        }
+        }*/
     }
 
 }

@@ -1,6 +1,5 @@
 package com.savia.app.service.impl;
 
-import java.lang.reflect.Field;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -12,7 +11,7 @@ import com.savia.app.model.CmPaciente;
 import com.savia.app.repository.CmDetallePacienteRepository;
 import com.savia.app.service.EnfermedadesReadService;
 import com.savia.app.util.ObjetoJson;
-import com.savia.app.util.ObtenerColumnasTabla;
+import com.savia.app.util.ConsultasSql;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,7 +45,7 @@ public class DetallePacienteImpl implements DetallePacienteService {
     EnfermedadesReadService enfermedadesReadService;
 
     @Autowired
-    ObtenerColumnasTabla obtenerColumnasTabla;
+    ConsultasSql consultasSql;
 
     @Override
     @Transactional(rollbackFor = {Exception.class}, propagation = Propagation.REQUIRED)
@@ -153,25 +152,16 @@ public class DetallePacienteImpl implements DetallePacienteService {
         Integer page = listarPacienteDto.getPage();
         Integer limit = listarPacienteDto.getLimit();
         try {
-            List<Object> listNombreColumnas = obtenerColumnasTabla.getListAllColumTable(tablaPaso);
-            String pureSql = "SELECT cep.* ";
-            pureSql += " FROM " + tablaPaso + " as cep ";
-            pureSql += " WHERE cep.campo_leido=1 AND ";
-            pureSql += "DATE(concat(SUBSTRING_INDEX(SUBSTRING_INDEX(cep.clave_archivo, '-', 2), '-', -1),'-',";
-            pureSql += "SUBSTRING_INDEX(SUBSTRING_INDEX(cep.clave_archivo, '-', 3), '-', -1),'-',";
-            pureSql += "SUBSTRING_INDEX(SUBSTRING_INDEX(cep.clave_archivo, '-', 4), '-', -1)))";
-            pureSql += " BETWEEN '" + listarPacienteDto.getDesde() + "' AND '" + listarPacienteDto.getHasta() + "' ";
-            pureSql += " ORDER BY cep.id ";
-            pureSql += " LIMIT " + ((page - 1) * limit) + ", " + limit + ";";
-            Query query = entityManager.createNativeQuery(pureSql);
-            List<Object> listPacienteEror = query.getResultList();
+            List<Object> listNombreColumnas = consultasSql.getListAllColumTable(tablaPaso);
+            //Sancando los pacientes
+            List<Object> listPacienteError = consultasSql.getPacienteError(tablaPaso,limit,page,listarPacienteDto.getDesde(),listarPacienteDto.getHasta());
             String json="";
-            for (int i = 0; i < listPacienteEror.size(); i++) {
-                List<Object> listPacienteErrorUno=Arrays.asList(listPacienteEror.get(i));
+            for (int i = 0; i < listPacienteError.size(); i++) {
+                List<Object> listPacienteErrorUno=Arrays.asList(listPacienteError.get(i));
                  json=json+setConvertListToJson(listNombreColumnas,listPacienteErrorUno);
             }
-            responsePaciente.setMessage((listPacienteEror.isEmpty()) ? "No hay registros para mostrar" : "Cantidad de resultados encontrados : " + listPacienteEror.size());
-            responsePaciente.setStatus((listPacienteEror.isEmpty()) ? HttpStatus.NO_CONTENT : HttpStatus.OK);
+            responsePaciente.setMessage((listPacienteError.isEmpty()) ? "No hay registros para mostrar" : "Cantidad de resultados encontrados : " + listPacienteError.size());
+            responsePaciente.setStatus((listPacienteError.isEmpty()) ? HttpStatus.NO_CONTENT : HttpStatus.OK);
             responsePaciente.setItems(json);
         } catch (Exception e) {
             responsePaciente.setMessage("Ocurrio un error al momento de consultar los log de errores:" + e.getMessage());
