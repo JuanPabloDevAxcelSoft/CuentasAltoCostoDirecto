@@ -134,14 +134,21 @@ public class DetallePacienteImpl implements DetallePacienteService {
     }
 
     @Override
-    public CmDetallePaciente getDetallePacienteById(int idDetallePaciente) {
+    public ResponseEntity<ResponseMessage> getDetallePacienteById(int idDetallePaciente) {
+        ResponseMessage response = new ResponseMessage();
         try {
             Long id = Long.valueOf(idDetallePaciente);
-            return cmDetallePacienteRepository.findById(id).get();
+            CmDetallePaciente objectoDetalle = cmDetallePacienteRepository.findById(id).get();
+            if (objectoDetalle != null) {
+                response.setItem(objectoDetalle);
+            }
+            response.setMessage("Detalle del paciente");
+            response.setStatus(HttpStatus.OK);
         } catch (NoSuchElementException e) {
+            response.setMessage("Ocurrio un error al momento de realizar la consulta : " + e.getMessage());
             e.printStackTrace();
-            return null;
         }
+        return ResponseEntity.ok().body(response);
     }
 
     @Override
