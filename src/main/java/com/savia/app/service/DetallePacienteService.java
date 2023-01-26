@@ -1,7 +1,6 @@
 package com.savia.app.service;
 
 import com.savia.app.dto.ListarPacienteDto;
-import com.savia.app.model.CmDetallePaciente;
 import org.springframework.http.ResponseEntity;
 
 import com.savia.app.vo.ResponseJson;
@@ -15,6 +14,6 @@ public interface DetallePacienteService {
 
      ResponseEntity<ResponsePaciente> getCmPaciente(ListarPacienteDto listarPacienteDto);
 
-     CmDetallePaciente getDetallePacienteById(int idDetallePaciente);
+     ResponseEntity<ResponseMessage> getDetallePacienteById(int idDetallePaciente);
 
 }
