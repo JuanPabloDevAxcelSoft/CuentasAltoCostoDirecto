@@ -10,21 +10,21 @@ import com.savia.app.dto.Pacientes;
 public class ResponsePaciente {
     private String message;
     private Integer status;
-    private List<Object> data;
+    private List<Pacientes> data;
     private String items;
 
     
     public ResponsePaciente() {
         this.message = "";
         this.status = 204;
-        this.data = new ArrayList<Object>();
+        this.data = new ArrayList<Pacientes>();
         this.items="";
     }
 
     public ResponsePaciente(String message, HttpStatus status) {
         this.message = message;
         this.status = Integer.parseInt(status.toString().substring(0, 3));
-        this.data = new ArrayList<Object>();
+        this.data = new ArrayList<Pacientes>();
     }
 
     public String getMessage() {
@@ -35,7 +35,7 @@ public class ResponsePaciente {
         return status;
     }
 
-    public List<Object> getData() {
+    public List<Pacientes> getData() {
         return data;
     }
 
@@ -47,7 +47,7 @@ public class ResponsePaciente {
         this.status = Integer.parseInt(status.toString().substring(0, 3));
     }
 
-    public void setData(List<Object> data) {
+    public void setData(List<Pacientes> data) {
         this.data = data;
     }
 
