@@ -4,13 +4,18 @@
 # Content-Type: application/json
 
 
-############## Enviar notificaciones al front-end
+
+
+
+########################################## Enviar notificaciones al front-end
 # POST http://localhost:8081/api/v1/notificacion/evento?message="hay nuevos mensajes para ti!!"
 # POST http://localhost:8081/api/v1/notificacion/evento?message="hay nuevos mensajes para ti!!"
 # Content-Type: application/json
 
 
-############## Consultar pacientes
+
+
+######################################## Consultar pacientes
 # POST http://localhost:8081/api/v1/consulta/paciente
 # GET http://localhost:8081/api/v1/consulta/detalle/paciente
 # Content-Type: application/json
@@ -24,4 +29,20 @@
 #     "hasta": "",
 #     "tipoDocumento": "",
 #     "documento": ""
+# }
+
+
+###################################### Consultar Errores
+# POST http://localhost:8081/api/v1/consulta/log/errores
+# Content-Type: application/json
+
+# {
+#     "idEnfermedad":1,
+#     "idIps":null,
+#     "limit":4,
+#     "page":1,
+#     "desde":"2020-01-20",
+#     "hasta":"2024-01-20",
+#     "tipoDocumento":"CC",
+#     "documento":""
 # }
