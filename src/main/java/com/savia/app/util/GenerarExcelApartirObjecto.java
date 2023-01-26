@@ -1,5 +1,6 @@
 package com.savia.app.util;
 
+import com.savia.app.dto.ListarPacienteDto;
 import com.savia.app.dto.PacienteExcelDto;
 import com.savia.app.service.EnfermedadesReadService;
 import org.apache.poi.hssf.usermodel.*;
@@ -15,6 +16,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -33,28 +35,66 @@ public class GenerarExcelApartirObjecto {
         String desde= pacienteExcelDto.getDesde();
         String hasta=pacienteExcelDto.getHasta();
         int idEnfermedad=pacienteExcelDto.getIdEnfermedad();
-        String tablaPaso = enfermedadesReadService.getNombreTablaGeneric("nombre_tabla_paso", idEnfermedad);
-        List<Object> nombreColumn=consultasSql.getListAllColumTable(tablaPaso);
+        int idIps=pacienteExcelDto.getIdIps();
+        List<Object> nombreColumn= new ArrayList<Object>();
         if(pacienteExcelDto.isBandera()){
+            String tablaFin = enfermedadesReadService.getNombreTablaGeneric("nom_tab_fin", idEnfermedad);
+            List<Object> cmPaciente=consultasSql.getPacienteCorrecto(new ListarPacienteDto(idEnfermedad,idIps,1048500,1,desde,hasta,"",""),false,"pac");
+            List<Object> cmDetallePaciente=consultasSql.getPacienteCorrecto(new ListarPacienteDto(idEnfermedad,idIps,1048500,1,desde,hasta,"",""),false,"det");
+            List<Object> cmEnfermedadPaciente=consultasSql.getPacienteCorrecto(new ListarPacienteDto(idEnfermedad,idIps,1048500,1,desde,hasta,"",""),false,"tblf");
+            for (int i = 0; i < cmPaciente.size(); i++) {
+                List<Object> listObje=new ArrayList<>();
+                listObje.add(cmPaciente.get(i));
+                listObje.add(cmDetallePaciente.get(i));
+                listObje.add(cmEnfermedadPaciente.get(i));
+                pacientes.addAll(listObje);
+            }
+            nombreColumn.addAll(consultasSql.getListAllColumTable("cm_paciente"));
+            nombreColumn.addAll(consultasSql.getListAllColumTable("cm_detalle_paciente"));
+            nombreColumn.addAll(consultasSql.getListAllColumTable(tablaFin));
         }else{
+           String tablaPaso = enfermedadesReadService.getNombreTablaGeneric("nombre_tabla_paso", idEnfermedad);
             pacientes= consultasSql.getPacienteError(tablaPaso,1048500,1,desde,hasta);
+            nombreColumn=consultasSql.getListAllColumTable(tablaPaso);
         }
+        System.out.println(pacientes.toString());
+        generacionEcxel(nombreColumn,pacientes);
+
+        return true;
+    }
+    public void generacionEcxel(List<Object> namesHeader,List<Object> data){
         //Generar archivo de excel
         Workbook workbook= new XSSFWorkbook();
         Sheet sheet= workbook.createSheet("Pacientes");
         //encabezado
         CellStyle style = workbook.createCellStyle();
-        style.setFillForegroundColor(IndexedColors.AQUA.getIndex());
+        style.setFillForegroundColor(IndexedColors.GOLD.getIndex());
         style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
         Row row= sheet.createRow(0);
-        for (int i = 0; i < nombreColumn.size(); i++) {
+        for (int i = 0; i < namesHeader.size(); i++) {
             Cell  cell=row.createCell(i);
             cell.setCellStyle(style);
-            cell.setCellValue("V"+i+nombreColumn.get(i).toString());
+            cell.setCellValue("V"+i+namesHeader.get(i).toString());
         }
         //data
-        
-
+        int contadorRow=1;
+        for (Object valores:data) {
+            if (valores.getClass().isArray()) {
+                List<Object> valoresTemporales= Arrays.asList((Object[]) valores);
+                Row rowBody=sheet.createRow(contadorRow);
+                int contadorColumn=0;
+                for (Object temp:valoresTemporales) {
+                    Cell cellBody=rowBody.createCell(contadorColumn);
+                    if (temp==null){
+                        cellBody.setCellValue("");
+                    }else{
+                        cellBody.setCellValue(temp.toString());
+                    }
+                    contadorColumn++;
+                }
+                contadorRow++;
+            }
+        }
 
         try {
             FileOutputStream fileOut = new FileOutputStream(new File("C:\\Users\\JuanSuarez\\Desktop\\datos.xlsx"));
@@ -66,7 +106,6 @@ public class GenerarExcelApartirObjecto {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return true;
     }
 }
 

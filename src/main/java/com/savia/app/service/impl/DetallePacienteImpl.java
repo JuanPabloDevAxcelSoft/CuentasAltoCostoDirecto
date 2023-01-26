@@ -27,7 +27,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -71,30 +70,8 @@ public class DetallePacienteImpl implements DetallePacienteService {
     @Override
     public ResponseEntity<ResponsePaciente> getCmPaciente(ListarPacienteDto listarPacienteDto) {
         ResponsePaciente response = new ResponsePaciente();
-
-        String tablaFinal = enfermedadesReadService.getNombreTablaGeneric("nom_tab_fin",
-                listarPacienteDto.getIdEnfermedad());
-        final String tblPaciente = "cm_paciente";
-        final String tblDetalle = "cm_detalle_paciente";
-
-        Integer page = listarPacienteDto.getPage();
-        Integer limit = listarPacienteDto.getLimit();
-
         try {
-            String pureSql = "SELECT pac.*, det.id AS detid, tblf.id AS finid ";
-            pureSql += " FROM " + tblPaciente + " AS pac ";
-            pureSql += " INNER JOIN " + tblDetalle + " AS det ";
-            pureSql += " ON pac.id = det.id_paciente ";
-            pureSql += " INNER JOIN " + tablaFinal + " AS tblf ";
-            pureSql += " ON pac.id = tblf.id_paciente ";
-            pureSql += " ORDER BY pac.id ";
-            String where = this.getWhereSql(listarPacienteDto);
-            pureSql += where;
-            pureSql += " LIMIT " + ((page - 1) * limit) + ", " + limit + ";";
-
-            Query query = entityManager.createNativeQuery(pureSql);
-
-            List<Object> listTemporal = query.getResultList();
+            List<Object> listTemporal = consultasSql.getPacienteCorrecto(listarPacienteDto,true,"");
             List<Pacientes> list = this.convertListArrayToJson.setConvertListObjectPaciente(listTemporal);
             response.setMessage((listTemporal.isEmpty()) ? "No hay registros para mostrar"
                     : "Cantidad de resultados encontrados : " + listTemporal.size());
@@ -107,31 +84,7 @@ public class DetallePacienteImpl implements DetallePacienteService {
         return ResponseEntity.ok().body(response);
     }
 
-    private String getWhereSql(ListarPacienteDto lista) {
-        String where = " WHERE ";
-        boolean entrada = false;
 
-        if ((!lista.getTipoDocumento().equals("")) && (!lista.getDocumento().equals(""))) {
-            where += " pac.tipo_identificacion = '" + lista.getTipoDocumento() + "' AND ";
-            where += " pac.numero_identificacion = '" + lista.getTipoDocumento() + "' ";
-            entrada = true;
-        }
-
-        if (!lista.getTipoDocumento().equals("") && (!entrada)) {
-            where += " pac.tipo_documento = '" + lista.getTipoDocumento() + "' ";
-            entrada = true;
-        }
-
-        if ((!lista.getDesde().equals("")) && (!lista.getHasta().equals(""))) {
-            if (entrada) {
-                where += " AND";
-            }
-            where += "pac.fecha_ingreso BETWEEN '" + lista.getDesde() + "' AND '" + lista.getHasta() + "'";
-            entrada = true;
-        }
-
-        return (entrada) ? where : "";
-    }
 
     @Override
     public ResponseEntity<ResponseMessage> getDetallePacienteById(int idDetallePaciente) {
