@@ -71,7 +71,7 @@ public class DetallePacienteImpl implements DetallePacienteService {
     public ResponseEntity<ResponsePaciente> getCmPaciente(ListarPacienteDto listPaciente) {
         ResponsePaciente response = new ResponsePaciente();
         try {
-            List<Object> listTemporal = consultasSql.getPacienteCorrecto(listPaciente,true,"");
+            List<Object> listTemporal = consultasSql.getPacienteCorrecto(listPaciente,true);
             List<Pacientes> list = this.convertListArrayToJson.setConvertListObjectPaciente(listTemporal);
             response.setMessage((listTemporal.isEmpty()) ? "No hay registros para mostrar" : "Cantidad de resultados encontrados : " + listTemporal.size());
             response.setStatus((listTemporal.isEmpty()) ? HttpStatus.NO_CONTENT : HttpStatus.OK);

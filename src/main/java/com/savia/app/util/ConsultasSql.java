@@ -11,7 +11,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -61,7 +60,7 @@ public class ConsultasSql {
         }
         return listPacienteError;
     }
-    public  List<Object> getPacienteCorrecto(ListarPacienteDto listarPacienteDto,boolean isFrond,String campo){
+    public  List<Object> getPacienteCorrecto(ListarPacienteDto listarPacienteDto,boolean isFrond){
         String tablaFinal = enfermedadesReadService.getNombreTablaGeneric("nom_tab_fin",
                 listarPacienteDto.getIdEnfermedad());
         final String tblPaciente = "cm_paciente";
@@ -73,7 +72,7 @@ public class ConsultasSql {
             if(isFrond){
                 pureSql += " pac.*, det.id AS detid, tblf.id AS finid ";
             }else {
-                pureSql+=campo+".*";
+                pureSql+="*";
             }
             pureSql += " FROM " + tblPaciente + " AS pac ";
             pureSql += " INNER JOIN " + tblDetalle + " AS det ";
@@ -116,5 +115,15 @@ public class ConsultasSql {
         }
 
         return (entrada) ? where : "";
+    }
+
+    public List<Object[]> consultaPrueba(){
+        String pureSql="CONCAT('SELECT ', " +
+                "(SELECT REPLACE(GROUP_CONCAT(COLUMN_NAME), " +
+                "'id,', '') FROM INFORMATION_SCHEMA.COLUMNS WHERE " +
+                "TABLE_NAME = 'cm_paciente' AND TABLE_SCHEMA = " +
+                "'db_savia'), ' FROM cm_paciente');" ;
+        Query query= entityManager.createNativeQuery(pureSql);
+        return query.getResultList();
     }
 }
