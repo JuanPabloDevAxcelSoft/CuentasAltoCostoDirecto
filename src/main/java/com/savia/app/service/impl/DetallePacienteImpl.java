@@ -27,7 +27,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -71,6 +70,7 @@ public class DetallePacienteImpl implements DetallePacienteService {
     @Override
     public ResponseEntity<ResponsePaciente> getCmPaciente(ListarPacienteDto listPaciente) {
         ResponsePaciente response = new ResponsePaciente();
+<<<<<<< HEAD
 
         String tablaFinal = enfermedadesReadService.getNombreTablaGeneric("nom_tab_fin", listPaciente.getIdEnfermedad());
         final String tblPaciente = "cm_paciente";
@@ -112,6 +112,10 @@ public class DetallePacienteImpl implements DetallePacienteService {
             }
 
             List<Object> listTemporal = query.getResultList();
+=======
+        try {
+            List<Object> listTemporal = consultasSql.getPacienteCorrecto(listarPacienteDto,true,"");
+>>>>>>> juan.dev
             List<Pacientes> list = this.convertListArrayToJson.setConvertListObjectPaciente(listTemporal);
             response.setMessage((listTemporal.isEmpty()) ? "No hay registros para mostrar" : "Cantidad de resultados encontrados : " + listTemporal.size());
             response.setStatus((listTemporal.isEmpty()) ? HttpStatus.NO_CONTENT : HttpStatus.OK);
@@ -123,10 +127,8 @@ public class DetallePacienteImpl implements DetallePacienteService {
         return ResponseEntity.ok().body(response);
     }
 
-    private String getWhereSql(ListarPacienteDto lista) {
-        String where = " WHERE ";
-        boolean entrada = false;
 
+<<<<<<< HEAD
         if ((!lista.getTipoDocumento().equals("")) && (!lista.getDocumento().equals(""))) {
             where += " pac.tipo_identificacion = :tipo AND ";
             where += " pac.numero_identificacion = :documento ";
@@ -147,6 +149,8 @@ public class DetallePacienteImpl implements DetallePacienteService {
         }
         return (entrada) ? where : "";
     }
+=======
+>>>>>>> juan.dev
 
     @Override
     public ResponseEntity<ResponseMessage> getDetallePacienteById(int idDetallePaciente) {
