@@ -30,22 +30,6 @@ public class GenerarExcelApartirObjecto {
     EnfermedadesReadService enfermedadesReadService;
 
     public boolean isExcel(PacienteExcelDto pacienteExcelDto) {
-<<<<<<< HEAD
-        List<Object> pacientes = new ArrayList<Object>();
-        String desde = pacienteExcelDto.getDesde();
-        String hasta = pacienteExcelDto.getHasta();
-        int idEnfermedad = pacienteExcelDto.getIdEnfermedad();
-        String tablaPaso = enfermedadesReadService.getNombreTablaGeneric("nombre_tabla_paso", idEnfermedad);
-        List<Object> nombreColumn = consultasSql.getListAllColumTable(tablaPaso);
-        if (pacienteExcelDto.isBandera()) {
-        } else {
-            pacientes = consultasSql.getPacienteError(tablaPaso, 1048500, 1, desde, hasta);
-        }
-        // Generar archivo de excel
-        Workbook workbook = new XSSFWorkbook();
-        Sheet sheet = workbook.createSheet("Pacientes");
-        // encabezado
-=======
         List<Object> pacientes= new ArrayList<Object>();
         String desde= pacienteExcelDto.getDesde();
         String hasta=pacienteExcelDto.getHasta();
@@ -82,19 +66,9 @@ public class GenerarExcelApartirObjecto {
         Workbook workbook= new XSSFWorkbook();
         Sheet sheet= workbook.createSheet("Pacientes");
         //encabezado
->>>>>>> juan.dev
         CellStyle style = workbook.createCellStyle();
         style.setFillForegroundColor(IndexedColors.GOLD.getIndex());
         style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-<<<<<<< HEAD
-        Row row = sheet.createRow(0);
-        for (int i = 0; i < nombreColumn.size(); i++) {
-            Cell cell = row.createCell(i);
-            cell.setCellStyle(style);
-            cell.setCellValue("V" + i + nombreColumn.get(i).toString());
-        }
-        // data
-=======
         Row row= sheet.createRow(0);
         for (int i = 0; i < namesHeader.size(); i++) {
             Cell  cell=row.createCell(i);
@@ -120,8 +94,6 @@ public class GenerarExcelApartirObjecto {
                 contadorRow++;
             }
         }
->>>>>>> juan.dev
-
         try {
             FileOutputStream fileOut = new FileOutputStream(new File("C:\\Users\\JuanSuarez\\Desktop\\datos.xlsx"));
             workbook.write(fileOut);
