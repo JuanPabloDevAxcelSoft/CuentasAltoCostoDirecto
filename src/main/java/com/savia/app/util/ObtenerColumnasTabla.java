@@ -28,7 +28,6 @@ public class ObtenerColumnasTabla {
             Query query = entityManager.createNativeQuery(pureSql);
             return query.getResultList();
         } catch (Exception e) {
-            e.printStackTrace();
             return null;
         }
     }

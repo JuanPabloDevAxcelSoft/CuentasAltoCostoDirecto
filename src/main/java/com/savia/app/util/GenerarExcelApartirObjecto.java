@@ -2,7 +2,6 @@ package com.savia.app.util;
 
 import com.savia.app.dto.PacienteExcelDto;
 import com.savia.app.service.EnfermedadesReadService;
-import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,32 +28,30 @@ public class GenerarExcelApartirObjecto {
     EnfermedadesReadService enfermedadesReadService;
 
     public boolean isExcel(PacienteExcelDto pacienteExcelDto) {
-        List<Object> pacientes= new ArrayList<Object>();
-        String desde= pacienteExcelDto.getDesde();
-        String hasta=pacienteExcelDto.getHasta();
-        int idEnfermedad=pacienteExcelDto.getIdEnfermedad();
+        List<Object> pacientes = new ArrayList<Object>();
+        String desde = pacienteExcelDto.getDesde();
+        String hasta = pacienteExcelDto.getHasta();
+        int idEnfermedad = pacienteExcelDto.getIdEnfermedad();
         String tablaPaso = enfermedadesReadService.getNombreTablaGeneric("nombre_tabla_paso", idEnfermedad);
-        List<Object> nombreColumn=consultasSql.getListAllColumTable(tablaPaso);
-        if(pacienteExcelDto.isBandera()){
-        }else{
-            pacientes= consultasSql.getPacienteError(tablaPaso,1048500,1,desde,hasta);
+        List<Object> nombreColumn = consultasSql.getListAllColumTable(tablaPaso);
+        if (pacienteExcelDto.isBandera()) {
+        } else {
+            pacientes = consultasSql.getPacienteError(tablaPaso, 1048500, 1, desde, hasta);
         }
-        //Generar archivo de excel
-        Workbook workbook= new XSSFWorkbook();
-        Sheet sheet= workbook.createSheet("Pacientes");
-        //encabezado
+        // Generar archivo de excel
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("Pacientes");
+        // encabezado
         CellStyle style = workbook.createCellStyle();
         style.setFillForegroundColor(IndexedColors.AQUA.getIndex());
         style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-        Row row= sheet.createRow(0);
+        Row row = sheet.createRow(0);
         for (int i = 0; i < nombreColumn.size(); i++) {
-            Cell  cell=row.createCell(i);
+            Cell cell = row.createCell(i);
             cell.setCellStyle(style);
-            cell.setCellValue("V"+i+nombreColumn.get(i).toString());
+            cell.setCellValue("V" + i + nombreColumn.get(i).toString());
         }
-        //data
-        
-
+        // data
 
         try {
             FileOutputStream fileOut = new FileOutputStream(new File("C:\\Users\\JuanSuarez\\Desktop\\datos.xlsx"));
@@ -69,4 +66,3 @@ public class GenerarExcelApartirObjecto {
         return true;
     }
 }
-

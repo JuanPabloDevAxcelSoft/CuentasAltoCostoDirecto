@@ -5,9 +5,9 @@ import com.savia.app.util.GenerarExcelApartirObjecto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -19,7 +19,7 @@ public class GenerarExcelController {
     @Autowired
     GenerarExcelApartirObjecto generarExcelApartirObjecto;
 
-    private final Logger logger = LoggerFactory.getLogger(NotificacionesController.class);
+    private final Logger logger = LoggerFactory.getLogger(GenerarExcelController.class);
 
     SseEmitter sseEmitter = new SseEmitter(Long.MAX_VALUE);
 
@@ -31,16 +31,14 @@ public class GenerarExcelController {
             message = "Archivo de excel en proceso";
         } catch (Exception e) {
             message = "Ocurrio un error interno al momento de generar excel : " + e.getMessage();
-            e.printStackTrace();
         }
         this.logger.info(message);
         return this.sseEmitter;
     }
 
 
-    @RequestMapping(value = "/descargar", method = RequestMethod.POST, consumes = { "application/json" })
+    @PostMapping(value = "/descargar", consumes = { "application/json" })
     public void getDispirarEvento(@RequestBody PacienteExcelDto pacienteExcelDto) throws InterruptedException {
-        String messageLogger = "";
         /* CODIGO DE GENERAR EL EXCEL */
         generarExcelApartirObjecto.isExcel(pacienteExcelDto);
         /*

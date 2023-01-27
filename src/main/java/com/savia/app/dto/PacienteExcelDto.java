@@ -2,10 +2,10 @@ package com.savia.app.dto;
 
 public class PacienteExcelDto {
     private int idEnfermedad;
-    private  int idIps;
+    private int idIps;
     private boolean bandera;
     private String desde;
-    private  String hasta;
+    private String hasta;
 
     public PacienteExcelDto(int idEnfermedad, int idIps, boolean bandera, String desde, String hasta) {
         this.idEnfermedad = idEnfermedad;

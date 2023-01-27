@@ -17,24 +17,24 @@ public class ConsultasSql {
     @Value("${database.name}")
     String dbName;
 
-    public List<Object> getListAllColumTable(String nombreTabla){
-        try{
-            String pureSql="SELECT column_name ";
-            pureSql+=" FROM information_schema.columns ";
-            pureSql+="WHERE table_schema='"+dbName+"' ";
-            pureSql+="and table_name='"+nombreTabla+"' ";
-            pureSql+="ORDER BY ordinal_position";
-            Query query= entityManager.createNativeQuery(pureSql);
+    public List<Object> getListAllColumTable(String nombreTabla) {
+        try {
+            String pureSql = "SELECT column_name ";
+            pureSql += " FROM information_schema.columns ";
+            pureSql += "WHERE table_schema='" + dbName + "' ";
+            pureSql += "and table_name='" + nombreTabla + "' ";
+            pureSql += "ORDER BY ordinal_position";
+            Query query = entityManager.createNativeQuery(pureSql);
             return query.getResultList();
-       }catch (Exception e ){
+        } catch (Exception e) {
             e.printStackTrace();
-         return null;
+            return null;
         }
     }
 
-    public List<Object> getPacienteError(String tablaPaso,int limit, int page, String desde,String hasta){
-        List<Object> listPacienteError=new ArrayList<Object>();
-        try{
+    public List<Object> getPacienteError(String tablaPaso, int limit, int page, String desde, String hasta) {
+        List<Object> listPacienteError = new ArrayList<Object>();
+        try {
             String pureSql = "SELECT cep.* ";
             pureSql += " FROM " + tablaPaso + " as cep ";
             pureSql += " WHERE cep.campo_leido=1 AND ";
@@ -47,7 +47,7 @@ public class ConsultasSql {
             Query query = entityManager.createNativeQuery(pureSql);
             listPacienteError = query.getResultList();
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return listPacienteError;
