@@ -5,8 +5,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -31,7 +31,6 @@ public class NotificacionesController {
             message = "Usuario subscrito";
         } catch (Exception e) {
             message = "Ocurrio un error interno : " + e.getMessage();
-            e.printStackTrace();
         }
         sseEmitter.onCompletion(() -> this.listSseEmitter.remove(sseEmitter));
         listSseEmitter.add(sseEmitter);
@@ -40,7 +39,7 @@ public class NotificacionesController {
     }
 
     /* Metodo para disparar un evento a todos los clientes subcritos */
-    @RequestMapping(value = "/evento", method = RequestMethod.POST, consumes = { "application/json" })
+    @PostMapping(value = "/evento", consumes = { "application/json" })
     public void getDispirarEvento(@RequestParam("message") String message) {
 
         String messageLogger = "";

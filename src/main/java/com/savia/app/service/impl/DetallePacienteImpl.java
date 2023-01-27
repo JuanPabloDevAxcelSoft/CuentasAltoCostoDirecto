@@ -2,10 +2,10 @@ package com.savia.app.service.impl;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import com.savia.app.dto.ListarPacienteDto;
 import com.savia.app.dto.Pacientes;
-import com.savia.app.model.CmDetallePaciente;
 import com.savia.app.model.CmPaciente;
 import com.savia.app.repository.CmDetallePacienteRepository;
 import com.savia.app.service.EnfermedadesReadService;
@@ -69,16 +69,19 @@ public class DetallePacienteImpl implements DetallePacienteService {
     }
 
     @Override
-    public ResponseEntity<ResponsePaciente> getCmPaciente(ListarPacienteDto listarPacienteDto) {
+    public ResponseEntity<ResponsePaciente> getCmPaciente(ListarPacienteDto listPaciente) {
         ResponsePaciente response = new ResponsePaciente();
 
-        String tablaFinal = enfermedadesReadService.getNombreTablaGeneric("nom_tab_fin",
-                listarPacienteDto.getIdEnfermedad());
+        String tablaFinal = enfermedadesReadService.getNombreTablaGeneric("nom_tab_fin", listPaciente.getIdEnfermedad());
         final String tblPaciente = "cm_paciente";
         final String tblDetalle = "cm_detalle_paciente";
 
-        Integer page = listarPacienteDto.getPage();
-        Integer limit = listarPacienteDto.getLimit();
+        final boolean banderaTipoNumeroDocumentos = (!listPaciente.getTipoDocumento().equals("")) && (!listPaciente.getDocumento().equals(""));
+        final boolean banderaTipoDocumento= !listPaciente.getTipoDocumento().equals("");
+        final boolean banderaFechasRango = (!listPaciente.getDesde().equals("")) && (!listPaciente.getHasta().equals(""));
+        
+        Integer page = listPaciente.getPage();
+        Integer limit = listPaciente.getLimit();
 
         try {
             String pureSql = "SELECT pac.*, det.id AS detid, tblf.id AS finid ";
@@ -87,17 +90,30 @@ public class DetallePacienteImpl implements DetallePacienteService {
             pureSql += " ON pac.id = det.id_paciente ";
             pureSql += " INNER JOIN " + tablaFinal + " AS tblf ";
             pureSql += " ON pac.id = tblf.id_paciente ";
-            pureSql += " ORDER BY pac.id ";
-            String where = this.getWhereSql(listarPacienteDto);
+            String where = this.getWhereSql(listPaciente);
             pureSql += where;
-            pureSql += " LIMIT " + ((page - 1) * limit) + ", " + limit + ";";
+            pureSql += " ORDER BY pac.id ";
+            pureSql += " LIMIT :pagina , :limite ;";
 
             Query query = entityManager.createNativeQuery(pureSql);
+            query.setParameter("pagina", ((page - 1) * limit));
+            query.setParameter("limite", limit);
+
+            if (banderaTipoNumeroDocumentos) {
+                query.setParameter("tipo", listPaciente.getTipoDocumento());
+                query.setParameter("documento", listPaciente.getDocumento());
+            }
+            if (banderaTipoDocumento) {
+                query.setParameter("tipo", listPaciente.getTipoDocumento());
+            }
+            if (banderaFechasRango) {
+                query.setParameter("desde", listPaciente.getDesde());
+                query.setParameter("hasta", listPaciente.getHasta());
+            }
 
             List<Object> listTemporal = query.getResultList();
             List<Pacientes> list = this.convertListArrayToJson.setConvertListObjectPaciente(listTemporal);
-            response.setMessage((listTemporal.isEmpty()) ? "No hay registros para mostrar"
-                    : "Cantidad de resultados encontrados : " + listTemporal.size());
+            response.setMessage((listTemporal.isEmpty()) ? "No hay registros para mostrar" : "Cantidad de resultados encontrados : " + listTemporal.size());
             response.setStatus((listTemporal.isEmpty()) ? HttpStatus.NO_CONTENT : HttpStatus.OK);
             response.setData(list);
 
@@ -112,24 +128,23 @@ public class DetallePacienteImpl implements DetallePacienteService {
         boolean entrada = false;
 
         if ((!lista.getTipoDocumento().equals("")) && (!lista.getDocumento().equals(""))) {
-            where += " pac.tipo_identificacion = '" + lista.getTipoDocumento() + "' AND ";
-            where += " pac.numero_identificacion = '" + lista.getTipoDocumento() + "' ";
+            where += " pac.tipo_identificacion = :tipo AND ";
+            where += " pac.numero_identificacion = :documento ";
             entrada = true;
         }
 
         if (!lista.getTipoDocumento().equals("") && (!entrada)) {
-            where += " pac.tipo_documento = '" + lista.getTipoDocumento() + "' ";
+            where += " pac.tipo_identificacion = :tipo ";
             entrada = true;
         }
 
         if ((!lista.getDesde().equals("")) && (!lista.getHasta().equals(""))) {
             if (entrada) {
-                where += " AND";
+                where += " AND ";
             }
-            where += "pac.fecha_ingreso BETWEEN '" + lista.getDesde() + "' AND '" + lista.getHasta() + "'";
+            where += "pac.fecha_ingreso BETWEEN :desde AND :hasta ";
             entrada = true;
         }
-
         return (entrada) ? where : "";
     }
 
@@ -138,15 +153,14 @@ public class DetallePacienteImpl implements DetallePacienteService {
         ResponseMessage response = new ResponseMessage();
         try {
             Long id = Long.valueOf(idDetallePaciente);
-            CmDetallePaciente objectoDetalle = cmDetallePacienteRepository.findById(id).get();
+            Optional<?> objectoDetalle = cmDetallePacienteRepository.findById(id);
             if (objectoDetalle != null) {
-                response.setItem(objectoDetalle);
+                response.setItem(objectoDetalle.get());
             }
             response.setMessage("Detalle del paciente");
             response.setStatus(HttpStatus.OK);
         } catch (NoSuchElementException e) {
             response.setMessage("Ocurrio un error al momento de realizar la consulta : " + e.getMessage());
-            e.printStackTrace();
         }
         return ResponseEntity.ok().body(response);
     }
@@ -162,15 +176,21 @@ public class DetallePacienteImpl implements DetallePacienteService {
             final List<Object> listNombreColumnas = obtenerColumnasTabla.getListAllColumTable(tablaPaso);
             String pureSql = "SELECT cep.* ";
             pureSql += " FROM " + tablaPaso + " as cep ";
-            pureSql += " WHERE cep.campo_leido=1 AND ";
+            pureSql += " WHERE cep.campo_leido = :estado AND ";
             pureSql += " DATE(concat(SUBSTRING_INDEX(SUBSTRING_INDEX(cep.clave_archivo, '-', 2), '-', -1),'-',";
             pureSql += " SUBSTRING_INDEX(SUBSTRING_INDEX(cep.clave_archivo, '-', 3), '-', -1),'-',";
             pureSql += " SUBSTRING_INDEX(SUBSTRING_INDEX(cep.clave_archivo, '-', 4), '-', -1)))";
-            pureSql += " BETWEEN '" + listarPacienteDto.getDesde() + "' AND '" + listarPacienteDto.getHasta() + "' ";
+            pureSql += " BETWEEN :desde AND :hasta ";
             pureSql += " ORDER BY cep.id ";
-            pureSql += " LIMIT " + ((page - 1) * limit) + ", " + limit + ";";
-            
+            pureSql += " LIMIT :pagina , :limite ;";
+
             Query query = entityManager.createNativeQuery(pureSql);
+            query.setParameter("estado", 1);
+            query.setParameter("desde", listarPacienteDto.getDesde());
+            query.setParameter("hasta", listarPacienteDto.getHasta());
+            query.setParameter("pagina", ((page - 1) * limit));
+            query.setParameter("limite", limit);
+
             List<Object> listError = query.getResultList();
 
             responseJsonGeneric.setMessage((listError.isEmpty())
