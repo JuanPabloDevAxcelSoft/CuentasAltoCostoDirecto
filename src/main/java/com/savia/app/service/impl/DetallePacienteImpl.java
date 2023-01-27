@@ -10,7 +10,7 @@ import com.savia.app.model.CmPaciente;
 import com.savia.app.repository.CmDetallePacienteRepository;
 import com.savia.app.service.EnfermedadesReadService;
 import com.savia.app.util.ConvertListArrayToJson;
-import com.savia.app.util.ObtenerColumnasTabla;
+import com.savia.app.util.ConsultasSql;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,7 +46,7 @@ public class DetallePacienteImpl implements DetallePacienteService {
     EnfermedadesReadService enfermedadesReadService;
 
     @Autowired
-    ObtenerColumnasTabla obtenerColumnasTabla;
+    ConsultasSql consultasSql;
 
     @Autowired
     private ConvertListArrayToJson convertListArrayToJson;
@@ -173,32 +173,15 @@ public class DetallePacienteImpl implements DetallePacienteService {
         Integer page = listarPacienteDto.getPage();
         Integer limit = listarPacienteDto.getLimit();
         try {
-            final List<Object> listNombreColumnas = obtenerColumnasTabla.getListAllColumTable(tablaPaso);
-            String pureSql = "SELECT cep.* ";
-            pureSql += " FROM " + tablaPaso + " as cep ";
-            pureSql += " WHERE cep.campo_leido = :estado AND ";
-            pureSql += " DATE(concat(SUBSTRING_INDEX(SUBSTRING_INDEX(cep.clave_archivo, '-', 2), '-', -1),'-',";
-            pureSql += " SUBSTRING_INDEX(SUBSTRING_INDEX(cep.clave_archivo, '-', 3), '-', -1),'-',";
-            pureSql += " SUBSTRING_INDEX(SUBSTRING_INDEX(cep.clave_archivo, '-', 4), '-', -1)))";
-            pureSql += " BETWEEN :desde AND :hasta ";
-            pureSql += " ORDER BY cep.id ";
-            pureSql += " LIMIT :pagina , :limite ;";
-
-            Query query = entityManager.createNativeQuery(pureSql);
-            query.setParameter("estado", 1);
-            query.setParameter("desde", listarPacienteDto.getDesde());
-            query.setParameter("hasta", listarPacienteDto.getHasta());
-            query.setParameter("pagina", ((page - 1) * limit));
-            query.setParameter("limite", limit);
-
-            List<Object> listError = query.getResultList();
-
-            responseJsonGeneric.setMessage((listError.isEmpty())
+            List<Object> listNombreColumnas = consultasSql.getListAllColumTable(tablaPaso);
+            //Sancando los pacientes
+            List<Object> listPacienteError = consultasSql.getPacienteError(tablaPaso,limit,page,listarPacienteDto.getDesde(),listarPacienteDto.getHasta());
+            responseJsonGeneric.setMessage((listPacienteError.isEmpty())
                     ? "No hay registros para mostrar"
-                    : "Cantidad de resultados encontrados : " + listError.size());
+                    : "Cantidad de resultados encontrados : " + listPacienteError.size());
 
-            responseJsonGeneric.setStatus((listError.isEmpty()) ? HttpStatus.NO_CONTENT : HttpStatus.OK);
-            ArrayList<Object> listAllResult = convertListArrayToJson.setConvertListArrayToListJson(listError,
+            responseJsonGeneric.setStatus((listPacienteError.isEmpty()) ? HttpStatus.NO_CONTENT : HttpStatus.OK);
+            ArrayList<Object> listAllResult = convertListArrayToJson.setConvertListArrayToListJson(listPacienteError,
                     listNombreColumnas);
 
             responseJsonGeneric.setData(listAllResult);
