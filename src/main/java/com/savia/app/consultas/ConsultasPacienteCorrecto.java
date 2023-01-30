@@ -11,9 +11,8 @@ import java.util.List;
 public class ConsultasPacienteCorrecto extends  ConsultasAbstract{
     private final String nombreTablaPacienteFinal ="cm_paciente";
     private final String nombreTablaDetalleFinal="cm_detalle_paciente";
-
-
-    public List<Object> getNombreColumnasCorrecto(int idEnfermedad) {
+   @Override
+    public List<Object> getListAllColumTable(int idEnfermedad) {
         final String nombreTablaEnfermedadFinal=nombreTablaEnfermedad(idEnfermedad, EnumNombreColumnasTablaCmEnfermedad.nom_tab_fin.toString());
         pureSql="SELECT DISTINCT (CONCAT(t.TABLE_NAME, '.', col.COLUMN_NAME)) ";
         pureSql+="FROM INFORMATION_SCHEMA.COLUMNS AS col ";
@@ -62,13 +61,13 @@ public class ConsultasPacienteCorrecto extends  ConsultasAbstract{
         boolean entrada = false;
 
         if ((!lista.getTipoDocumento().equals("")) && (!lista.getDocumento().equals(""))) {
-            where += " pac.tipo_identificacion = '" + lista.getTipoDocumento() + "' AND ";
-            where += " pac.numero_identificacion = '" + lista.getTipoDocumento() + "' ";
+            where +=  nombreTablaPacienteFinal+".tipo_identificacion = '" + lista.getTipoDocumento() + "' AND ";
+            where += nombreTablaPacienteFinal+".numero_identificacion = '" + lista.getTipoDocumento() + "' ";
             entrada = true;
         }
 
         if (!lista.getTipoDocumento().equals("") && (!entrada)) {
-            where += " pac.tipo_documento = '" + lista.getTipoDocumento() + "' ";
+            where += nombreTablaPacienteFinal+".tipo_documento = '" + lista.getTipoDocumento() + "' ";
             entrada = true;
         }
 
@@ -76,7 +75,7 @@ public class ConsultasPacienteCorrecto extends  ConsultasAbstract{
             if (entrada) {
                 where += " AND";
             }
-            where += "pac.fecha_ingreso BETWEEN '" + lista.getDesde() + "' AND '" + lista.getHasta() + "'";
+            where += nombreTablaPacienteFinal+".fecha_ingreso BETWEEN '" + lista.getDesde() + "' AND '" + lista.getHasta() + "'";
             entrada = true;
         }
 

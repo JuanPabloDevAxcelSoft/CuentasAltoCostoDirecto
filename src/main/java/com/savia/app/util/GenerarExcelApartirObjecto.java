@@ -1,14 +1,19 @@
 package com.savia.app.util;
 
+import com.savia.app.constants.KeySsEmitter;
+import com.savia.app.constants.PathFileUpload;
 import com.savia.app.consultas.ConsultaLogErrores;
 import com.savia.app.consultas.ConsultasPacienteCorrecto;
+import com.savia.app.controller.GenerarExcelController;
 import com.savia.app.dto.ListarPacienteDto;
 import com.savia.app.dto.PacienteExcelDto;
-import com.savia.app.service.EnfermedadesReadService;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -16,17 +21,18 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 @Service
 public class GenerarExcelApartirObjecto {
+    private final Logger logger = LoggerFactory.getLogger(GenerarExcelController.class);
+
     @PersistenceContext
     EntityManager entityManager;
-
-    @Autowired
-    ConsultasSql consultasSql;
 
     @Autowired
     ConsultasPacienteCorrecto consultasPacienteCorrecto;
@@ -34,88 +40,93 @@ public class GenerarExcelApartirObjecto {
     @Autowired
     ConsultaLogErrores consultaLogErrores;
 
-    @Autowired
-    EnfermedadesReadService enfermedadesReadService;
 
-    public boolean isExcel(PacienteExcelDto pacienteExcelDto) {
-        try{
-            List<Object> pacientes= new ArrayList<Object>();
-            String desde= pacienteExcelDto.getDesde();
-            String hasta=pacienteExcelDto.getHasta();
-            int idEnfermedad=pacienteExcelDto.getIdEnfermedad();
-            int idIps=pacienteExcelDto.getIdIps();
-            List<Object> nombreColumn= new ArrayList<Object>();
-            if(pacienteExcelDto.isBandera()){
-                List<Object> nombColumns=consultasPacienteCorrecto.getNombreColumnasCorrecto(idEnfermedad);
-                String campos="";
-                for (int i = 0; i < nombColumns.size(); i++) {
-                    if(i==(nombColumns.size()-1)){
-                        campos+=nombColumns.get(i).toString()+" ";
-                    }else{
-                        campos+=nombColumns.get(i).toString()+" , ";
+    public void getExcel(PacienteExcelDto pacienteExcelDto, SseEmitter sseEmitter) {
+        try {
+            List<Object> pacientes = new ArrayList<Object>();
+            String desde = pacienteExcelDto.getDesde();
+            String hasta = pacienteExcelDto.getHasta();
+            int idEnfermedad = pacienteExcelDto.getIdEnfermedad();
+            int idIps = pacienteExcelDto.getIdIps();
+            List<Object> nombreColumn = new ArrayList<Object>();
+            if (pacienteExcelDto.isBandera()) {
+                nombreColumn = consultasPacienteCorrecto.getListAllColumTable(idEnfermedad);
+                String campos = "";
+                for (int i = 0; i < nombreColumn.size(); i++) {
+                    campos += nombreColumn.get(i).toString() + " AS " + nombreColumn.get(i).toString().replace(".", "_") + " ";
+                    if (!(i == (nombreColumn.size() - 1))) {
+                        campos += " , ";
                     }
-
                 }
-                pacientes=consultasPacienteCorrecto.getPacienteCorrecto(new ListarPacienteDto(idEnfermedad,idIps,1048570,1,desde,hasta,"",""),false,campos);
-            }else{
-                //nombreColumn=consultasSql.getListAllColumTable(tablaPaso);
+                pacientes = consultasPacienteCorrecto.getPacienteCorrecto(new ListarPacienteDto(idEnfermedad, idIps, 1048570, 1, desde, hasta, "", ""), false, campos);
+            } else {
+                nombreColumn = consultaLogErrores.getListAllColumTable(idEnfermedad);
+                pacientes = consultaLogErrores.getPacienteError(idEnfermedad, 1048570, 1, desde, hasta);
             }
-            System.out.println(pacientes);
-            //generacionEcxel(nombreColumn,pacientes);
-            return true;
-        }  catch (Exception e){
+            generacionEcxel(nombreColumn, pacientes, sseEmitter);
+
+        } catch (Exception e) {
             e.printStackTrace();
-            return false;
         }
     }
-    public void generacionEcxel(List<Object> namesHeader,List<Object> data){
-        //Generar archivo de excel
-        Workbook workbook= new XSSFWorkbook();
-        Sheet sheet= workbook.createSheet("Pacientes");
-        //encabezado
-        CellStyle style = workbook.createCellStyle();
-        style.setFillForegroundColor(IndexedColors.AQUA.getIndex());
-        style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-        Row row= sheet.createRow(0);
-        for (int i = 0; i < namesHeader.size(); i++) {
-            Cell  cell=row.createCell(i);
-            cell.setCellStyle(style);
-            cell.setCellValue("V"+i+namesHeader.get(i).toString());
-        }
-        //data
-        int contadorRow=1;
-        for (Object valores:data) {
-            if (valores.getClass().isArray()) {
-                List<Object> valoresTemporales= Arrays.asList((Object[]) valores);
-                Row rowBody=sheet.createRow(contadorRow);
-                int contadorColumn=0;
-                for (Object temp:valoresTemporales) {
-                    Cell cellBody=rowBody.createCell(contadorColumn);
-                    if (temp==null){
-                        cellBody.setCellValue("");
-                    }else{
-                        cellBody.setCellValue(temp.toString());
-                    }
-                    contadorColumn++;
-                }
-                contadorRow++;
-            }
-        }
+
+    public void generacionEcxel(List<Object> namesHeader, List<Object> data, SseEmitter sseEmitter) {
         try {
-            FileOutputStream fileOut = new FileOutputStream(new File("C:\\Users\\JuanSuarez\\Desktop\\datos.xlsx"));
+            //Generar archivo de excel
+            Workbook workbook = new XSSFWorkbook();
+            Sheet sheet = workbook.createSheet("Pacientes");
+            //encabezado
+            CellStyle style = workbook.createCellStyle();
+            style.setFillForegroundColor(IndexedColors.AQUA.getIndex());
+            style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+            Row row = sheet.createRow(0);
+            for (int i = 0; i < namesHeader.size(); i++) {
+                Cell cell = row.createCell(i);
+                cell.setCellStyle(style);
+                cell.setCellValue("V" + i + namesHeader.get(i).toString());
+            }
+            //data
+            int contadorRow = 1;
+
+            for (Object valores : data) {
+                int porcentArchivo = contadorRow * 100 / data.size();
+                if (valores.getClass().isArray()) {
+                    List<Object> valoresTemporales = Arrays.asList((Object[]) valores);
+                    Row rowBody = sheet.createRow(contadorRow);
+                    int contadorColumn = 0;
+                    for (Object temp : valoresTemporales) {
+                        Cell cellBody = rowBody.createCell(contadorColumn);
+                        cellBody.setCellValue((temp == null) ? "" : temp.toString());
+                        contadorColumn++;
+                    }
+                    enviarNotificacion(porcentArchivo, sseEmitter);
+                    contadorRow++;
+                }
+
+            }
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd-kk-mm-ss");
+            FileOutputStream fileOut = new FileOutputStream(new File(PathFileUpload.PATH_FILE_UPLOAD+"excel\\"+"Reporte-"+simpleDateFormat.format(new Date())+".xlsx"));
             workbook.write(fileOut);
             fileOut.close();
+            workbook.close();
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        finally {
-            try {
-                workbook.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+    }
+
+    public void enviarNotificacion(int porcentajeCarga, SseEmitter sseEmitter) {
+        String messageLogger;
+        try {
+            sseEmitter.send(SseEmitter.event().name(KeySsEmitter.KEY_PROCESS_GERERAR.toString()).data(porcentajeCarga));
+            messageLogger = "El archivo esta al " + porcentajeCarga;
+            this.logger.info(messageLogger);
+        } catch (Exception e) {
+            messageLogger = "El emitter fue removido de la lista de subcritos";
+            this.logger.error(e.getMessage());
         }
+
     }
 }

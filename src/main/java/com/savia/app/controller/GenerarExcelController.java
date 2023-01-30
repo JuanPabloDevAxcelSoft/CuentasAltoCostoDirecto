@@ -39,19 +39,7 @@ public class GenerarExcelController {
 
     @PostMapping(value = "/descargar", consumes = { "application/json" })
     public void getDispirarEvento(@RequestBody PacienteExcelDto pacienteExcelDto) throws InterruptedException {
-        /* CODIGO DE GENERAR EL EXCEL */
-        generarExcelApartirObjecto.isExcel(pacienteExcelDto);
-        /*
-        for (int i = 0; i < 100; i++) {
-            try {
-                sseEmitter.send(SseEmitter.event().name(KeySsEmitter.KEY_PROCESS_GERERAR.toString()).data(i));
-                messageLogger = "Notificacion enviada al usuario subscrito";
-            } catch (Exception e) {
-                messageLogger = "El emitter fue removido de la lista de subcritos";
-            }
-            this.logger.info(messageLogger);
-            Thread.sleep(1000);
-        }*/
+        generarExcelApartirObjecto.getExcel(pacienteExcelDto,sseEmitter);
     }
 
 }

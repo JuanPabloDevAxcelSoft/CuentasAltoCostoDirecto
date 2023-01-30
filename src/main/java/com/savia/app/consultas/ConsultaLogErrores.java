@@ -3,12 +3,12 @@ package com.savia.app.consultas;
 import com.savia.app.constants.EnumNombreColumnasTablaCmEnfermedad;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class ConsultaLogErrores extends ConsultasAbstract {
+
     public List<Object> getPacienteError(int idEnfermedad, int limit, int page, String desde, String hasta) {
         final String nombreTablaEnfermedadPaso=nombreTablaEnfermedad(idEnfermedad, EnumNombreColumnasTablaCmEnfermedad.nombre_tabla_paso.toString());
         List<Object> listPacienteError = new ArrayList<Object>();
@@ -30,6 +30,23 @@ public class ConsultaLogErrores extends ConsultasAbstract {
         }
         return listPacienteError;
     }
-
-
+    @Override
+    public List<Object> getListAllColumTable(int idEnfermedad) {
+        final String nombreTablaEnfermedadPaso=nombreTablaEnfermedad(idEnfermedad, EnumNombreColumnasTablaCmEnfermedad.nombre_tabla_paso.toString());
+        try {
+            String pureSql = "SELECT column_name ";
+            pureSql += " FROM information_schema.columns ";
+            pureSql += "WHERE table_schema='" + dbName + "' ";
+            pureSql += "and table_name='" + nombreTablaEnfermedadPaso + "' ";
+            pureSql += "ORDER BY ordinal_position";
+            query = entityManager.createNativeQuery(pureSql);
+            return query.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }
+
+
+

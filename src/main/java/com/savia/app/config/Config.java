@@ -1,6 +1,8 @@
 package com.savia.app.config;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletContext;
 
@@ -50,16 +52,22 @@ public class Config {
     @Bean(name = "createDirectoryTempForFiles")
     public void createDirectoryTempForFiles() {
         File directory = null;
+        List<String> listDirectory =new ArrayList<>();
         try {
-            String directoryPath = PathFileUpload.PATH_FILE_UPLOAD;
-            directory = new File(directoryPath);
-            if (!directory.isDirectory()) {
-                directory.mkdirs();
-                directory.setReadable(true, false);
-                directory.setWritable(true, false);
-                directory.setExecutable(true, false);
-                logger.info("Directorio de archivos temporales creado");
+            listDirectory.add(PathFileUpload.PATH_FILE_UPLOAD+"upload\\");
+            listDirectory.add(PathFileUpload.PATH_FILE_UPLOAD+"excel\\");
+            for (String directoryPath: listDirectory) {
+                directory = new File(directoryPath);
+
+                if (!directory.isDirectory()) {
+                    directory.mkdirs();
+                    directory.setReadable(true, false);
+                    directory.setWritable(true, false);
+                    directory.setExecutable(true, false);
+                    logger.info("Directorio de archivos temporales creado");
+                }
             }
+
         } catch (Exception e) {
             logger.error("Error en creacion de directorio termporal : " + e.getLocalizedMessage());
         } finally {

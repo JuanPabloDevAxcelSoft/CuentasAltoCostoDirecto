@@ -1,8 +1,6 @@
 package com.savia.app.consultas;
 
-import com.savia.app.constants.EnumNombreColumnasTablaCmEnfermedad;
 import com.savia.app.service.EnfermedadesReadService;
-import org.hibernate.query.internal.NativeQueryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -25,11 +23,11 @@ public abstract class ConsultasAbstract {
 
     protected Query query;
 
-    protected EnumNombreColumnasTablaCmEnfermedad enumNombreColumnasTablaCmEnfermedad;
 
     public String nombreTablaEnfermedad(int idEnfermedad, String nombreColumna){
         return enfermedadesReadService.getNombreTablaGeneric(nombreColumna,idEnfermedad);
     }
+    public abstract List<Object> getListAllColumTable(int idEnfermedad);
     public ConsultasAbstract() {
     }
 
