@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import com.savia.app.constants.EnumNombreColumnasTablaCmEnfermedad;
+import com.savia.app.consultas.ConsultaLogErrores;
+import com.savia.app.consultas.ConsultasAbstract;
 import com.savia.app.dto.ListarPacienteDto;
 import com.savia.app.dto.Pacientes;
 import com.savia.app.model.CmPaciente;
@@ -46,6 +49,8 @@ public class DetallePacienteImpl implements DetallePacienteService {
 
     @Autowired
     ConsultasSql consultasSql;
+    @Autowired
+    ConsultaLogErrores consultaLogErrores;
 
     @Autowired
     private ConvertListArrayToJson convertListArrayToJson;
@@ -105,14 +110,14 @@ public class DetallePacienteImpl implements DetallePacienteService {
     @Override
     public ResponseEntity<ResponseJson> getLogErrores(ListarPacienteDto listarPacienteDto) {
         ResponseJson responseJsonGeneric = new ResponseJson();
-        final String tablaPaso = enfermedadesReadService.getNombreTablaGeneric("nombre_tabla_paso",
+        final String tablaPaso = enfermedadesReadService.getNombreTablaGeneric(EnumNombreColumnasTablaCmEnfermedad.nombre_tabla_paso.toString(),
                 listarPacienteDto.getIdEnfermedad());
         Integer page = listarPacienteDto.getPage();
         Integer limit = listarPacienteDto.getLimit();
         try {
             List<Object> listNombreColumnas = consultasSql.getListAllColumTable(tablaPaso);
             //Sancando los pacientes
-            List<Object> listPacienteError = consultasSql.getPacienteError(tablaPaso,limit,page,listarPacienteDto.getDesde(),listarPacienteDto.getHasta());
+            List<Object> listPacienteError = consultaLogErrores.getPacienteError(listarPacienteDto.getIdEnfermedad(),limit,page,listarPacienteDto.getDesde(),listarPacienteDto.getHasta());
             responseJsonGeneric.setMessage((listPacienteError.isEmpty())
                     ? "No hay registros para mostrar"
                     : "Cantidad de resultados encontrados : " + listPacienteError.size());

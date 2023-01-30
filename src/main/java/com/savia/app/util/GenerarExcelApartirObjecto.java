@@ -1,5 +1,7 @@
 package com.savia.app.util;
 
+import com.savia.app.consultas.ConsultaLogErrores;
+import com.savia.app.consultas.ConsultasPacienteCorrecto;
 import com.savia.app.dto.ListarPacienteDto;
 import com.savia.app.dto.PacienteExcelDto;
 import com.savia.app.service.EnfermedadesReadService;
@@ -27,6 +29,12 @@ public class GenerarExcelApartirObjecto {
     ConsultasSql consultasSql;
 
     @Autowired
+    ConsultasPacienteCorrecto consultasPacienteCorrecto;
+
+    @Autowired
+    ConsultaLogErrores consultaLogErrores;
+
+    @Autowired
     EnfermedadesReadService enfermedadesReadService;
 
     public boolean isExcel(PacienteExcelDto pacienteExcelDto) {
@@ -38,17 +46,21 @@ public class GenerarExcelApartirObjecto {
             int idIps=pacienteExcelDto.getIdIps();
             List<Object> nombreColumn= new ArrayList<Object>();
             if(pacienteExcelDto.isBandera()){
-                String tablaFin = enfermedadesReadService.getNombreTablaGeneric("nom_tab_fin", idEnfermedad);
-                //pacientes=consultasSql.getPacienteCorrecto(new ListarPacienteDto(idEnfermedad,idIps,1048500,1,desde,hasta,"",""),false);
-                List<Object[]> pruebaObject=consultasSql.consultaPrueba();
-                nombreColumn.addAll(consultasSql.getListAllColumTable("cm_paciente"));
-                nombreColumn.addAll(consultasSql.getListAllColumTable("cm_detalle_paciente"));
-                nombreColumn.addAll(consultasSql.getListAllColumTable(tablaFin));
+                List<Object> nombColumns=consultasPacienteCorrecto.getNombreColumnasCorrecto(idEnfermedad);
+                String campos="";
+                for (int i = 0; i < nombColumns.size(); i++) {
+                    if(i==(nombColumns.size()-1)){
+                        campos+=nombColumns.get(i).toString()+" ";
+                    }else{
+                        campos+=nombColumns.get(i).toString()+" , ";
+                    }
+
+                }
+                pacientes=consultasPacienteCorrecto.getPacienteCorrecto(new ListarPacienteDto(idEnfermedad,idIps,1048570,1,desde,hasta,"",""),false,campos);
             }else{
-                String tablaPaso = enfermedadesReadService.getNombreTablaGeneric("nombre_tabla_paso", idEnfermedad);
-                pacientes= consultasSql.getPacienteError(tablaPaso,1048500,1,desde,hasta);
-                nombreColumn=consultasSql.getListAllColumTable(tablaPaso);
+                //nombreColumn=consultasSql.getListAllColumTable(tablaPaso);
             }
+            System.out.println(pacientes);
             //generacionEcxel(nombreColumn,pacientes);
             return true;
         }  catch (Exception e){
@@ -93,11 +105,17 @@ public class GenerarExcelApartirObjecto {
             FileOutputStream fileOut = new FileOutputStream(new File("C:\\Users\\JuanSuarez\\Desktop\\datos.xlsx"));
             workbook.write(fileOut);
             fileOut.close();
-            workbook.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+        finally {
+            try {
+                workbook.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

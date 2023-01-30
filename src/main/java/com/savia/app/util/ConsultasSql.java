@@ -40,26 +40,7 @@ public class ConsultasSql {
         }
     }
 
-    public List<Object> getPacienteError(String tablaPaso, int limit, int page, String desde, String hasta) {
-        List<Object> listPacienteError = new ArrayList<Object>();
-        try {
-            String pureSql = "SELECT cep.* ";
-            pureSql += " FROM " + tablaPaso + " as cep ";
-            pureSql += " WHERE cep.campo_leido=1 AND ";
-            pureSql += "DATE(concat(SUBSTRING_INDEX(SUBSTRING_INDEX(cep.clave_archivo, '-', 2), '-', -1),'-',";
-            pureSql += "SUBSTRING_INDEX(SUBSTRING_INDEX(cep.clave_archivo, '-', 3), '-', -1),'-',";
-            pureSql += "SUBSTRING_INDEX(SUBSTRING_INDEX(cep.clave_archivo, '-', 4), '-', -1)))";
-            pureSql += " BETWEEN '" + desde + "' AND '" + hasta + "' ";
-            pureSql += " ORDER BY cep.id ";
-            pureSql += " LIMIT " + ((page - 1) * limit) + ", " + limit + ";";
-            Query query = entityManager.createNativeQuery(pureSql);
-            listPacienteError = query.getResultList();
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return listPacienteError;
-    }
     public  List<Object> getPacienteCorrecto(ListarPacienteDto listarPacienteDto,boolean isFrond){
         String tablaFinal = enfermedadesReadService.getNombreTablaGeneric("nom_tab_fin",
                 listarPacienteDto.getIdEnfermedad());
