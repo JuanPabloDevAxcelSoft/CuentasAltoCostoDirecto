@@ -130,10 +130,13 @@ public class GenerarExcelApartirObjecto {
         String messageLogger;
         try {
             boolean validacionNumero = isNumber(porcentajeCarga);
-            Object bandera = ((validacionNumero == true) ? false : true);
+            boolean bandera = ((validacionNumero == true) ? false : true);
             String json = "{'bandera':" + bandera + ", 'valor':" + porcentajeCarga + "}";
             sseEmitter.send(SseEmitter.event().name(KeySsEmitter.KEY_PROCESS_GERERAR.toString()).data(json));
             messageLogger = json;
+            if (bandera && porcentajeCarga.endsWith(".xlsx")){
+                sseEmitter.complete();
+            }
         } catch (Exception e) {
             messageLogger = "El emitter fue removido de la lista de subcritos";
         }
