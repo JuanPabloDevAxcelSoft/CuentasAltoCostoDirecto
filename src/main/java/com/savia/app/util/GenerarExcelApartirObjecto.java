@@ -68,7 +68,7 @@ public class GenerarExcelApartirObjecto {
             this.setGeneracionArchivoExcel(nombreColumn, pacientes, sseEmitter);
 
         } catch (Exception e) {
-            LOG.error("Ocurrio un error en el metodo: '" + ClassUtil.getCurrentMethodName(this.getClass()) + "'");
+            LOG.error("Ocurrio un error en el metodo: '" + ClassUtil.getCurrentMethodName(this.getClass()) + "'" + e.getMessage());
         }
     }
 
@@ -87,7 +87,7 @@ public class GenerarExcelApartirObjecto {
                 cell.setCellStyle(style);
                 cell.setCellValue("V" + i + namesHeader.get(i).toString());
             }
-            
+
             // data
             int contadorRow = 1;
             for (Object valores : data) {
@@ -101,34 +101,60 @@ public class GenerarExcelApartirObjecto {
                         cellBody.setCellValue((temp == null) ? "" : temp.toString());
                         contadorColumn++;
                     }
-                    enviarNotificacion(porcentArchivo, sseEmitter);
+                    enviarNotificacion(Integer.toString(porcentArchivo), sseEmitter);
                     contadorRow++;
                 }
             }
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-kk-mm-ss");
-            final String nombreArchivo = PathFileUpload.PATH_FILE_UPLOAD + "excel\\reporte-" + sdf.format(new Date() + ".xlsx");
-            FileOutputStream fileOut = new FileOutputStream(new File(nombreArchivo));
-            
+            Date dateNow = new Date();
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd-kk-mm-ss");
+            String predicado = "reporte-" + simpleDateFormat.format(dateNow) + ".xlsx";
+            final String nombreArchivo = PathFileUpload.PATH_FILE_UPLOAD + "excel\\" + predicado;
+            File archivoCrear = new File(nombreArchivo);
+            archivoCrear.setReadable(true, false);
+            archivoCrear.setWritable(true, false);
+            archivoCrear.setExecutable(true, false);
+            FileOutputStream fileOut = new FileOutputStream(archivoCrear);
             workbook.write(fileOut);
-            
             fileOut.close();
             workbook.close();
+            enviarNotificacion(predicado, sseEmitter);
 
         } catch (FileNotFoundException e) {
-            LOG.error("Ocurrio un error en el metodo: '" + ClassUtil.getCurrentMethodName(this.getClass()) + "'");
+            LOG.error("Ocurrio un error en el metodo: '" + ClassUtil.getCurrentMethodName(this.getClass()) + "'" + e.getMessage());
         } catch (IOException e) {
-            LOG.error("Ocurrio un error en el metodo: '" + ClassUtil.getCurrentMethodName(this.getClass()) + "'");
+            LOG.error("Ocurrio un error en el metodo: '" + ClassUtil.getCurrentMethodName(this.getClass()) + "'" + e.getMessage());
         }
     }
 
-    public void enviarNotificacion(int porcentajeCarga, SseEmitter sseEmitter) {
+    public void enviarNotificacion(String porcentajeCarga, SseEmitter sseEmitter) {
         String messageLogger;
         try {
-            sseEmitter.send(SseEmitter.event().name(KeySsEmitter.KEY_PROCESS_GERERAR.toString()).data(porcentajeCarga));
-            messageLogger = "El archivo esta al " + porcentajeCarga;
+            boolean validacionNumero = isNumber(porcentajeCarga);
+            boolean bandera = ((validacionNumero == true) ? false : true);
+            String json = "{'bandera':" + bandera + ", 'valor':" + porcentajeCarga + "}";
+            sseEmitter.send(SseEmitter.event().name(KeySsEmitter.KEY_PROCESS_GERERAR.toString()).data(json));
+            messageLogger = json;
+            if (bandera && porcentajeCarga.endsWith(".xlsx")){
+                sseEmitter.complete();
+            }
         } catch (Exception e) {
             messageLogger = "El emitter fue removido de la lista de subcritos";
         }
         this.LOG.info(messageLogger);
+    }
+
+    private boolean isNumber(String porcentajeCarga) {
+        String messageLogger;
+        try {
+            Integer.parseInt(porcentajeCarga);
+            return true;
+        } catch (Exception e) {
+            if (!porcentajeCarga.endsWith(".xlsx")) {
+                return true;
+            }
+            messageLogger = "Ocurrio un error en la conversion " + e.getMessage();
+        }
+        this.LOG.info(messageLogger);
+        return false;
     }
 }
