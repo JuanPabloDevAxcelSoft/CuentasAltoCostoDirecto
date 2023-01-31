@@ -39,7 +39,7 @@ public class GenerarExcelController {
 
     @PostMapping(value = "/descargar", consumes = { "application/json" })
     public void getDispirarEvento(@RequestBody PacienteExcelDto pacienteExcelDto) throws InterruptedException {
-        generarExcelApartirObjecto.getExcel(pacienteExcelDto,sseEmitter);
+        generarExcelApartirObjecto.getProcesoArchivoExcel(pacienteExcelDto,sseEmitter);
     }
 
 }

@@ -4,7 +4,6 @@ import com.savia.app.constants.KeySsEmitter;
 import com.savia.app.constants.PathFileUpload;
 import com.savia.app.consultas.ConsultaLogErrores;
 import com.savia.app.consultas.ConsultasPacienteCorrecto;
-import com.savia.app.controller.GenerarExcelController;
 import com.savia.app.dto.ListarPacienteDto;
 import com.savia.app.dto.PacienteExcelDto;
 import org.apache.poi.ss.usermodel.*;
@@ -29,7 +28,7 @@ import java.util.List;
 
 @Service
 public class GenerarExcelApartirObjecto {
-    private final Logger logger = LoggerFactory.getLogger(GenerarExcelController.class);
+    private final Logger LOG = LoggerFactory.getLogger(ObtenerColumnasTabla.class);
 
     @PersistenceContext
     EntityManager entityManager;
@@ -40,42 +39,45 @@ public class GenerarExcelApartirObjecto {
     @Autowired
     ConsultaLogErrores consultaLogErrores;
 
-
-    public void getExcel(PacienteExcelDto pacienteExcelDto, SseEmitter sseEmitter) {
+    public void getProcesoArchivoExcel(PacienteExcelDto pacienteExcelDto, SseEmitter sseEmitter) {
         try {
             List<Object> pacientes = new ArrayList<Object>();
+
             String desde = pacienteExcelDto.getDesde();
             String hasta = pacienteExcelDto.getHasta();
             int idEnfermedad = pacienteExcelDto.getIdEnfermedad();
             int idIps = pacienteExcelDto.getIdIps();
             List<Object> nombreColumn = new ArrayList<Object>();
+
             if (pacienteExcelDto.isBandera()) {
                 nombreColumn = consultasPacienteCorrecto.getListAllColumTable(idEnfermedad);
                 String campos = "";
                 for (int i = 0; i < nombreColumn.size(); i++) {
-                    campos += nombreColumn.get(i).toString() + " AS " + nombreColumn.get(i).toString().replace(".", "_") + " ";
+                    campos += nombreColumn.get(i).toString() + " AS " + nombreColumn.get(i).toString().replace(".", "_")
+                            + " ";
                     if (!(i == (nombreColumn.size() - 1))) {
                         campos += " , ";
                     }
                 }
-                pacientes = consultasPacienteCorrecto.getPacienteCorrecto(new ListarPacienteDto(idEnfermedad, idIps, 1048570, 1, desde, hasta, "", ""), false, campos);
+                pacientes = consultasPacienteCorrecto.getPacienteCorrecto(
+                        new ListarPacienteDto(idEnfermedad, idIps, 1048570, 1, desde, hasta, "", ""), false, campos);
             } else {
                 nombreColumn = consultaLogErrores.getListAllColumTable(idEnfermedad);
                 pacientes = consultaLogErrores.getPacienteError(idEnfermedad, 1048570, 1, desde, hasta);
             }
-            generacionEcxel(nombreColumn, pacientes, sseEmitter);
+            this.setGeneracionArchivoExcel(nombreColumn, pacientes, sseEmitter);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Ocurrio un error en el metodo: '" + ClassUtil.getCurrentMethodName(this.getClass()) + "'");
         }
     }
 
-    public void generacionEcxel(List<Object> namesHeader, List<Object> data, SseEmitter sseEmitter) {
+    public void setGeneracionArchivoExcel(List<Object> namesHeader, List<Object> data, SseEmitter sseEmitter) {
         try {
-            //Generar archivo de excel
+            // Generar archivo de excel
             Workbook workbook = new XSSFWorkbook();
             Sheet sheet = workbook.createSheet("Pacientes");
-            //encabezado
+            // encabezado
             CellStyle style = workbook.createCellStyle();
             style.setFillForegroundColor(IndexedColors.AQUA.getIndex());
             style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
@@ -85,9 +87,9 @@ public class GenerarExcelApartirObjecto {
                 cell.setCellStyle(style);
                 cell.setCellValue("V" + i + namesHeader.get(i).toString());
             }
-            //data
+            
+            // data
             int contadorRow = 1;
-
             for (Object valores : data) {
                 int porcentArchivo = contadorRow * 100 / data.size();
                 if (valores.getClass().isArray()) {
@@ -102,18 +104,20 @@ public class GenerarExcelApartirObjecto {
                     enviarNotificacion(porcentArchivo, sseEmitter);
                     contadorRow++;
                 }
-
             }
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd-kk-mm-ss");
-            FileOutputStream fileOut = new FileOutputStream(new File(PathFileUpload.PATH_FILE_UPLOAD+"excel\\"+"Reporte-"+simpleDateFormat.format(new Date())+".xlsx"));
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-kk-mm-ss");
+            final String nombreArchivo = PathFileUpload.PATH_FILE_UPLOAD + "excel\\reporte-" + sdf.format(new Date() + ".xlsx");
+            FileOutputStream fileOut = new FileOutputStream(new File(nombreArchivo));
+            
             workbook.write(fileOut);
+            
             fileOut.close();
             workbook.close();
 
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            LOG.error("Ocurrio un error en el metodo: '" + ClassUtil.getCurrentMethodName(this.getClass()) + "'");
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.error("Ocurrio un error en el metodo: '" + ClassUtil.getCurrentMethodName(this.getClass()) + "'");
         }
     }
 
@@ -122,11 +126,9 @@ public class GenerarExcelApartirObjecto {
         try {
             sseEmitter.send(SseEmitter.event().name(KeySsEmitter.KEY_PROCESS_GERERAR.toString()).data(porcentajeCarga));
             messageLogger = "El archivo esta al " + porcentajeCarga;
-            this.logger.info(messageLogger);
         } catch (Exception e) {
             messageLogger = "El emitter fue removido de la lista de subcritos";
-            this.logger.error(e.getMessage());
         }
-
+        this.LOG.info(messageLogger);
     }
 }

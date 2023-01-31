@@ -140,25 +140,6 @@ public class CmPaciente implements Serializable {
     public void setCodigoPertenenciaEtnica(Character codigoPertenenciaEtnica) {
         this.codigoPertenenciaEtnica = codigoPertenenciaEtnica;
     }
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof CmPaciente)) {
-            return false;
-        }
-        CmPaciente other = (CmPaciente) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
-    }
 
     @Override
     public String toString() {

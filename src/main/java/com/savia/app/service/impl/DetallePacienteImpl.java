@@ -4,9 +4,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import com.savia.app.constants.EnumNombreColumnasTablaCmEnfermedad;
 import com.savia.app.consultas.ConsultaLogErrores;
-import com.savia.app.consultas.ConsultasAbstract;
 import com.savia.app.consultas.ConsultasPacienteCorrecto;
 import com.savia.app.dto.ListarPacienteDto;
 import com.savia.app.dto.Pacientes;
@@ -33,7 +31,6 @@ import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-@SuppressWarnings("unchecked")
 @Service
 public class DetallePacienteImpl implements DetallePacienteService {
     @PersistenceContext
@@ -110,8 +107,6 @@ public class DetallePacienteImpl implements DetallePacienteService {
     @Override
     public ResponseEntity<ResponseJson> getLogErrores(ListarPacienteDto listarPacienteDto) {
         ResponseJson responseJsonGeneric = new ResponseJson();
-        final String tablaPaso = enfermedadesReadService.getNombreTablaGeneric(EnumNombreColumnasTablaCmEnfermedad.nombre_tabla_paso.toString(),
-                listarPacienteDto.getIdEnfermedad());
         Integer page = listarPacienteDto.getPage();
         Integer limit = listarPacienteDto.getLimit();
         try {

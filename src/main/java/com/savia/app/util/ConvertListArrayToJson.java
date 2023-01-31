@@ -33,7 +33,6 @@ public class ConvertListArrayToJson {
             }
             listaFinal.add(map);
         }
-
         return listaFinal;
     }
 
