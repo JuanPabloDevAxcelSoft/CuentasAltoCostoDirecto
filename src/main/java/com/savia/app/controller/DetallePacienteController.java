@@ -25,18 +25,18 @@ public class DetallePacienteController {
     @Autowired
     private DetallePacienteService detallePacienteService;
 
-    @PostMapping("/consulta/paciente")
+    @PostMapping(value = "/consulta/paciente", consumes = { "application/json" }, produces = "application/json")
     public ResponseEntity<ResponsePaciente> getPaciente(@RequestBody ListarPacienteDto listarPacienteDto) {
         return this.detallePacienteService.getCmPaciente(listarPacienteDto);
     }
 
-    @RequestMapping(value="/consulta/log/errores", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ResponseJson> getErrores(@RequestBody ListarPacienteDto listarPacienteDto){
+    @RequestMapping(value = "/consulta/log/errores", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseJson> getErrores(@RequestBody ListarPacienteDto listarPacienteDto) {
         return this.detallePacienteService.getLogErrores(listarPacienteDto);
     }
 
     @GetMapping("/consulta/detalle/{id}")
-    public ResponseEntity<ResponseMessage> getDetallePaciente(@PathVariable("id") int idDetallePaciente){
-        return  this.detallePacienteService.getDetallePacienteById(idDetallePaciente);
+    public ResponseEntity<ResponseMessage> getDetallePaciente(@PathVariable("id") int idDetallePaciente) {
+        return this.detallePacienteService.getDetallePacienteById(idDetallePaciente);
     }
 }

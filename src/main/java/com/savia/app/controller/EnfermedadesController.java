@@ -53,7 +53,8 @@ public class EnfermedadesController {
     }
 
     @PutMapping("/enfermedades")
-    public ResponseEntity<ResponseMessage> updateEnfermedad(@RequestParam("idEnfermedad") int idEnfermedad,
+    public ResponseEntity<ResponseMessage> updateEnfermedad(
+            @RequestParam("idEnfermedad") int idEnfermedad,
             @RequestParam("enfermedad") String nombreEnfermedad) {
         return enfermedadesWriteService.updateEnfermedad(idEnfermedad, nombreEnfermedad);
     }
