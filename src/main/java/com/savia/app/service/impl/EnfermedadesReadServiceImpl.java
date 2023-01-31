@@ -22,6 +22,7 @@ import java.util.List;
 @Service
 public class EnfermedadesReadServiceImpl implements EnfermedadesReadService {
 
+    
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -89,6 +90,6 @@ public class EnfermedadesReadServiceImpl implements EnfermedadesReadService {
         query.setParameter("id", id);
         query.setParameter("estado", 1);
 
-        return query.getSingleResult().toString();
+        return (query.getSingleResult() == null) ? "" : query.getSingleResult().toString();
     }
 }
