@@ -22,7 +22,7 @@ import com.savia.app.vo.ResponseMessage;
 @Service
 public class UploadServiceImpl implements UploadService {
 
-	private String folder = PathFileUpload.PATH_FILE_UPLOAD;
+	private String folder = PathFileUpload.PATH_FILE_UPLOAD+"upload\\";
 
 	@Autowired
 	EnfermedadesReadService enfermedadesServiceDirect;

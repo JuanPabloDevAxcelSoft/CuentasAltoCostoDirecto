@@ -4,13 +4,16 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import com.savia.app.constants.EnumNombreColumnasTablaCmEnfermedad;
+import com.savia.app.consultas.ConsultaLogErrores;
+import com.savia.app.consultas.ConsultasAbstract;
+import com.savia.app.consultas.ConsultasPacienteCorrecto;
 import com.savia.app.dto.ListarPacienteDto;
 import com.savia.app.dto.Pacientes;
 import com.savia.app.model.CmPaciente;
 import com.savia.app.repository.CmDetallePacienteRepository;
 import com.savia.app.service.EnfermedadesReadService;
 import com.savia.app.util.ConvertListArrayToJson;
-import com.savia.app.util.ConsultasSql;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,7 +47,9 @@ public class DetallePacienteImpl implements DetallePacienteService {
     EnfermedadesReadService enfermedadesReadService;
 
     @Autowired
-    ConsultasSql consultasSql;
+    ConsultasPacienteCorrecto consultasPacienteCorrecto;
+    @Autowired
+    ConsultaLogErrores consultaLogErrores;
 
     @Autowired
     private ConvertListArrayToJson convertListArrayToJson;
@@ -70,7 +75,7 @@ public class DetallePacienteImpl implements DetallePacienteService {
     public ResponseEntity<ResponsePaciente> getCmPaciente(ListarPacienteDto listPaciente) {
         ResponsePaciente response = new ResponsePaciente();
         try {
-            List<Object> listTemporal = consultasSql.getPacienteCorrecto(listPaciente,true);
+            List<Object> listTemporal = consultasPacienteCorrecto.getPacienteCorrecto(listPaciente,true,"");
             List<Pacientes> list = this.convertListArrayToJson.setConvertListObjectPaciente(listTemporal);
             response.setMessage((listTemporal.isEmpty()) ? "No hay registros para mostrar" : "Cantidad de resultados encontrados : " + listTemporal.size());
             response.setStatus((listTemporal.isEmpty()) ? HttpStatus.NO_CONTENT : HttpStatus.OK);
@@ -104,14 +109,14 @@ public class DetallePacienteImpl implements DetallePacienteService {
     @Override
     public ResponseEntity<ResponseJson> getLogErrores(ListarPacienteDto listarPacienteDto) {
         ResponseJson responseJsonGeneric = new ResponseJson();
-        final String tablaPaso = enfermedadesReadService.getNombreTablaGeneric("nombre_tabla_paso",
+        final String tablaPaso = enfermedadesReadService.getNombreTablaGeneric(EnumNombreColumnasTablaCmEnfermedad.nombre_tabla_paso.toString(),
                 listarPacienteDto.getIdEnfermedad());
         Integer page = listarPacienteDto.getPage();
         Integer limit = listarPacienteDto.getLimit();
         try {
-            List<Object> listNombreColumnas = consultasSql.getListAllColumTable(tablaPaso);
+            List<Object> listNombreColumnas = consultasPacienteCorrecto.getListAllColumTable(listarPacienteDto.getIdEnfermedad());
             //Sancando los pacientes
-            List<Object> listPacienteError = consultasSql.getPacienteError(tablaPaso,limit,page,listarPacienteDto.getDesde(),listarPacienteDto.getHasta());
+            List<Object> listPacienteError = consultaLogErrores.getPacienteError(listarPacienteDto.getIdEnfermedad(),limit,page,listarPacienteDto.getDesde(),listarPacienteDto.getHasta());
             responseJsonGeneric.setMessage((listPacienteError.isEmpty())
                     ? "No hay registros para mostrar"
                     : "Cantidad de resultados encontrados : " + listPacienteError.size());

@@ -6,6 +6,6 @@ public class PathFileUpload {
 
     /* Ruta del File server para alojar los .Csv */
     public static final String PATH_FILE_UPLOAD = new FileSystemResource("").getFile().getAbsolutePath()
-            + "\\src\\main\\resources\\tmp\\upload\\";
+            + "\\src\\main\\resources\\tmp\\";
 
 }
