@@ -55,14 +55,8 @@ public class EnfermedadesWriteServiceImpl implements EnfermedadesWriteService {
         ResponseMessage response = new ResponseMessage();
         try {
             if (!nombreEnfermedad.isEmpty()) {
-<<<<<<< HEAD
                 String nombreTabla = "cm_" + nombreEnfermedad.toLowerCase() + "_paso";
                 enfermedadesRepository.save(new CmEnfermedades(nombreTabla, nombreEnfermedad.toLowerCase()));
-=======
-                enfermedadesRepository.save(
-                        new WriteCmEnfermedades("tbl_" + nombreEnfermedad.toLowerCase() + "_paso",
-                                nombreEnfermedad.toLowerCase(), new Date(), true));
->>>>>>> juan.dev
             }
             response.setMessage((!nombreEnfermedad.isEmpty()) ? "Se cargo la enfermedad correctamente"
                     : "El nombre de la enfermedad  no puede ser vacio");

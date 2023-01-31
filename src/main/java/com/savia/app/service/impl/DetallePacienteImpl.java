@@ -30,7 +30,6 @@ import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-@SuppressWarnings("unchecked")
 @Service
 public class DetallePacienteImpl implements DetallePacienteService {
     @PersistenceContext

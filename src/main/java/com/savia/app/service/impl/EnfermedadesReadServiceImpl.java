@@ -21,8 +21,10 @@ import java.util.List;
 
 @Service
 public class EnfermedadesReadServiceImpl implements EnfermedadesReadService {
+
     @PersistenceContext
     private EntityManager entityManager;
+
     @Autowired
     EnfermedadesReadRepository enfermedadesRepository;
 
@@ -50,8 +52,8 @@ public class EnfermedadesReadServiceImpl implements EnfermedadesReadService {
         if (enfermedadesReadModel != null) {
             enferReadDtoResponse = new EnfermedadesReadDto(enfermedadesReadModel.getId(),
                     enfermedadesReadModel.getNomTabFin(),
-
-                    enfermedadesReadModel.getFechaCreacion(), enfermedadesReadModel.getEstado());
+                    enfermedadesReadModel.getFechaCreacion(),
+                    enfermedadesReadModel.getEstado());
 
             response.setMessage("Información de la enfermedad");
             response.setStatus(HttpStatus.OK);
@@ -76,14 +78,16 @@ public class EnfermedadesReadServiceImpl implements EnfermedadesReadService {
 
     /*
      * Metodo que retorna el nombre de la tabla segun el tipo de parametros
-    */
+     */
     @Override
-    public String getNombreTablaGeneric (String columna, Integer id) {
-        
-        String pureSql = "SELECT " + columna +" FROM cm_enfermedades AS enf ";
-        pureSql += "WHERE enf.id =" + id + " AND enf.estado=1;";
-        
+    public String getNombreTablaGeneric(String columna, Integer id) {
+
+        String pureSql = "SELECT " + columna + " FROM cm_enfermedades AS enf ";
+        pureSql += "WHERE enf.id = :id AND enf.estado = :estado ;";
+
         Query query = entityManager.createNativeQuery(pureSql);
+        query.setParameter("id", id);
+        query.setParameter("estado", 1);
 
         return query.getSingleResult().toString();
     }
