@@ -8,9 +8,11 @@ import java.io.InputStream;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.savia.app.util.EliminarFile;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,9 +23,11 @@ import com.savia.app.util.ClassUtil;
 
 @RestController
 @RequestMapping(path = "/api/v1")
-public class ExportExcelController {
+public class ExcelController {
+    @Autowired
+    EliminarFile eliminarFile;
 
-    private final Logger LOG = LoggerFactory.getLogger(ExportExcelController.class);
+    private final Logger LOG = LoggerFactory.getLogger(ExcelController.class);
 
     @GetMapping(value = "/exportar/excel")
     public void descargarArchivoExcel(@RequestParam("file") String file, HttpServletResponse response) {
@@ -47,6 +51,15 @@ public class ExportExcelController {
                     LOG.error("Ocurrio un error en el metodo: '" + ClassUtil.getCurrentMethodName(this.getClass()) + "' al momento de cerrar : " + e.getMessage());
                 }
             }
+        }
+    }
+
+    @GetMapping(value = "/eliminar/excel")
+    public  void setRemoveFile(@RequestParam("clave") String clave) {
+        try {
+            eliminarFile.setRemoveFile(clave);
+        }catch (Exception e){
+            LOG.error(e.getMessage());
         }
     }
 }
