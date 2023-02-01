@@ -26,13 +26,13 @@ public class CargaDirectaImpl implements CargaDirectaService {
 
     @Override
     @Transactional
-    public ResponseEntity<ResponseMessage> loadDataBaseDirect(String ruta, Integer id) {
+    public ResponseEntity<ResponseMessage> loadDataBaseDirect(String ruta, Integer idEnfermedad) {
         ResponseMessage response = new ResponseMessage();
         String message = "";
         HttpStatus status = HttpStatus.ACCEPTED;
         try {
-            if ((!ruta.isEmpty()) && (id > 0)) {
-                EnfermedadesReadDto enfermedadesReadDtoObj = enfermedadesServiceDirect.findEnfermedadById(id);
+            if ((!ruta.isEmpty()) && (idEnfermedad > 0)) {
+                EnfermedadesReadDto enfermedadesReadDtoObj = enfermedadesServiceDirect.findEnfermedadById(idEnfermedad);
                 if (enfermedadesReadDtoObj != null) {
                     String pureSql="LOAD DATA LOCAL INFILE '" +ruta+
                             "' INTO TABLE "+enfermedadesReadDtoObj.getNameTables()+" FIELDS TERMINATED BY ';' LINES TERMINATED BY '\\n' IGNORE 1 ROWS;";
