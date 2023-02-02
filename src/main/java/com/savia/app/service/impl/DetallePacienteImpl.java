@@ -10,7 +10,6 @@ import com.savia.app.dto.ListarPacienteDto;
 import com.savia.app.dto.Pacientes;
 import com.savia.app.model.CmPaciente;
 import com.savia.app.repository.CmDetallePacienteRepository;
-import com.savia.app.service.EnfermedadesReadService;
 import com.savia.app.util.ConvertListArrayToJson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,16 +37,15 @@ public class DetallePacienteImpl implements DetallePacienteService {
 
     @Autowired
     private CmPacienteRepository cmPacienteRepository;
+    
     @Autowired
     private CmDetallePacienteRepository cmDetallePacienteRepository;
 
     @Autowired
-    EnfermedadesReadService enfermedadesReadService;
-
+    private ConsultasPacienteCorrecto consultasPacienteCorrecto;
+    
     @Autowired
-    ConsultasPacienteCorrecto consultasPacienteCorrecto;
-    @Autowired
-    ConsultaLogErrores consultaLogErrores;
+    private ConsultaLogErrores consultaLogErrores;
 
     @Autowired
     private ConvertListArrayToJson convertListArrayToJson;

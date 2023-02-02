@@ -43,8 +43,8 @@ public class EnfermedadesController {
             return null;
         }
     }
-    @GetMapping("/nombre/clase/validacion/{idEnfermedad}")
-    public String getNombreClaseValidacion(@PathVariable("idEnfermedad") int idEnfermedad) {
+    @GetMapping("/nombre/clase/validacion")
+    public String getNombreClaseValidacion(@RequestParam("idEnfermedad") int idEnfermedad) {
         try {
             return enfermedadesReadService.getNombreTablaGeneric("nombre_clase_validacion",idEnfermedad);
         } catch (Exception e) {
