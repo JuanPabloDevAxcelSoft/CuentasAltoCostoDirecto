@@ -58,7 +58,7 @@ public class ConsultasPacienteCorrecto extends ConsultasAbstract {
         Integer limit = listarPacienteDto.getLimit();
         try {
             String pureSql = "SELECT ";
-            pureSql += (bandera) ? " pac.*, det.id AS detid, tblf.id AS finid " : campos + " ";
+            pureSql += (bandera) ? " "+nombreTablaPacienteFinal+".*, "+nombreTablaDetalleFinal+".id AS detid,  "+nombreTablaEnfermedadFinal+".id AS finid  " : campos + " ";
 
             pureSql += " FROM " + nombreTablaPacienteFinal + "  ";
             pureSql += " INNER JOIN " + nombreTablaDetalleFinal + "  ";
@@ -69,7 +69,8 @@ public class ConsultasPacienteCorrecto extends ConsultasAbstract {
             pureSql += where;
             pureSql += " ORDER BY " + nombreTablaPacienteFinal + ".id ";
             pureSql += " LIMIT :pagina , :limite ;";
-            
+
+            System.out.println(pureSql);
             Query query = entityManager.createNativeQuery(pureSql);
             query.setParameter("pagina", ((page - 1) * limit));
             query.setParameter("limite", limit);
