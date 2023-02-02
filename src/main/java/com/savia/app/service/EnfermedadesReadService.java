@@ -5,6 +5,8 @@ import org.springframework.http.ResponseEntity;
 import com.savia.app.dto.EnfermedadesReadDto;
 import com.savia.app.vo.ResponseMessage;
 
+import java.util.List;
+
 public interface EnfermedadesReadService {
     ResponseEntity<ResponseMessage> tblIllness(Integer id);
 
@@ -12,6 +14,9 @@ public interface EnfermedadesReadService {
 
     EnfermedadesReadDto findEnfermedadById(Integer id);
 
-    public String getNombreTablaGeneric(String columna, Integer id);
+    String getNombreTablaGeneric(String columna, Integer id);
+
+    List<Integer> getAllId();
+     List<Object> getCantidadValidar(String nombreTabla);
 
 }

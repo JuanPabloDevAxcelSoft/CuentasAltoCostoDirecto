@@ -1,6 +1,9 @@
 package com.savia.app.service.impl;
 
+import com.savia.app.components.TaskBackComponent;
 import com.savia.app.model.ReadCmEnfermedades;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +16,7 @@ import com.savia.app.service.EnfermedadesReadService;
 import com.savia.app.vo.ResponseMessage;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.ArrayList;
@@ -21,10 +25,11 @@ import java.util.List;
 
 @Service
 public class EnfermedadesReadServiceImpl implements EnfermedadesReadService {
+    private final Logger LOGGER = LoggerFactory.getLogger(EnfermedadesReadService.class);
 
-    
-    @PersistenceContext
-    private EntityManager entityManager;
+
+    @Autowired
+    private EntityManagerFactory entityManagerFactory;
 
     @Autowired
     EnfermedadesReadRepository enfermedadesRepository;
@@ -82,7 +87,7 @@ public class EnfermedadesReadServiceImpl implements EnfermedadesReadService {
      */
     @Override
     public String getNombreTablaGeneric(String columna, Integer id) {
-
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
         String pureSql = "SELECT " + columna + " FROM cm_enfermedades AS enf ";
         pureSql += "WHERE enf.id = :id AND enf.estado = :estado ;";
 
@@ -91,5 +96,32 @@ public class EnfermedadesReadServiceImpl implements EnfermedadesReadService {
         query.setParameter("estado", 1);
 
         return (query.getSingleResult() == null) ? "" : query.getSingleResult().toString();
+    }
+
+    @Override
+    public List<Integer> getAllId() {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        String pureSql="SELECT enf.id FROM cm_enfermedades AS enf ";
+        pureSql+=" WHERE enf.estado= :estado ;";
+        Query query= entityManager.createNativeQuery(pureSql);
+        query.setParameter("estado",1);
+        return query.getResultList();
+    }
+    @Override
+    public List<Object> getCantidadValidar(String nombreTabla) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        List<Object> listResultante = null;
+        String pureQuery = "SELECT tab.id";
+        pureQuery += " FROM " + nombreTabla + " AS tab";
+        pureQuery += " WHERE tab.campo_leido = :estado;";
+        try {
+            System.out.println(pureQuery);
+            Query query = entityManager.createNativeQuery(pureQuery);
+            query.setParameter("estado", 0);
+            listResultante = query.getResultList();
+        } catch (Exception e) {
+            this.LOGGER.info("Ocurrio un error : " + e.getMessage());
+        }
+        return listResultante;
     }
 }

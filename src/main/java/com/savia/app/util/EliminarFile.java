@@ -9,7 +9,7 @@ import java.io.File;
 
 @Service
 public class EliminarFile {
-    private final Logger LOG = LoggerFactory.getLogger(ObtenerColumnasTabla.class);
+    private final Logger LOG = LoggerFactory.getLogger(EliminarFile.class);
     public void setRemoveFile(String clave){
         final  String ruta=PathFileUpload.PATH_FILE_UPLOAD +"\\upload\\"+clave;
         try {
