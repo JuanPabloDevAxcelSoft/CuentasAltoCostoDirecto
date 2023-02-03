@@ -90,12 +90,18 @@ public class EnfermedadesReadServiceImpl implements EnfermedadesReadService {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         String pureSql = "SELECT " + columna + " FROM cm_enfermedades AS enf ";
         pureSql += "WHERE enf.id = :id AND enf.estado = :estado ;";
+        try{
+            Query query = entityManager.createNativeQuery(pureSql);
+            query.setParameter("id", id);
+            query.setParameter("estado", 1);
+            return (query.getSingleResult() == null) ? "" : query.getSingleResult().toString();
+        }catch (Exception e){
+            this.LOGGER.info("Ocurrio un error getNombreTablaGeneric : " + e.getMessage());
+            return "";
+        }finally {
+            entityManager.close();
+        }
 
-        Query query = entityManager.createNativeQuery(pureSql);
-        query.setParameter("id", id);
-        query.setParameter("estado", 1);
-
-        return (query.getSingleResult() == null) ? "" : query.getSingleResult().toString();
     }
 
     @Override
@@ -103,9 +109,17 @@ public class EnfermedadesReadServiceImpl implements EnfermedadesReadService {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         String pureSql="SELECT enf.id FROM cm_enfermedades AS enf ";
         pureSql+=" WHERE enf.estado= :estado ;";
-        Query query= entityManager.createNativeQuery(pureSql);
-        query.setParameter("estado",1);
-        return query.getResultList();
+        try{
+            Query query= entityManager.createNativeQuery(pureSql);
+            query.setParameter("estado",1);
+            return query.getResultList();
+        }catch (Exception e){
+            this.LOGGER.info("Ocurrio un error getAllId: " + e.getMessage());
+            return null;
+        }finally {
+            entityManager.close();
+        }
+
     }
     @Override
     public List<Object> getCantidadValidar(String nombreTabla) {
@@ -113,14 +127,15 @@ public class EnfermedadesReadServiceImpl implements EnfermedadesReadService {
         List<Object> listResultante = null;
         String pureQuery = "SELECT tab.id";
         pureQuery += " FROM " + nombreTabla + " AS tab";
-        pureQuery += " WHERE tab.campo_leido = :estado;";
+        pureQuery += " WHERE tab.campo_leido = :estado ;";
         try {
-            System.out.println(pureQuery);
             Query query = entityManager.createNativeQuery(pureQuery);
             query.setParameter("estado", 0);
             listResultante = query.getResultList();
         } catch (Exception e) {
-            this.LOGGER.info("Ocurrio un error : " + e.getMessage());
+            this.LOGGER.info("Ocurrio un error getCantidadValidar: " + e.getMessage());
+        }finally {
+            entityManager.close();
         }
         return listResultante;
     }
