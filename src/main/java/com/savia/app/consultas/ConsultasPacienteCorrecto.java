@@ -49,7 +49,7 @@ public class ConsultasPacienteCorrecto extends ConsultasAbstract {
         return listaFinal;
     }
 
-    public List<Object> getPacienteCorrecto(ListarPacienteDto listarPacienteDto, boolean bandera, String campos) {
+    public List<Object> getPacienteCorrecto(ListarPacienteDto listarPacienteDto, boolean bandera, String campos, boolean contador) {
         List<Object> listaFinal = null;
         final String nombreTablaEnfermedadFinal = nombreTablaEnfermedad(
                 listarPacienteDto.getIdEnfermedad(),
@@ -58,8 +58,7 @@ public class ConsultasPacienteCorrecto extends ConsultasAbstract {
         Integer limit = listarPacienteDto.getLimit();
         try {
             String pureSql = "SELECT ";
-            pureSql += (bandera) ? " "+nombreTablaPacienteFinal+".*, "+nombreTablaDetalleFinal+".id AS detid,  "+nombreTablaEnfermedadFinal+".id AS finid  " : campos + " ";
-
+            pureSql+=(contador)?"COUNT(*) ":(bandera) ? " "+nombreTablaPacienteFinal+".*, "+nombreTablaDetalleFinal+".id AS detid,  "+nombreTablaEnfermedadFinal+".id AS finid  " : campos + " ";
             pureSql += " FROM " + nombreTablaPacienteFinal + "  ";
             pureSql += " INNER JOIN " + nombreTablaDetalleFinal + "  ";
             pureSql += " ON " + nombreTablaPacienteFinal + ".id = " + nombreTablaDetalleFinal + ".id_paciente ";
@@ -69,8 +68,6 @@ public class ConsultasPacienteCorrecto extends ConsultasAbstract {
             pureSql += where;
             pureSql += " ORDER BY " + nombreTablaPacienteFinal + ".id ";
             pureSql += " LIMIT :pagina , :limite ;";
-
-            System.out.println(pureSql);
             Query query = entityManager.createNativeQuery(pureSql);
             query.setParameter("pagina", ((page - 1) * limit));
             query.setParameter("limite", limit);
