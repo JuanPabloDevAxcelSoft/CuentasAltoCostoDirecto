@@ -41,8 +41,9 @@ public class CargaDirectaImpl implements CargaDirectaService {
                 if (enfermedadesReadDtoObj != null) {
                     String pureSql="LOAD DATA LOCAL INFILE '" +ruta+
                             "' INTO TABLE "+enfermedadesReadDtoObj.getNameTables()+" FIELDS TERMINATED BY ';' LINES TERMINATED BY '\\n' IGNORE 1 ROWS" +
-                            " SET clave_archivo='"+claveArchivo+"' , id =0;";
+                            " SET clave_archivo=:claveArchivo , id =0;";
                     Query nativeQuery = entityManager.createNativeQuery(pureSql);
+                    nativeQuery.setParameter("claveArchivo ","'"+claveArchivo+"'");
                     nativeQuery.executeUpdate();
                     status = HttpStatus.OK;
                     message = "El archivo fue cargado correctamente";
