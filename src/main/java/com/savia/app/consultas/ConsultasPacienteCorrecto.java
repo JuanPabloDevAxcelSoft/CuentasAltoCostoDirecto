@@ -67,14 +67,16 @@ public class ConsultasPacienteCorrecto extends ConsultasAbstract {
             String where = this.getWhereSql(listarPacienteDto);
             pureSql += where;
             pureSql += " ORDER BY " + nombreTablaPacienteFinal + ".id ";
-            pureSql += " LIMIT :pagina , :limite ;";
+            pureSql += (contador)? " ;":" LIMIT :pagina , :limite ;";
             Query query = entityManager.createNativeQuery(pureSql);
-            query.setParameter("pagina", ((page - 1) * limit));
-            query.setParameter("limite", limit);
+            if(!contador){
+                query.setParameter("pagina", ((page - 1) * limit));
+                query.setParameter("limite", limit);
+            }
 
             listaFinal = query.getResultList();
         } catch (Exception e) {
-            LOG.error("Ocurrio un error en el metodo: '" + ClassUtil.getCurrentMethodName(this.getClass()) + "'");
+            LOG.error("Ocurrio un error en el metodo: '" + ClassUtil.getCurrentMethodName(this.getClass()) + "' "+e.getMessage());
         }
         return listaFinal;
     }
