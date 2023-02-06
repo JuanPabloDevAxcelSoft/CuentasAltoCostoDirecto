@@ -1,5 +1,6 @@
 package com.savia.app.service.impl;
 
+import com.savia.app.constants.PathFileUpload;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ import javax.transaction.Transactional;
 
 @Service
 public class CargaDirectaImpl implements CargaDirectaService {
+    private String folder = PathFileUpload.PATH_FILE_UPLOAD+"upload\\";
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -30,12 +32,16 @@ public class CargaDirectaImpl implements CargaDirectaService {
         ResponseMessage response = new ResponseMessage();
         String message = "";
         HttpStatus status = HttpStatus.ACCEPTED;
+        String claveArchivo = folder.replace("\\","/");
+        claveArchivo =ruta.replace(claveArchivo,"");
+        claveArchivo=claveArchivo.replace(".csv","");
         try {
             if ((!ruta.isEmpty()) && (idEnfermedad > 0)) {
                 EnfermedadesReadDto enfermedadesReadDtoObj = enfermedadesServiceDirect.findEnfermedadById(idEnfermedad);
                 if (enfermedadesReadDtoObj != null) {
                     String pureSql="LOAD DATA LOCAL INFILE '" +ruta+
-                            "' INTO TABLE "+enfermedadesReadDtoObj.getNameTables()+" FIELDS TERMINATED BY ';' LINES TERMINATED BY '\\n' IGNORE 1 ROWS;";
+                            "' INTO TABLE "+enfermedadesReadDtoObj.getNameTables()+" FIELDS TERMINATED BY ';' LINES TERMINATED BY '\\n' IGNORE 1 ROWS" +
+                            " SET clave_archivo='"+claveArchivo+"' , id =0;";
                     Query nativeQuery = entityManager.createNativeQuery(pureSql);
                     nativeQuery.executeUpdate();
                     status = HttpStatus.OK;
