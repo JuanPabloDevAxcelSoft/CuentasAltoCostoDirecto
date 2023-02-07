@@ -109,7 +109,7 @@ public class DetallePacienteImpl implements DetallePacienteService {
         Integer page = listarPacienteDto.getPage();
         Integer limit = listarPacienteDto.getLimit();
         try {
-            List<Object> listNombreColumnas = consultasPacienteCorrecto.getListAllColumTable(listarPacienteDto.getIdEnfermedad());
+            List<Object> listNombreColumnas = consultaLogErrores.getListAllColumTable(listarPacienteDto.getIdEnfermedad());
             //Sancando los pacientes
             List<Object> listPacienteError = consultaLogErrores.getPacienteError(listarPacienteDto.getIdEnfermedad(),limit,page,listarPacienteDto.getDesde(),listarPacienteDto.getHasta());
             responseJsonGeneric.setMessage((listPacienteError.isEmpty())
