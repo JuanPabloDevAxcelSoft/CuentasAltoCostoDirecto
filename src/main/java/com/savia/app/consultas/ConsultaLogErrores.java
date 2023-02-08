@@ -15,11 +15,12 @@ public class ConsultaLogErrores extends ConsultasAbstract {
 
     private final Logger LOG = LoggerFactory.getLogger(ConsultaLogErrores.class);
 
-    public List<Object> getPacienteError(int idEnfermedad, int limit, int page, String desde, String hasta) {
+    public List<Object> getPacienteError(int idEnfermedad, int limit, int page, String desde, String hasta, boolean contador) {
         final String nombreTablaEnfermedadPaso=nombreTablaEnfermedad(idEnfermedad, EnumNombreColumnasTablaCmEnfermedad.nombre_tabla_paso.toString());
         List<Object> listPacienteError = new ArrayList<Object>();
         try {
-            String pureSql = "SELECT cep.* ";
+            String pureSql = "SELECT  ";
+            pureSql+=(contador)?" COUNT(*)":" cep.*";
             pureSql += " FROM " + nombreTablaEnfermedadPaso + " as cep ";
             pureSql += " WHERE cep.campo_leido = 1 AND";
             pureSql += " DATE(concat(SUBSTRING_INDEX(SUBSTRING_INDEX(cep.clave_archivo, '-', 2), '-', -1),'-',";
@@ -27,13 +28,15 @@ public class ConsultaLogErrores extends ConsultasAbstract {
             pureSql += " SUBSTRING_INDEX(SUBSTRING_INDEX(cep.clave_archivo, '-', 4), '-', -1)))";
             pureSql += " BETWEEN :desde AND :hasta ";
             pureSql += " ORDER BY cep.id ";
-            pureSql += " LIMIT :pagina , :limite ;";
+            pureSql += (contador)? " ;":" LIMIT :pagina , :limite ;";
             
             query = entityManager.createNativeQuery(pureSql);
             query.setParameter("desde", desde);
             query.setParameter("hasta", hasta);
-            query.setParameter("pagina", ((page - 1) * limit));
-            query.setParameter("limite", limit);
+            if(!contador){
+                query.setParameter("pagina", ((page - 1) * limit));
+                query.setParameter("limite", limit);
+            }
 
             listPacienteError = query.getResultList();
 

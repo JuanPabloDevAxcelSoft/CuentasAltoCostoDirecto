@@ -63,7 +63,7 @@ public class GenerarExcelApartirObjecto {
                         new ListarPacienteDto(idEnfermedad, idIps, 1048570, 1, desde, hasta, "", ""), false, campos,false);
             } else {
                 nombreColumn = consultaLogErrores.getListAllColumTable(idEnfermedad);
-                pacientes = consultaLogErrores.getPacienteError(idEnfermedad, 1048570, 1, desde, hasta);
+                pacientes = consultaLogErrores.getPacienteError(idEnfermedad, 1048570, 1, desde, hasta,false);
             }
             this.setGeneracionArchivoExcel(nombreColumn, pacientes, sseEmitter);
 

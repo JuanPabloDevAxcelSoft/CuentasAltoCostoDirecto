@@ -7,11 +7,13 @@ public class ResponseJson {
     private String message;
     private Integer status;
     private ArrayList<Object> data;
+    private String items;
 
     public ResponseJson() {
         this.message = "";
         this.status = 204;
         this.data = new ArrayList<Object>();
+        this.items="";
     }
 
     public String getMessage() {
@@ -36,5 +38,17 @@ public class ResponseJson {
 
     public void setData(ArrayList<Object> data) {
         this.data = data;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public String getItems() {
+        return items;
+    }
+
+    public void setItems(String items) {
+        this.items = items;
     }
 }

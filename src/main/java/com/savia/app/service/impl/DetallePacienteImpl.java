@@ -111,7 +111,8 @@ public class DetallePacienteImpl implements DetallePacienteService {
         try {
             List<Object> listNombreColumnas = consultaLogErrores.getListAllColumTable(listarPacienteDto.getIdEnfermedad());
             //Sancando los pacientes
-            List<Object> listPacienteError = consultaLogErrores.getPacienteError(listarPacienteDto.getIdEnfermedad(),limit,page,listarPacienteDto.getDesde(),listarPacienteDto.getHasta());
+            responseJsonGeneric.setItems(consultaLogErrores.getPacienteError(listarPacienteDto.getIdEnfermedad(),limit,page,listarPacienteDto.getDesde(),listarPacienteDto.getHasta(),true).toString());
+            List<Object> listPacienteError = consultaLogErrores.getPacienteError(listarPacienteDto.getIdEnfermedad(),limit,page,listarPacienteDto.getDesde(),listarPacienteDto.getHasta(),false);
             responseJsonGeneric.setMessage((listPacienteError.isEmpty())
                     ? "No hay registros para mostrar"
                     : "Cantidad de resultados encontrados : " + listPacienteError.size());
