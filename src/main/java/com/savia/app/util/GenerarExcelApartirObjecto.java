@@ -131,7 +131,7 @@ public class GenerarExcelApartirObjecto {
         try {
             boolean validacionNumero = isNumber(porcentajeCarga);
             boolean bandera = ((validacionNumero == true) ? false : true);
-            String json = "{'bandera':" + bandera + ", 'valor':" + porcentajeCarga + "}";
+            String json = "{'bandera':" + bandera + ", 'valor':" + "'"+ porcentajeCarga + "'}";
             sseEmitter.send(SseEmitter.event().name(KeySsEmitter.KEY_PROCESS_GERERAR.toString()).data(json));
             messageLogger = json;
             if (bandera && porcentajeCarga.endsWith(".xlsx")){

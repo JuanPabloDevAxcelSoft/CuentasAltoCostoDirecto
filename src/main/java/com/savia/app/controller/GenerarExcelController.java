@@ -21,10 +21,11 @@ public class GenerarExcelController {
 
     private final Logger logger = LoggerFactory.getLogger(GenerarExcelController.class);
 
-    SseEmitter sseEmitter = new SseEmitter(Long.MAX_VALUE);
+    SseEmitter sseEmitter = null;
 
     @RequestMapping("/generar")
     public SseEmitter getSubcribe() {
+        this.sseEmitter = new SseEmitter(Long.MAX_VALUE);
         String message = "";
         try {
             this.sseEmitter.send(SseEmitter.event().name(KeySsEmitter.KEY_INIT_GERERAR.toString()));
