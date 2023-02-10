@@ -46,7 +46,7 @@ public class TaskBackComponent {
     private final String PATH = PathFileUpload.PATH_FILE_UPLOAD + "upload\\";
 
     @Async
-    @Scheduled(fixedRate = 5000,initialDelay =5000)
+    @Scheduled(fixedRate = 5000,initialDelay =19000)
     public void setRealizarTarea() {
         try {
             File directorio = new File(this.PATH);
