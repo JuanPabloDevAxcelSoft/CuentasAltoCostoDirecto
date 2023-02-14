@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import javax.persistence.Query;
 import java.util.List;
 
-@SuppressWarnings("unchecked")
 @Service
 public class ConsultasPacienteCorrecto extends ConsultasAbstract {
 

@@ -10,8 +10,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.List;
 
-@SuppressWarnings("unchecked")
-@Service("obtenerColumnasTabla")
+@Service
 public class ObtenerColumnasTabla {
 
     private final Logger LOG = LoggerFactory.getLogger(ObtenerColumnasTabla.class);

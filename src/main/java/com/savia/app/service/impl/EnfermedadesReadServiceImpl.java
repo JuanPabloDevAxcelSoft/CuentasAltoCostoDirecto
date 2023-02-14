@@ -1,6 +1,5 @@
 package com.savia.app.service.impl;
 
-import com.savia.app.components.TaskBackComponent;
 import com.savia.app.model.ReadCmEnfermedades;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +16,6 @@ import com.savia.app.vo.ResponseMessage;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.Arrays;

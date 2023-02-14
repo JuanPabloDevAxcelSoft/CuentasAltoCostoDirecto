@@ -3,30 +3,17 @@ package com.savia.app.components;
 import java.io.File;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-
-import com.savia.app.constants.EnumNombreColumnasTablaCmEnfermedad;
 import com.savia.app.service.EnfermedadesReadService;
 import com.savia.app.util.EliminarFile;
 import com.savia.app.util.ProcesoEnvioBankend;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
-
 import com.savia.app.constants.PathFileUpload;
 
-@SuppressWarnings("unchecked")
 @Component
 public class TaskBackComponent {
 

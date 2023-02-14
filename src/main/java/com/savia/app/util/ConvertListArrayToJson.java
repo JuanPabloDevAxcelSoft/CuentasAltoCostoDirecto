@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.savia.app.dto.Pacientes;
 
-@Service("convertList")
+@Service
 public class ConvertListArrayToJson {
     /*
      * ListaValores: Lista de datos consultados en la base de datos

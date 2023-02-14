@@ -19,15 +19,16 @@ public abstract class ConsultasAbstract {
     @Value("${database.name}")
     protected String dbName;
 
-    protected String pureSql="";
+    protected String pureSql = "";
 
     protected Query query;
 
-
-    public String nombreTablaEnfermedad(int idEnfermedad, String nombreColumna){
-        return enfermedadesReadService.getNombreTablaGeneric(nombreColumna,idEnfermedad);
+    public String nombreTablaEnfermedad(int idEnfermedad, String nombreColumna) {
+        return enfermedadesReadService.getNombreTablaGeneric(nombreColumna, idEnfermedad);
     }
+
     public abstract List<Object> getListAllColumTable(int idEnfermedad);
+
     public ConsultasAbstract() {
     }
 
