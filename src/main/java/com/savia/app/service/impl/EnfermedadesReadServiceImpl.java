@@ -1,6 +1,6 @@
 package com.savia.app.service.impl;
 
-import com.savia.app.model.ReadCmEnfermedades;
+import com.savia.app.model.ModelCmEnfermedades;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,7 @@ public class EnfermedadesReadServiceImpl implements EnfermedadesReadService {
     @Override
     public ResponseEntity<ResponseMessage> getAllEnfermedades() {
         ResponseMessage response = new ResponseMessage();
-        List<ReadCmEnfermedades> list = new ArrayList<>();
+        List<ModelCmEnfermedades> list = new ArrayList<>();
         try {
             list = enfermedadesRepository.findAllByEstado(true);
             response.setStatus((!list.isEmpty()) ? HttpStatus.OK : HttpStatus.ACCEPTED);
@@ -51,7 +51,7 @@ public class EnfermedadesReadServiceImpl implements EnfermedadesReadService {
     @Override
     public ResponseEntity<ResponseMessage> tblIllness(Integer id) {
         ResponseMessage response = new ResponseMessage();
-        ReadCmEnfermedades enfermedadesReadModel = enfermedadesRepository.getById(id);
+        ModelCmEnfermedades enfermedadesReadModel = enfermedadesRepository.getById(id);
         EnfermedadesReadDto enferReadDtoResponse = null;
         if (enfermedadesReadModel != null) {
             enferReadDtoResponse = new EnfermedadesReadDto(enfermedadesReadModel.getId(),
@@ -70,11 +70,11 @@ public class EnfermedadesReadServiceImpl implements EnfermedadesReadService {
 
     @Override
     public EnfermedadesReadDto findEnfermedadById(Integer id) {
-        ReadCmEnfermedades enfermedadesReadModel = enfermedadesRepository.getById(id);
+        ModelCmEnfermedades enfermedadesReadModel = enfermedadesRepository.getById(id);
         EnfermedadesReadDto enferReadDtoResponse = null;
         if (enfermedadesReadModel != null) {
             enferReadDtoResponse = new EnfermedadesReadDto(enfermedadesReadModel.getId(),
-                    enfermedadesReadModel.getNombreTabla(),
+                    enfermedadesReadModel.getNombreTablaPaso(),
                     enfermedadesReadModel.getFechaCreacion(), enfermedadesReadModel.getEstado());
         }
         return enferReadDtoResponse;

@@ -17,7 +17,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "cm_enfermedades")
-public class WriteCmEnfermedades implements Serializable {
+public class ModelCmEnfermedades implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -53,14 +53,14 @@ public class WriteCmEnfermedades implements Serializable {
     private String novedades;
 
 
-    public WriteCmEnfermedades() {
+    public ModelCmEnfermedades() {
     }
 
-    public WriteCmEnfermedades(Integer id) {
+    public ModelCmEnfermedades(Integer id) {
         this.id = id;
     }
 
-    public WriteCmEnfermedades(Integer id, String nombreTablaPaso, String nombre, String nameEnfermedadFrond, String nomTabFin) {
+    public ModelCmEnfermedades(Integer id, String nombreTablaPaso, String nombre, String nameEnfermedadFrond, String nomTabFin) {
         this.id = id;
         this.nombreTablaPaso = nombreTablaPaso;
         this.nombre = nombre;
@@ -68,7 +68,7 @@ public class WriteCmEnfermedades implements Serializable {
         this.nomTabFin = nomTabFin;
     }
 
-    public WriteCmEnfermedades(int id, String nombreTablaPaso, Date fechaCreacion, boolean estado) {
+    public ModelCmEnfermedades(int id, String nombreTablaPaso, Date fechaCreacion, boolean estado) {
         this.id = id;
         this.nombreTablaPaso = nombreTablaPaso;
         this.fechaCreacion=fechaCreacion;

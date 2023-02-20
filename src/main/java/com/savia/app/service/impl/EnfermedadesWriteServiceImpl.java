@@ -1,6 +1,6 @@
 package com.savia.app.service.impl;
 
-import com.savia.app.model.WriteCmEnfermedades;
+import com.savia.app.model.ModelCmEnfermedades;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +38,7 @@ public class EnfermedadesWriteServiceImpl implements EnfermedadesWriteService {
         ResponseMessage response = new ResponseMessage();
         try {
             if (!nombreEnfermedad.isEmpty()) {
-                enfermedadesRepository.save(new WriteCmEnfermedades(idEnfermedad,
+                enfermedadesRepository.save(new ModelCmEnfermedades(idEnfermedad,
                         "cm_" + nombreEnfermedad.toLowerCase() + "_paso", new Date(), true));
             }
             response.setMessage((!nombreEnfermedad.isEmpty()) ? "Se cargo la enfermedad correctamente"

@@ -1,5 +1,6 @@
 package com.savia.app.controller;
 
+import com.savia.app.constants.EnumNombreColumnasTablaCmEnfermedad;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +27,14 @@ public class EnfermedadesController {
             return null;
         }
     }
+    @GetMapping("/enfermedades/novedades/")
+    public String  getNovedades(@RequestParam("idEnfermedad") int idEnfermedad) {
+        try {
+            return enfermedadesReadService.getNombreTablaGeneric(EnumNombreColumnasTablaCmEnfermedad.novedades.toString(),idEnfermedad);
+        } catch (Exception e) {
+            return null;
+        }
+    }
 
     @GetMapping("/enfermedades/{idEnfermedad}")
     public ResponseEntity<ResponseMessage> getEnfermedad(@PathVariable("idEnfermedad") int idEnfermedad) {
@@ -38,7 +47,7 @@ public class EnfermedadesController {
     @GetMapping("/nombre/paso/{idEnfermedad}")
     public String getNombreTablaPaso(@PathVariable("idEnfermedad") int idEnfermedad) {
         try {
-            return enfermedadesReadService.getNombreTablaGeneric("nombre_tabla_paso", idEnfermedad);
+            return enfermedadesReadService.getNombreTablaGeneric(EnumNombreColumnasTablaCmEnfermedad.nombre_tabla_paso.toString(), idEnfermedad);
         } catch (Exception e) {
             return null;
         }
@@ -46,7 +55,7 @@ public class EnfermedadesController {
     @GetMapping("/nombre/clase/validacion")
     public String getNombreClaseValidacion(@RequestParam("idEnfermedad") int idEnfermedad) {
         try {
-            return enfermedadesReadService.getNombreTablaGeneric("nombre_clase_validacion",idEnfermedad);
+            return enfermedadesReadService.getNombreTablaGeneric(EnumNombreColumnasTablaCmEnfermedad.nombre_clase_validacion.toString(),idEnfermedad);
         } catch (Exception e) {
             return null;
         }

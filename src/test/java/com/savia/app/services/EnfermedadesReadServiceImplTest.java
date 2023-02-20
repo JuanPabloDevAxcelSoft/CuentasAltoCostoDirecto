@@ -21,7 +21,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.savia.app.model.ReadCmEnfermedades;
 import com.savia.app.repository.EnfermedadesReadRepository;
 import com.savia.app.service.impl.EnfermedadesReadServiceImpl;
 
