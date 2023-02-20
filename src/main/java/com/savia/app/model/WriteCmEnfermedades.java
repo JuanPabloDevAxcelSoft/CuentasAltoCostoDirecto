@@ -27,8 +27,8 @@ public class WriteCmEnfermedades implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
-    @Column(name = "nombre_tabla")
-    private String nombreTabla;
+    @Column(name = "nombre_tabla_paso")
+    private String nombreTablaPaso;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
@@ -40,13 +40,17 @@ public class WriteCmEnfermedades implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
-    @Column(name = "name_enfermedad_frond")
-    private String nameEnfermedadFrond;
+    @Column(name = "nombre_clase_validacion")
+    private String nombreClaseValidacion;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
     @Column(name = "nom_tab_fin")
     private String nomTabFin;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 255)
+    private String novedades;
 
 
     public WriteCmEnfermedades() {
@@ -56,17 +60,17 @@ public class WriteCmEnfermedades implements Serializable {
         this.id = id;
     }
 
-    public WriteCmEnfermedades(Integer id, String nombreTabla, String nombre, String nameEnfermedadFrond, String nomTabFin) {
+    public WriteCmEnfermedades(Integer id, String nombreTablaPaso, String nombre, String nameEnfermedadFrond, String nomTabFin) {
         this.id = id;
-        this.nombreTabla = nombreTabla;
+        this.nombreTablaPaso = nombreTablaPaso;
         this.nombre = nombre;
-        this.nameEnfermedadFrond = nameEnfermedadFrond;
+        this.nombreClaseValidacion = nameEnfermedadFrond;
         this.nomTabFin = nomTabFin;
     }
 
-    public WriteCmEnfermedades(int id, String nombreTabla, Date fechaCreacion, boolean estado) {
+    public WriteCmEnfermedades(int id, String nombreTablaPaso, Date fechaCreacion, boolean estado) {
         this.id = id;
-        this.nombreTabla = nombreTabla;
+        this.nombreTablaPaso = nombreTablaPaso;
         this.fechaCreacion=fechaCreacion;
         this.estado=estado;
     }
@@ -79,12 +83,12 @@ public class WriteCmEnfermedades implements Serializable {
         this.id = id;
     }
 
-    public String getNombreTabla() {
-        return nombreTabla;
+    public String getNombreTablaPaso() {
+        return nombreTablaPaso;
     }
 
-    public void setNombreTabla(String nombreTabla) {
-        this.nombreTabla = nombreTabla;
+    public void setNombreTablaPaso(String nombreTablaPaso) {
+        this.nombreTablaPaso = nombreTablaPaso;
     }
 
     public String getNombre() {
@@ -111,12 +115,12 @@ public class WriteCmEnfermedades implements Serializable {
         this.fechaCreacion = fechaCreacion;
     }
 
-    public String getNameEnfermedadFrond() {
-        return nameEnfermedadFrond;
+    public String getNombreClaseValidacion() {
+        return nombreClaseValidacion;
     }
 
-    public void setNameEnfermedadFrond(String nameEnfermedadFrond) {
-        this.nameEnfermedadFrond = nameEnfermedadFrond;
+    public void setNombreClaseValidacion(String nombreClaseValidacion) {
+        this.nombreClaseValidacion = nombreClaseValidacion;
     }
 
     public String getNomTabFin() {
@@ -125,6 +129,14 @@ public class WriteCmEnfermedades implements Serializable {
 
     public void setNomTabFin(String nomTabFin) {
         this.nomTabFin = nomTabFin;
+    }
+
+    public String getNovedades() {
+        return novedades;
+    }
+
+    public void setNovedades(String novedades) {
+        this.novedades = novedades;
     }
 
     @Override
