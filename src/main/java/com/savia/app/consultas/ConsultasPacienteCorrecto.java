@@ -6,8 +6,12 @@ import com.savia.app.util.ClassUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import java.util.List;
 
@@ -16,11 +20,13 @@ public class ConsultasPacienteCorrecto extends ConsultasAbstract {
 
     private final Logger LOG = LoggerFactory.getLogger(ConsultasPacienteCorrecto.class);
 
+
     private final String nombreTablaPacienteFinal = "cm_paciente";
     private final String nombreTablaDetalleFinal = "cm_detalle_paciente";
 
     @Override
     public List<Object> getListAllColumTable(int idEnfermedad) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
         List<Object> listaFinal = null;
         try {
             final String nombreTablaEnfermedadFinal = nombreTablaEnfermedad(idEnfermedad,
@@ -44,11 +50,14 @@ public class ConsultasPacienteCorrecto extends ConsultasAbstract {
             listaFinal = query.getResultList();
         } catch (Exception e) {
             LOG.error("Ocurrio un error en el metodo: '" + ClassUtil.getCurrentMethodName(this.getClass()) + "'");
+        }finally {
+            entityManager.close();
         }
         return listaFinal;
     }
-
+    @CacheEvict(allEntries = true)
     public List<Object> getPacienteCorrecto(ListarPacienteDto listarPacienteDto, boolean bandera, String campos, boolean contador) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
         List<Object> listaFinal = null;
         final String nombreTablaEnfermedadFinal = nombreTablaEnfermedad(
                 listarPacienteDto.getIdEnfermedad(),
@@ -76,6 +85,8 @@ public class ConsultasPacienteCorrecto extends ConsultasAbstract {
             listaFinal = query.getResultList();
         } catch (Exception e) {
             LOG.error("Ocurrio un error en el metodo: '" + ClassUtil.getCurrentMethodName(this.getClass()) + "' "+e.getMessage());
+        }finally {
+            entityManager.close();
         }
         return listaFinal;
     }
@@ -94,10 +105,17 @@ public class ConsultasPacienteCorrecto extends ConsultasAbstract {
             where += nombreTablaPacienteFinal + ".tipo_documento = '" + lista.getTipoDocumento() + "' ";
             entrada = true;
         }
+        if(!lista.getNovedades().equals("")){
+            if (entrada) {
+                where += " AND ";
+            }
+            where+= nombreTablaPacienteFinal+ ".novedades = '"+lista.getNovedades()+"' ";
+            entrada = true;
+        }
 
         if ((!lista.getDesde().equals("")) && (!lista.getHasta().equals(""))) {
             if (entrada) {
-                where += " AND";
+                where += " AND ";
             }
             where += nombreTablaPacienteFinal + ".fecha_ingreso BETWEEN '" + lista.getDesde() + "' AND '"
                     + lista.getHasta() + "'";

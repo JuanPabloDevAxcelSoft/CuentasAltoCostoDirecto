@@ -10,10 +10,12 @@ public class ListarPacienteDto {
     private String tipoDocumento;
     private String documento;
 
+    private  String novedades;
+
     public ListarPacienteDto() {
     }
 
-    public ListarPacienteDto(int idEnfermedad, int idIps, int limit, int page, String desde, String hasta, String tipoDocumento, String documento) {
+    public ListarPacienteDto(int idEnfermedad, int idIps, int limit, int page, String desde, String hasta, String tipoDocumento, String documento, String novedades) {
         this.idEnfermedad = idEnfermedad;
         this.idIps = idIps;
         this.limit = limit;
@@ -22,6 +24,7 @@ public class ListarPacienteDto {
         this.hasta = hasta;
         this.tipoDocumento = tipoDocumento;
         this.documento = documento;
+        this.novedades = novedades;
     }
 
     public int getIdEnfermedad() {
@@ -86,5 +89,13 @@ public class ListarPacienteDto {
 
     public void setDocumento(String documento) {
         this.documento = documento;
+    }
+
+    public String getNovedades() {
+        return novedades;
+    }
+
+    public void setNovedades(String novedades) {
+        this.novedades = novedades;
     }
 }

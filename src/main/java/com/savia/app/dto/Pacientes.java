@@ -15,6 +15,8 @@ public class Pacientes {
     private String fechaNacimiento;
     private String sexo;
     private String codigoPerteneneciaEtnica;
+    private String claveArchivo;
+    private String novedades;
     private Long idDetalle;
     private Long idCargaEnfermedad;
 
@@ -32,8 +34,10 @@ public class Pacientes {
             this.fechaNacimiento = list.get(8).toString();
             this.sexo = list.get(9).toString();
             this.codigoPerteneneciaEtnica = list.get(10).toString();
-            this.idDetalle = Long.parseLong(list.get(12).toString());
-            this.idCargaEnfermedad = Long.parseLong(list.get(13).toString());
+            this.claveArchivo = list.get(11).toString();
+            this.novedades = list.get(12).toString();
+            this.idDetalle = Long.parseLong(list.get(13).toString());
+            this.idCargaEnfermedad = Long.parseLong(list.get(14).toString());
         }
     }
 
@@ -115,6 +119,22 @@ public class Pacientes {
 
     public void setCodigoPerteneneciaEtnica(String codigoPerteneneciaEtnica) {
         this.codigoPerteneneciaEtnica = codigoPerteneneciaEtnica;
+    }
+
+    public String getClaveArchivo() {
+        return claveArchivo;
+    }
+
+    public void setClaveArchivo(String claveArchivo) {
+        this.claveArchivo = claveArchivo;
+    }
+
+    public String getNovedades() {
+        return novedades;
+    }
+
+    public void setNovedades(String novedades) {
+        this.novedades = novedades;
     }
 
     public Long getIdDetalle() {

@@ -8,7 +8,6 @@ import com.savia.app.vo.ResponseMessage;
 import com.savia.app.vo.ResponsePaciente;
 
 public interface DetallePacienteService {
-     ResponseEntity<ResponseMessage> getAllPacientePaginated();
 
      ResponseEntity<ResponseJson> getLogErrores(ListarPacienteDto listarPacienteDto);
 

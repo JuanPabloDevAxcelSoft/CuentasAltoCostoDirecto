@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
 @Service
@@ -15,6 +16,7 @@ public class ConsultaLogErrores extends ConsultasAbstract {
     private final Logger LOG = LoggerFactory.getLogger(ConsultaLogErrores.class);
 
     public List<Object> getPacienteError(int idEnfermedad, int limit, int page, String desde, String hasta, boolean contador) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
         final String nombreTablaEnfermedadPaso=nombreTablaEnfermedad(idEnfermedad, EnumNombreColumnasTablaCmEnfermedad.nombre_tabla_paso.toString());
         List<Object> listPacienteError = new ArrayList<Object>();
         try {
@@ -41,12 +43,15 @@ public class ConsultaLogErrores extends ConsultasAbstract {
 
         } catch (Exception e) {
             LOG.error("Ocurrio un error en el metodo: '" + ClassUtil.getCurrentMethodName(this.getClass()) + "'");
+        }finally {
+            entityManager.close();
         }
         return listPacienteError;
     }
 
     @Override
     public List<Object> getListAllColumTable(int idEnfermedad) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
         List<Object> listaColumnas = null;
         final String nombreTablaEnfermedadPaso=nombreTablaEnfermedad(idEnfermedad, EnumNombreColumnasTablaCmEnfermedad.nombre_tabla_paso.toString());
         try {
@@ -63,6 +68,8 @@ public class ConsultaLogErrores extends ConsultasAbstract {
             listaColumnas = query.getResultList();
         } catch (Exception e) {
             LOG.error("Ocurrio un error en el metodo: '" + ClassUtil.getCurrentMethodName(this.getClass()) + "'");
+        }finally {
+            entityManager.close();
         }
         return listaColumnas;
     }

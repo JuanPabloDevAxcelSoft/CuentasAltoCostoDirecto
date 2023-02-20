@@ -5,13 +5,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.List;
 
 public abstract class ConsultasAbstract {
-    @PersistenceContext
-    protected EntityManager entityManager;
+    @Autowired
+    protected EntityManagerFactory entityManagerFactory;
 
     @Autowired
     protected EnfermedadesReadService enfermedadesReadService;
@@ -32,12 +33,12 @@ public abstract class ConsultasAbstract {
     public ConsultasAbstract() {
     }
 
-    public EntityManager getEntityManager() {
-        return entityManager;
+    public EntityManagerFactory getEntityManagerFactory() {
+        return entityManagerFactory;
     }
 
-    public void setEntityManager(EntityManager entityManager) {
-        this.entityManager = entityManager;
+    public void setEntityManagerFactory(EntityManagerFactory entityManagerFactory) {
+        this.entityManagerFactory = entityManagerFactory;
     }
 
     public EnfermedadesReadService getEnfermedadesReadService() {
