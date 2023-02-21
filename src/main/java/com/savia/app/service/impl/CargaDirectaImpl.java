@@ -28,7 +28,7 @@ public class CargaDirectaImpl implements CargaDirectaService {
 
     @Override
     @Transactional
-    public ResponseEntity<ResponseMessage> loadDataBaseDirect(String ruta, Integer idEnfermedad) {
+    public ResponseEntity<ResponseMessage> loadDataBaseDirect(String ruta, Integer idEnfermedad, String nombreArchivoOrig) {
         ResponseMessage response = new ResponseMessage();
         String message = "";
         HttpStatus status = HttpStatus.ACCEPTED;
@@ -41,7 +41,7 @@ public class CargaDirectaImpl implements CargaDirectaService {
                 if (enfermedadesReadDtoObj != null) {
                     String pureSql="LOAD DATA LOCAL INFILE '" +ruta+
                             "' INTO TABLE "+enfermedadesReadDtoObj.getNameTables()+" FIELDS TERMINATED BY ';' LINES TERMINATED BY '\\n' IGNORE 1 ROWS" +
-                            " SET clave_archivo='"+claveArchivo+"' , id =0;";
+                            " SET clave_archivo='"+claveArchivo+"' , id =0 , nombre_archivo_original='"+nombreArchivoOrig+"';";
                     Query nativeQuery = entityManager.createNativeQuery(pureSql);
                     nativeQuery.executeUpdate();
                     status = HttpStatus.OK;

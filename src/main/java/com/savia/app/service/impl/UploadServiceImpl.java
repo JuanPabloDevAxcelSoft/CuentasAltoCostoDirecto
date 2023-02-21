@@ -35,6 +35,8 @@ public class UploadServiceImpl implements UploadService {
 		ResponseMessage response = new ResponseMessage();
 		Date date = new Date();
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd-kk-mm-ss");
+		String nombreArchivoOrig=file.getOriginalFilename();
+		nombreArchivoOrig=nombreArchivoOrig.replace(".csv","");
 
 		if (!file.isEmpty()) {
 			try {
@@ -42,7 +44,7 @@ public class UploadServiceImpl implements UploadService {
 				Path path = Paths.get(folder + idEnfermedad + ipsEmisora+"-" + format.format(date) + ".csv");
 				Files.write(path, bytes);
 				String pathFile = String.valueOf(path).replace("\\", "/");
-				cargaDirectaService.loadDataBaseDirect(pathFile, idEnfermedad);
+				cargaDirectaService.loadDataBaseDirect(pathFile, idEnfermedad,nombreArchivoOrig);
 				response.setMessage("El archivo fue cargado correctamente.");
 				response.setStatus(HttpStatus.OK);
 
