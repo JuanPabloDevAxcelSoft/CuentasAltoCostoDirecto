@@ -111,7 +111,7 @@ public class ConsultasPacienteCorrecto extends ConsultasAbstract {
             if (entrada) {
                 where += " AND ";
             }
-            where+= nombreTablaPacienteFinal+ ".novedades = '"+lista.getNovedades()+"' ";
+            where+= nombreTablaPacienteFinal+ ".novedades IN ("+lista.getNovedades()+") ";
             entrada = true;
         }
 
