@@ -13,9 +13,12 @@ public class Pacientes {
     private String tipoIdentificacion;
     private String numeroIdentificacion;
     private String fechaNacimiento;
+
+    private String fechaAfilicion;
     private String sexo;
     private String codigoPerteneneciaEtnica;
     private String claveArchivo;
+    private String nombreArchivoOriginal;
     private String novedades;
     private Long idDetalle;
     private Long idCargaEnfermedad;
@@ -32,12 +35,14 @@ public class Pacientes {
             this.tipoIdentificacion = list.get(6).toString();
             this.numeroIdentificacion = list.get(7).toString();
             this.fechaNacimiento = list.get(8).toString();
-            this.sexo = list.get(9).toString();
-            this.codigoPerteneneciaEtnica = list.get(10).toString();
-            this.claveArchivo = list.get(11).toString();
-            this.novedades = list.get(12).toString();
-            this.idDetalle = Long.parseLong(list.get(13).toString());
-            this.idCargaEnfermedad = Long.parseLong(list.get(14).toString());
+            this.fechaAfilicion=list.get(9).toString();
+            this.sexo = list.get(10).toString();
+            this.codigoPerteneneciaEtnica = list.get(11).toString();
+            this.claveArchivo = list.get(12).toString();
+            this.nombreArchivoOriginal = list.get(13).toString();
+            this.novedades = list.get(14).toString();
+            this.idDetalle = Long.parseLong(list.get(15).toString());
+            this.idCargaEnfermedad = Long.parseLong(list.get(16).toString());
         }
     }
 
@@ -105,6 +110,14 @@ public class Pacientes {
         this.fechaNacimiento = fechaNacimiento;
     }
 
+    public String getFechaAfilicion() {
+        return fechaAfilicion;
+    }
+
+    public void setFechaAfilicion(String fechaAfilicion) {
+        this.fechaAfilicion = fechaAfilicion;
+    }
+
     public String getSexo() {
         return sexo;
     }
@@ -127,6 +140,14 @@ public class Pacientes {
 
     public void setClaveArchivo(String claveArchivo) {
         this.claveArchivo = claveArchivo;
+    }
+
+    public String getNombreArchivoOriginal() {
+        return nombreArchivoOriginal;
+    }
+
+    public void setNombreArchivoOriginal(String nombreArchivoOriginal) {
+        this.nombreArchivoOriginal = nombreArchivoOriginal;
     }
 
     public String getNovedades() {
