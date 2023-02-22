@@ -16,7 +16,7 @@ public class ConsultasHistoricoArchivo  extends  ConsultasAbstract{
     public List<Object> getListAllColumTable(int idEnfermedad) {
         return null;
     }
-    public  List<Object> getHistoricoArchivo(int idEnfermedad, boolean contador){
+    public  List<Object> getHistoricoArchivo(int idEnfermedad, boolean contador,int limit, int page){
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         List<Object> listaFinal = null;
         try {
@@ -31,8 +31,12 @@ public class ConsultasHistoricoArchivo  extends  ConsultasAbstract{
             pureSql += " SUBSTRING_INDEX(SUBSTRING_INDEX(clave_archivo, '-', 3), '-', -1),'-',";
             pureSql += " SUBSTRING_INDEX(SUBSTRING_INDEX(clave_archivo, '-', 4), '-', -1))) ";
             pureSql+=" FROM "+nombreTablaEnfermedadPaso+" ";
-            pureSql+=(contador)? " ) as conjunto_resultados ;":";";
+            pureSql+=(contador)? " ) as conjunto_resultados ;":"LIMIT :pagina , :limite ;";
             query = entityManager.createNativeQuery(pureSql);
+            if(!contador){
+                query.setParameter("pagina", ((page - 1) * limit));
+                query.setParameter("limite", limit);
+            }
 
             listaFinal= query.getResultList();
         }catch (Exception e){

@@ -23,11 +23,11 @@ public class HistoricoArchvivoImpl implements HistoricoArchivoService {
     private ConvertListArrayToJson convertListArrayToJson;
 
     @Override
-    public ResponseEntity<ResponseHistoricoArchivos> getHistoricoArchivo(int idEnfermedad) {
+    public ResponseEntity<ResponseHistoricoArchivos> getHistoricoArchivo(int idEnfermedad,int limt, int page) {
         ResponseHistoricoArchivos response = new ResponseHistoricoArchivos();
         try {
-                String numeroDeArchivos= consultasHistoricoArchivo.getHistoricoArchivo(idEnfermedad,true).toString();
-                List<Object> archvosObjetos = consultasHistoricoArchivo.getHistoricoArchivo(idEnfermedad,false);
+                String numeroDeArchivos= consultasHistoricoArchivo.getHistoricoArchivo(idEnfermedad,true,limt,page).toString();
+                List<Object> archvosObjetos = consultasHistoricoArchivo.getHistoricoArchivo(idEnfermedad,false, limt, page);
                 List<HistoricoArchivoDto> historicoArchivoDtos= convertListArrayToJson.setConvertListObjectHistoricoArchivo(archvosObjetos);
                 response.setData(historicoArchivoDtos);
                 response.setItem(numeroDeArchivos);
