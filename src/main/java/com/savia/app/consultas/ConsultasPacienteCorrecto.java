@@ -64,6 +64,7 @@ public class ConsultasPacienteCorrecto extends ConsultasAbstract {
                 EnumNombreColumnasTablaCmEnfermedad.nom_tab_fin.toString());
         Integer page = listarPacienteDto.getPage();
         Integer limit = listarPacienteDto.getLimit();
+        String claveArchivo=listarPacienteDto.getClaveArchivo();
         try {
             String pureSql = "SELECT ";
             pureSql+=(contador)?"COUNT(*) ":(bandera) ? " "+nombreTablaPacienteFinal+".*, "+nombreTablaDetalleFinal+".id AS detid,  "+nombreTablaEnfermedadFinal+".id AS finid  " : campos + " ";
@@ -73,6 +74,7 @@ public class ConsultasPacienteCorrecto extends ConsultasAbstract {
             pureSql += " INNER JOIN " + nombreTablaEnfermedadFinal + "  ";
             pureSql += " ON " + nombreTablaPacienteFinal + ".id = " + nombreTablaEnfermedadFinal + ".id_paciente ";
             String where = this.getWhereSql(listarPacienteDto);
+            pureSql+="WHERE "+nombreTablaPacienteFinal+".clave_archivo = '"+claveArchivo+"' ";
             pureSql += where;
             pureSql += " ORDER BY " + nombreTablaPacienteFinal + ".id ";
             pureSql += (contador)? " ;":" LIMIT :pagina , :limite ;";
@@ -92,7 +94,7 @@ public class ConsultasPacienteCorrecto extends ConsultasAbstract {
     }
 
     private String getWhereSql(ListarPacienteDto lista) {
-        String where = " WHERE ";
+        String where = " AND ";
         boolean entrada = false;
 
         if ((!lista.getTipoDocumento().equals("")) && (!lista.getDocumento().equals(""))) {

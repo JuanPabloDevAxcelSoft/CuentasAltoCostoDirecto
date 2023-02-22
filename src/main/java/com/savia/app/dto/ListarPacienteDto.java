@@ -1,6 +1,7 @@
 package com.savia.app.dto;
 
 public class ListarPacienteDto {
+    private String claveArchivo;
     private int idEnfermedad;
     private int idIps;
     private int limit;
@@ -15,7 +16,8 @@ public class ListarPacienteDto {
     public ListarPacienteDto() {
     }
 
-    public ListarPacienteDto(int idEnfermedad, int idIps, int limit, int page, String desde, String hasta, String tipoDocumento, String documento, String novedades) {
+    public ListarPacienteDto(String claveArchivo, int idEnfermedad, int idIps, int limit, int page, String desde, String hasta, String tipoDocumento, String documento, String novedades) {
+        this.claveArchivo = claveArchivo;
         this.idEnfermedad = idEnfermedad;
         this.idIps = idIps;
         this.limit = limit;
@@ -25,6 +27,14 @@ public class ListarPacienteDto {
         this.tipoDocumento = tipoDocumento;
         this.documento = documento;
         this.novedades = novedades;
+    }
+
+    public String getClaveArchivo() {
+        return claveArchivo;
+    }
+
+    public void setClaveArchivo(String claveArchivo) {
+        this.claveArchivo = claveArchivo;
     }
 
     public int getIdEnfermedad() {

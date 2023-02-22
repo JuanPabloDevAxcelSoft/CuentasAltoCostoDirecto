@@ -1,18 +1,28 @@
 package com.savia.app.dto;
 
 public class PacienteExcelDto {
+    private String claveArchivo;
     private int idEnfermedad;
     private int idIps;
     private boolean bandera;
     private String desde;
     private String hasta;
 
-    public PacienteExcelDto(int idEnfermedad, int idIps, boolean bandera, String desde, String hasta) {
+    public PacienteExcelDto(String claveArchivo, int idEnfermedad, int idIps, boolean bandera, String desde, String hasta) {
+        this.claveArchivo = claveArchivo;
         this.idEnfermedad = idEnfermedad;
         this.idIps = idIps;
         this.bandera = bandera;
         this.desde = desde;
         this.hasta = hasta;
+    }
+
+    public String getClaveArchivo() {
+        return claveArchivo;
+    }
+
+    public void setClaveArchivo(String claveArchivo) {
+        this.claveArchivo = claveArchivo;
     }
 
     public int getIdEnfermedad() {

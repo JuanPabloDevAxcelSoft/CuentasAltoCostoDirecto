@@ -42,7 +42,7 @@ public class GenerarExcelApartirObjecto {
     public void getProcesoArchivoExcel(PacienteExcelDto pacienteExcelDto, SseEmitter sseEmitter) {
         try {
             List<Object> pacientes = new ArrayList<Object>();
-
+            String claveArchivo= pacienteExcelDto.getClaveArchivo();
             String desde = pacienteExcelDto.getDesde();
             String hasta = pacienteExcelDto.getHasta();
             int idEnfermedad = pacienteExcelDto.getIdEnfermedad();
@@ -60,7 +60,7 @@ public class GenerarExcelApartirObjecto {
                     }
                 }
                 pacientes = consultasPacienteCorrecto.getPacienteCorrecto(
-                        new ListarPacienteDto(idEnfermedad, idIps, 1048570, 1, desde, hasta, "", "",""), false, campos,false);
+                        new ListarPacienteDto(claveArchivo,idEnfermedad, idIps, 1048570, 1, desde, hasta, "", "",""), false, campos,false);
             } else {
                 nombreColumn = consultaLogErrores.getListAllColumTable(idEnfermedad);
                 pacientes = consultaLogErrores.getPacienteError(idEnfermedad, 1048570, 1, desde, hasta,false);
