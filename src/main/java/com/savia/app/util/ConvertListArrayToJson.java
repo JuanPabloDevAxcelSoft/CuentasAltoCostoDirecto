@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import com.savia.app.dto.HistoricoArchivoDto;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.stereotype.Service;
 
@@ -44,6 +45,14 @@ public class ConvertListArrayToJson {
         List<Pacientes> listaFinal = new ArrayList<>();
         for (Object item : list) {
             listaFinal.add(new Pacientes(item));
+        }
+        return listaFinal;
+    }
+
+    public List<HistoricoArchivoDto> setConvertListObjectHistoricoArchivo(List<Object> list) {
+        List<HistoricoArchivoDto> listaFinal = new ArrayList<>();
+        for (Object item : list) {
+            listaFinal.add(new HistoricoArchivoDto(item));
         }
         return listaFinal;
     }

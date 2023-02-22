@@ -20,7 +20,7 @@ public class ConsultaLogErrores extends ConsultasAbstract {
         final String nombreTablaEnfermedadPaso=nombreTablaEnfermedad(idEnfermedad, EnumNombreColumnasTablaCmEnfermedad.nombre_tabla_paso.toString());
         List<Object> listPacienteError = new ArrayList<Object>();
         try {
-            String pureSql = "SELECT  ";
+            pureSql = "SELECT  ";
             pureSql+=(contador)?" COUNT(*)":" cep.*";
             pureSql += " FROM " + nombreTablaEnfermedadPaso + " as cep ";
             pureSql += " WHERE cep.campo_leido = 1 AND";
