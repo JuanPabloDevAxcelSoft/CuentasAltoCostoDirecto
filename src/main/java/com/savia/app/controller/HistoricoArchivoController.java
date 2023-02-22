@@ -19,7 +19,7 @@ public class HistoricoArchivoController {
     HistoricoArchivoService historicoArchivoService;
     @GetMapping("/historico/archivo")
     public ResponseEntity<ResponseHistoricoArchivos> getHistoricoArchivo(@RequestParam("idEnfermedad") int idEnfermedad
-    ,@RequestParam("limt")int limt,@RequestParam("page")  int page){
-        return historicoArchivoService.getHistoricoArchivo(idEnfermedad,limt,page);
+    ,@RequestParam("limit")int limit,@RequestParam("page")  int page){
+        return historicoArchivoService.getHistoricoArchivo(idEnfermedad,limit,page);
     }
 }
