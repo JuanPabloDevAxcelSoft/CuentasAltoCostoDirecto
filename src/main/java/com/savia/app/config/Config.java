@@ -54,8 +54,8 @@ public class Config {
         File directory = null;
         List<String> listDirectory =new ArrayList<>();
         try {
-            listDirectory.add(PathFileUpload.PATH_FILE_UPLOAD+"upload\\");
-            listDirectory.add(PathFileUpload.PATH_FILE_UPLOAD+"excel\\");
+            listDirectory.add(PathFileUpload.PATH_FILE_UPLOAD+"upload/");
+            listDirectory.add(PathFileUpload.PATH_FILE_UPLOAD+"excel/");
             for (String directoryPath: listDirectory) {
                 directory = new File(directoryPath);
 
