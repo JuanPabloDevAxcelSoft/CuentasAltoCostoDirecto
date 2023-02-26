@@ -5,15 +5,12 @@ import com.savia.app.dto.HistoricoArchivoDto;
 import com.savia.app.service.HistoricoArchivoService;
 import com.savia.app.util.ConvertListArrayToJson;
 import com.savia.app.vo.ResponseHistoricoArchivos;
-import com.savia.app.vo.ResponseMessage;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 public class HistoricoArchvivoImpl implements HistoricoArchivoService {

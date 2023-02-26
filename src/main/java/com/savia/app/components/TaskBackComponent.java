@@ -27,10 +27,8 @@ public class TaskBackComponent {
 
     @Autowired
     ProcesoEnvioBankend procesoEnvioBankend;
-
-
-
-    private final String PATH = PathFileUpload.PATH_FILE_UPLOAD + "upload\\";
+    
+    private final String PATH = PathFileUpload.PATH_FILE_UPLOAD + "upload/";
 
     @Async
     @Scheduled(fixedRate = 5000,initialDelay =19000)
@@ -48,16 +46,10 @@ public class TaskBackComponent {
                         }
                         eliminarFile.setRemoveFile(claveArchivo);
                     }
-                } else {
-                    System.out.println("Esperando por recibir archivos...");
                 }
             }
         } catch (Exception e) {
             LOGGER.info("Ocurrio un error, no se puede procesar la informacion" +e.getMessage());
         }
     }
-
-
-
-
 }

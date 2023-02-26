@@ -9,7 +9,6 @@ import java.util.List;
 import com.savia.app.dto.HistoricoArchivoDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.stereotype.Service;
 
 import com.savia.app.dto.Pacientes;
@@ -22,8 +21,7 @@ public class ConvertListArrayToJson {
      * Columnas: Las columnas de la tabla consulta ordenados
     */
     public ArrayList<Object> setConvertListArrayToListJson(List<Object> listaValores, List<Object> columnas){
-
-
+        
         ArrayList<Object> listaFinal = new ArrayList<Object>();
         try {
             for (Object valores : listaValores) {

@@ -31,7 +31,7 @@ public class ExcelController {
 
     @GetMapping(value = "/exportar/excel")
     public void descargarArchivoExcel(@RequestParam("file") String file, HttpServletResponse response) {
-        final String rutaArchivo = PathFileUpload.PATH_FILE_UPLOAD + "\\excel\\" + file;
+        final String rutaArchivo = PathFileUpload.PATH_FILE_UPLOAD + "/excel/" + file;
         final String nombreArchivo = "listaRegistroSavia.xlsx";
         InputStream inputStream = null;
         try {

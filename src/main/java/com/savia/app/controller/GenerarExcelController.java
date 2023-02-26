@@ -2,6 +2,10 @@ package com.savia.app.controller;
 
 import com.savia.app.dto.PacienteExcelDto;
 import com.savia.app.util.GenerarExcelApartirObjecto;
+
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,26 +25,28 @@ public class GenerarExcelController {
 
     private final Logger logger = LoggerFactory.getLogger(GenerarExcelController.class);
 
-    SseEmitter sseEmitter = new SseEmitter(Long.MAX_VALUE);;
+    private List<SseEmitter> listSseEmitter = new CopyOnWriteArrayList<>();
 
     @RequestMapping("/generar")
     public SseEmitter getSubcribe() {
-    
+        SseEmitter sseEmitter = new SseEmitter(Long.MAX_VALUE);
         String message = "";
         try {
-            this.sseEmitter.send(SseEmitter.event().name(KeySsEmitter.KEY_INIT_GERERAR.toString()));
+            sseEmitter.send(SseEmitter.event().name(KeySsEmitter.KEY_INIT_GERERAR.toString()));
             message = "Archivo de excel en proceso";
         } catch (Exception e) {
             message = "Ocurrio un error interno al momento de generar excel : " + e.getMessage();
         }
+        sseEmitter.onCompletion(() -> this.listSseEmitter.remove(sseEmitter));
+        listSseEmitter.add(sseEmitter);
         this.logger.info(message);
-        return this.sseEmitter;
+        return sseEmitter;
     }
 
 
     @PostMapping(value = "/descargar", consumes = { "application/json" })
     public void getDispirarEvento(@RequestBody PacienteExcelDto pacienteExcelDto) throws InterruptedException {
-        generarExcelApartirObjecto.getProcesoArchivoExcel(pacienteExcelDto,sseEmitter);
+        generarExcelApartirObjecto.getProcesoArchivoExcel(pacienteExcelDto, listSseEmitter);
     }
 
 }

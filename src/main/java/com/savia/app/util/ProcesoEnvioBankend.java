@@ -28,33 +28,31 @@ public class ProcesoEnvioBankend {
 
     public void setTransferencia(int idEnfermedad, String claveArchivo) {
         try {
-            nombreTabla = enfermedadesReadService.getNombreTablaGeneric(EnumNombreColumnasTablaCmEnfermedad.nombre_tabla_paso.toString(), idEnfermedad);
+            nombreTabla = enfermedadesReadService.getNombreTablaGeneric(
+                    EnumNombreColumnasTablaCmEnfermedad.nombre_tabla_paso.toString(), idEnfermedad);
             List<Object> resultCantidad = enfermedadesReadService.getCantidadValidar(nombreTabla);
             if (resultCantidad != null) {
                 for (Object valor : resultCantidad) {
-                    callDirectService(valor, claveArchivo,idEnfermedad);
+                    this.callDirectService(valor, claveArchivo, idEnfermedad);
                 }
             }
         } catch (Exception e) {
             LOGGER.error("Ocurrio un error :" + e.getMessage());
         }
-
     }
 
-    public void callDirectService(Object id, String clave,int idEnfermedad) {
+    public void callDirectService(Object id, String clave, int idEnfermedad) {
         RestTemplate rest = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
         headers.add("Accept", "*/*");
-        String endpoint = "/api/v1/validacion?idPaciente=" + id + "&idEnfermedad=" + idEnfermedad + "&claveArchivo=" + clave.replace(".csv", "");
+        String endpoint = "/api/v1/validacion?idPaciente=" + id + "&idEnfermedad=" + idEnfermedad + "&claveArchivo="
+                + clave.replace(".csv", "");
         String ruta = server + endpoint;
-
         try {
-
             HttpEntity<String> requestEntity = new HttpEntity<String>("", headers);
             ResponseEntity<String> responseEntity = rest.exchange(ruta, HttpMethod.GET, requestEntity, String.class);
-            String response = responseEntity.getBody();
-            this.LOGGER.info(response);
+            responseEntity.getBody();
         } catch (Exception e) {
             this.LOGGER.info("Error al momento de realizar el llamado al servicio de directo : " + e.getMessage());
         }

@@ -39,10 +39,10 @@ public class GenerarExcelApartirObjecto {
     @Autowired
     ConsultaLogErrores consultaLogErrores;
 
-    public void getProcesoArchivoExcel(PacienteExcelDto pacienteExcelDto, SseEmitter sseEmitter) {
+    public void getProcesoArchivoExcel(PacienteExcelDto pacienteExcelDto, List<SseEmitter> sseEmitter) {
         try {
             List<Object> pacientes = new ArrayList<Object>();
-            String claveArchivo= pacienteExcelDto.getClaveArchivo();
+            String claveArchivo = pacienteExcelDto.getClaveArchivo();
             String desde = pacienteExcelDto.getDesde();
             String hasta = pacienteExcelDto.getHasta();
             int idEnfermedad = pacienteExcelDto.getIdEnfermedad();
@@ -60,19 +60,21 @@ public class GenerarExcelApartirObjecto {
                     }
                 }
                 pacientes = consultasPacienteCorrecto.getPacienteCorrecto(
-                        new ListarPacienteDto(claveArchivo,idEnfermedad, idIps, 1048570, 1, desde, hasta, "", "",""), false, campos,false);
+                        new ListarPacienteDto(claveArchivo, idEnfermedad, idIps, 1048570, 1, desde, hasta, "", "", ""),
+                        false, campos, false);
             } else {
                 nombreColumn = consultaLogErrores.getListAllColumTable(idEnfermedad);
-                pacientes = consultaLogErrores.getPacienteError(idEnfermedad, 1048570, 1, desde, hasta,false);
+                pacientes = consultaLogErrores.getPacienteError(idEnfermedad, 1048570, 1, desde, hasta, false);
             }
             this.setGeneracionArchivoExcel(nombreColumn, pacientes, sseEmitter);
 
         } catch (Exception e) {
-            LOG.error("Ocurrio un error en el metodo: '" + ClassUtil.getCurrentMethodName(this.getClass()) + "'" + e.getMessage());
+            LOG.error("Ocurrio un error en el metodo: '" + ClassUtil.getCurrentMethodName(this.getClass()) + "'"
+                    + e.getMessage());
         }
     }
 
-    public void setGeneracionArchivoExcel(List<Object> namesHeader, List<Object> data, SseEmitter sseEmitter) {
+    public void setGeneracionArchivoExcel(List<Object> namesHeader, List<Object> data, List<SseEmitter> sseEmitter) {
         try {
             // Generar archivo de excel
             Workbook workbook = new XSSFWorkbook();
@@ -108,7 +110,7 @@ public class GenerarExcelApartirObjecto {
             Date dateNow = new Date();
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd-kk-mm-ss");
             String predicado = "reporte-" + simpleDateFormat.format(dateNow) + ".xlsx";
-            final String nombreArchivo = PathFileUpload.PATH_FILE_UPLOAD + "excel\\" + predicado;
+            final String nombreArchivo = PathFileUpload.PATH_FILE_UPLOAD + "excel/" + predicado;
             File archivoCrear = new File(nombreArchivo);
             archivoCrear.setReadable(true, false);
             archivoCrear.setWritable(true, false);
@@ -120,27 +122,33 @@ public class GenerarExcelApartirObjecto {
             enviarNotificacion(predicado, sseEmitter);
 
         } catch (FileNotFoundException e) {
-            LOG.error("Ocurrio un error en el metodo: '" + ClassUtil.getCurrentMethodName(this.getClass()) + "'" + e.getMessage());
+            LOG.error("Ocurrio un error en el metodo: '" + ClassUtil.getCurrentMethodName(this.getClass()) + "'"
+                    + e.getMessage());
         } catch (IOException e) {
-            LOG.error("Ocurrio un error en el metodo: '" + ClassUtil.getCurrentMethodName(this.getClass()) + "'" + e.getMessage());
+            LOG.error("Ocurrio un error en el metodo: '" + ClassUtil.getCurrentMethodName(this.getClass()) + "'"
+                    + e.getMessage());
         }
     }
 
-    public void enviarNotificacion(String porcentajeCarga, SseEmitter sseEmitter) {
-        String messageLogger;
+    public void enviarNotificacion(String porcentajeCarga, List<SseEmitter> sseEmitter) {
         try {
             boolean validacionNumero = isNumber(porcentajeCarga);
             boolean bandera = ((validacionNumero == true) ? false : true);
-            String json = "{'bandera':" + bandera + ", 'valor':" + "'"+ porcentajeCarga + "'}";
-            sseEmitter.send(SseEmitter.event().name(KeySsEmitter.KEY_PROCESS_GERERAR.toString()).data(json));
-            messageLogger = json;
-            if (bandera && porcentajeCarga.endsWith(".xlsx")){
-                sseEmitter.complete();
+            String json = "{'bandera':" + bandera + ", 'valor':" + "'" + porcentajeCarga + "'}";
+            
+            for (SseEmitter emitter : sseEmitter) {
+                try {
+                    emitter.send(SseEmitter.event().name(KeySsEmitter.KEY_PROCESS_GERERAR.toString()).data(json));
+                    if (bandera && porcentajeCarga.endsWith(".xlsx")) {
+                        emitter.complete();
+                    }
+                } catch (Exception e) {
+                    sseEmitter.remove(emitter);
+                }
             }
         } catch (Exception e) {
-            messageLogger = "El emitter fue removido de la lista de subcritos";
+            System.out.println("Ocurrio un error al momento de enviar las notificación");
         }
-        this.LOG.info(messageLogger);
     }
 
     private boolean isNumber(String porcentajeCarga) {

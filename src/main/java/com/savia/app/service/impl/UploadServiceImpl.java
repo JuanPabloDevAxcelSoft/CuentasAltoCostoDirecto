@@ -22,7 +22,7 @@ import com.savia.app.vo.ResponseMessage;
 @Service
 public class UploadServiceImpl implements UploadService {
 
-	private String folder = PathFileUpload.PATH_FILE_UPLOAD+"upload\\";
+	private String folder = PathFileUpload.PATH_FILE_UPLOAD + "upload/";
 
 	@Autowired
 	EnfermedadesReadService enfermedadesServiceDirect;
@@ -35,16 +35,18 @@ public class UploadServiceImpl implements UploadService {
 		ResponseMessage response = new ResponseMessage();
 		Date date = new Date();
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd-kk-mm-ss");
-		String nombreArchivoOrig=file.getOriginalFilename();
-		nombreArchivoOrig=nombreArchivoOrig.replace(".csv","");
+		String nombreArchivoOrig = file.getOriginalFilename();
+		if (nombreArchivoOrig != null) {
+			nombreArchivoOrig = nombreArchivoOrig.replace(".csv", "");
+		}
 
 		if (!file.isEmpty()) {
 			try {
 				byte[] bytes = file.getBytes();
-				Path path = Paths.get(folder + idEnfermedad + ipsEmisora+"-" + format.format(date) + ".csv");
+				Path path = Paths.get(folder + idEnfermedad + ipsEmisora + "-" + format.format(date) + ".csv");
 				Files.write(path, bytes);
 				String pathFile = String.valueOf(path).replace("\\", "/");
-				cargaDirectaService.loadDataBaseDirect(pathFile, idEnfermedad,nombreArchivoOrig);
+				cargaDirectaService.loadDataBaseDirect(pathFile, idEnfermedad, nombreArchivoOrig);
 				response.setMessage("El archivo fue cargado correctamente.");
 				response.setStatus(HttpStatus.OK);
 
